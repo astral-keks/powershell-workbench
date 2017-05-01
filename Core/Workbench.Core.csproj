@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <AssemblyName>AstralKeks.Workbench.Core</AssemblyName>
+    <RootNamespace>AstralKeks.Workbench.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Windows\.Workspace" />
+    <EmbeddedResource Include="Resource\Windows\Workspace.bat" />
+    <EmbeddedResource Include="Resource\Windows\Workspace.json" />
+    <EmbeddedResource Include="Resource\Windows\Application.json" />
+    <EmbeddedResource Include="Resource\Windows\Toolkit.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

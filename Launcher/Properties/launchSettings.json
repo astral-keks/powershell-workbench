@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Workbench.Launcher": {
+      "commandName": "Project",
+      "commandLineArgs": "Application Start WorkspaceEditor"
+    }
+  }
+}

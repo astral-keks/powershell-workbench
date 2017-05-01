@@ -1,0 +1,13 @@
+﻿{
+  "Directories": [
+    "Config",
+    "Source",
+    "Temp"
+  ],
+  "Files": [
+    {
+      "Directory": "",
+      "Filename": "Workspace.bat"
+    }
+  ]
+}
