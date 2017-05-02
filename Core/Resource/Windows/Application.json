@@ -4,6 +4,7 @@
     "Executable": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
     "Commands": [
       {
+        "Name": "Default",
         "Arguments": "-NoExit -File \"{$Bin}\\Script\\Initialize-Workbench.ps1\"",
         "UseShellExecute": false,
         "WaitForExit": true,
@@ -16,6 +17,7 @@
     "Executable": "C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe",
     "Commands": [
       {
+        "Name": "Default",
         "Arguments": ".",
         "UseShellExecute": false,
         "WaitForExit": false,
@@ -28,6 +30,7 @@
     "Executable": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
     "Commands": [
       {
+        "Name": "Default",
         "Arguments": "",
         "UseShellExecute": true,
         "WaitForExit": false,
@@ -40,6 +43,7 @@
     "Executable": "C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe",
     "Commands": [
       {
+        "Name": "Default",
         "Arguments": "{$Args}",
         "UseShellExecute": false,
         "WaitForExit": false,

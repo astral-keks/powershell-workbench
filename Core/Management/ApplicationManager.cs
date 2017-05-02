@@ -38,16 +38,20 @@ namespace AstralKeks.Workbench.Core.Management
                .ToArray();
         }
 
-        public void StartApplication(string applicationName, string commandName, List<string> arguments)
+        public void StartApplication(string applicationName = null, string commandName = null, List<string> arguments = null)
         {
+            applicationName = applicationName ?? Application.Default;
+            commandName = commandName ?? Command.Default;
+            arguments = arguments ?? new List<string>();
+
             var applications = GetApplications();
             var application = applications.FirstOrDefault(app => ApplicationHasName(app, applicationName));
             var command = application?.Commands.FirstOrDefault(cmd => CommandHasName(cmd, commandName));
 
             if (application == null)
-                throw new ArgumentException($"Application {applicationName} is not configured");
+                throw new ArgumentException($"Application '{applicationName}' is not configured");
             if (command == null)
-                throw new ArgumentException($"Command {commandName} in application {applicationName} is not configured");
+                throw new ArgumentException($"Command '{commandName}' in application '{applicationName}' is not configured");
 
             var process = new Process
             {

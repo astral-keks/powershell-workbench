@@ -1,7 +1,7 @@
 ﻿using AstralKeks.Workbench.Core;
 using Microsoft.Extensions.CommandLineUtils;
 using System;
-using System.Linq;
+using System.IO;
 using static AstralKeks.Workbench.Launcher.Constants;
 
 namespace AstralKeks.Workbench.Launcher
@@ -13,36 +13,50 @@ namespace AstralKeks.Workbench.Launcher
 
         public static int Main(string[] args)
         {
-            var cli = new CommandLineApplication();
-
-            cli.Command(Commands.Install, ws =>
+            var app = new CommandLineApplication();
+            app.OnExecute(() => Default());
+            app.Command(Nouns.Environment, noun =>
             {
-                ws.OnExecute(() =>Install());
-                ws.HelpOption(HelpTemplate);
-            });
-            cli.Command(Commands.Application, app =>
-            {
-                app.Command(Verbs.List, appList => appList.OnExecute(() => ApplicationList()));
-                app.Command(Verbs.Start, appStart => {
-                    var appName = appStart.Argument(Arguments.ApplicationName, Arguments.ApplicationNameDesc);
-                    var cmdName = appStart.Argument(Arguments.CommandName, Arguments.CommandNameDesc);
-                    var argList = appStart.Argument(Arguments.ArgumentsList, Arguments.ArgumentsListDesc, true);
-                    appStart.OnExecute(() => ApplicationStart(appName, cmdName, argList));
+                noun.Command(Verbs.Install, verb =>
+                {
+                    verb.OnExecute(() => EnvironmentInstall());
+                    verb.Description = Description.InstallVerb;
+                    verb.HelpOption(Options.HelpTemplate);
                 });
-                app.HelpOption(HelpTemplate);
+                noun.OnExecute(() => HandleHelp(noun));
+                noun.HelpOption(Options.HelpTemplate);
             });
-            cli.Command(Commands.Workspace, ws =>
+            app.Command(Nouns.Application, noun =>
             {
-                ws.Command(Verbs.Create, wsCreate => wsCreate.OnExecute(() => WorkspaceCreate()));
-                ws.HelpOption(HelpTemplate);
+                noun.Command(Verbs.Start, verb => 
+                {
+                    var appName = verb.Argument(Arguments.ApplicationName, Description.ApplicationNameArg);
+                    var cmdName = verb.Argument(Arguments.CommandName, Description.CommandNameArg);
+                    var argList = verb.Argument(Arguments.ArgumentsList, Description.ArgumentsArg, true);
+                    verb.OnExecute(() => ApplicationStart(appName, cmdName, argList));
+                    verb.Description = Description.StartVerb;
+                    verb.HelpOption(Options.HelpTemplate);
+                });
+                noun.OnExecute(() => HandleHelp(noun));
+                noun.HelpOption(Options.HelpTemplate);
             });
-
-            cli.OnExecute(() => ApplicationStart());
-            cli.HelpOption(HelpTemplate);
+            app.Command(Nouns.Workspace, noun =>
+            {
+                noun.Command(Verbs.Create, verb =>
+                {
+                    verb.OnExecute(() => WorkspaceCreate());
+                    verb.Description = Description.CreateVerb;
+                    verb.HelpOption(Options.HelpTemplate);
+                });
+                noun.OnExecute(() => HandleHelp(noun));
+                noun.HelpOption(Options.HelpTemplate);
+            });
+            app.Description = Description.Default;
+            app.HelpOption(Options.HelpTemplate);
 
             try
             {
-                return cli.Execute(args);
+                return app.Execute(args);
             }
             catch (Exception e)
             {
@@ -50,39 +64,55 @@ namespace AstralKeks.Workbench.Launcher
             }
         }
 
-        private static int Install()
+        private static int Default()
         {
             var host = new WorkbenchHost();
-            Console.WriteLine($"{host.Install()} - installed");
-            return SuccessCode;
+            host.StartDefaultApplication();
+            return HandleSuccess();
         }
 
-        private static int ApplicationList()
+
+        private static int EnvironmentInstall()
         {
             var host = new WorkbenchHost();
-            var applications = host.ListApplications();
-            applications.ForEach(Console.WriteLine);
-            return SuccessCode;
+            host.InstallEnvironment();
+
+            Console.WriteLine("Environment installation succeeded");
+            return HandleSuccess();
         }
 
-        private static int ApplicationStart(CommandArgument applicationName = null, CommandArgument commandName = null, 
-            CommandArgument args = null)
+        private static int ApplicationStart(CommandArgument applicationName, CommandArgument commandName, CommandArgument args)
         {
             var host = new WorkbenchHost();
-            host.StartApplication(applicationName?.Value, commandName?.Value, args?.Values);
-            return SuccessCode;
+            host.StartApplication(applicationName.Value, commandName.Value, args.Values);
+            return HandleSuccess();
         }
 
         private static int WorkspaceCreate()
         {
             var host = new WorkbenchHost();
             host.CreateWorkspace();
+            Console.WriteLine("Workspace creation succeeded");
+            return HandleSuccess();
+        }
+
+        private static int HandleSuccess()
+        {
             return SuccessCode;
+        }
+
+        private static int HandleHelp(CommandLineApplication app)
+        {
+            app.ShowHelp();
+            return FailureCode;
         }
 
         private static int HandleError(Exception e)
         {
-            Console.WriteLine(e.Message);
+            var msg = e.Message
+                .Replace($".{Environment.NewLine}", ". ")
+                .Replace(Environment.NewLine, ". ");
+            Console.WriteLine($"ERROR: {msg}");
             return FailureCode;
         }
     }

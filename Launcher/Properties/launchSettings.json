@@ -2,7 +2,7 @@
   "profiles": {
     "Workbench.Launcher": {
       "commandName": "Project",
-      "commandLineArgs": "Application Start WorkspaceEditor"
+      "commandLineArgs": "application info terminal"
     }
   }
 }

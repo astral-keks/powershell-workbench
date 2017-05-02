@@ -3,6 +3,8 @@ namespace AstralKeks.Workbench.Core.Data
 {
     public class Command
     {
+        public const string Default = "Default";
+
         public string Name { get; set; }
         public string Arguments { get; set; }
         public bool UseShellExecute { get; set; }

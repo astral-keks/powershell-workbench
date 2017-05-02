@@ -16,7 +16,7 @@ namespace AstralKeks.Workbench.Core.Management
         public string ResolveMacros(string input, List<string> arguments)
         {
             return ResolveMacros(input)
-                .Replace("{$Args}", string.Join(" ", arguments ?? new List<string>()));
+                .Replace("{$Args}", string.Join(" ", arguments));
         }
 
         public string ResolveMacros(string input)

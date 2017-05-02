@@ -8,27 +8,15 @@ namespace AstralKeks.Workbench.Core
 {
     public class WorkbenchHost
     {
-        private readonly string _defaultApplicationName = "WorkspaceTerminal";
         private readonly WorkbenchEnvironment _env = new WorkbenchEnvironment();
 
-        public List<string> ListApplications()
+        public void StartDefaultApplication()
         {
-            return _env.ApplicationManager.GetApplications().Select(a => a.Name).ToList();
-        }
-
-        public void StartApplication(string applicationName, string commandName, List<string> arguments)
-        {
-            applicationName = applicationName ?? _defaultApplicationName;
             _env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
-            _env.ApplicationManager.StartApplication(applicationName, commandName, arguments);
+            _env.ApplicationManager.StartApplication();
         }
 
-        public void CreateWorkspace()
-        {
-            _env.WorkspaceManager.InitializeWorkspace(Directory.GetCurrentDirectory());
-        }
-
-        public string Install()
+        public string InstallEnvironment()
         {
             var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.User);
             var binDirectory = _env.FileSystemManager.GetBinDirectoryPath();
@@ -36,6 +24,17 @@ namespace AstralKeks.Workbench.Core
                 Environment.SetEnvironmentVariable("Path", $"{path};{binDirectory}", EnvironmentVariableTarget.User);
 
             return binDirectory;
+        }
+
+        public void StartApplication(string applicationName, string commandName, List<string> arguments)
+        {
+            _env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
+            _env.ApplicationManager.StartApplication(applicationName, commandName, arguments);
+        }
+
+        public void CreateWorkspace()
+        {
+            _env.WorkspaceManager.InitializeWorkspace(Directory.GetCurrentDirectory());
         }
     }
 }
