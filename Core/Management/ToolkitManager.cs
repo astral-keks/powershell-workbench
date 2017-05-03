@@ -6,22 +6,25 @@ namespace AstralKeks.Workbench.Core.Management
 {
     public class ToolkitManager
     {
-        private readonly ConfigurationManager _configurationManager;
         private readonly WorkspaceManager _workspaceManager;
+        private readonly UserspaceManager _userspaceManager;
+        private readonly ConfigurationManager _configurationManager;
         private readonly MacrosManager _macrosManager;
 
-        public ToolkitManager(ConfigurationManager configurationManager, WorkspaceManager workspaceManager,
-            MacrosManager macrosManager)
+        public ToolkitManager(WorkspaceManager workspaceManager, UserspaceManager userspaceManager,
+            ConfigurationManager configurationManager, MacrosManager macrosManager)
         {
-            _configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
             _workspaceManager = workspaceManager ?? throw new ArgumentNullException(nameof(workspaceManager));
+            _userspaceManager = userspaceManager ?? throw new ArgumentNullException(nameof(userspaceManager));
+            _configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
             _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
         }
 
         public IEnumerable<string> GetToolkitDirectories()
         {
-            var workspaceDirectory = _workspaceManager.GetCurrentWorkspaceDirectory();
-            var repositoryConfig = _configurationManager.GetRepositoryConfig(workspaceDirectory);
+            var workspaceDirectory = _workspaceManager.GetWorkspaceDirectory();
+            var userspaceDirectory = _userspaceManager.GetUserspaceDirectory();
+            var repositoryConfig = _configurationManager.GetRepositoryConfig(workspaceDirectory, userspaceDirectory);
             return repositoryConfig.Select(r => _macrosManager.ResolveMacros(r.Directory));
         }
 

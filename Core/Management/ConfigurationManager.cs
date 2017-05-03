@@ -12,27 +12,30 @@ namespace AstralKeks.Workbench.Core.Management
             _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
         }
 
-        public Application[] GetApplicationConfig(string workspaceDirectory)
+        public Application[] GetApplicationConfig(string workspaceDirectory, string userspaceDirectory)
         {
             var resource = _resourceManager.GetResource<Application[]>(
                 workspaceDirectory,
+                userspaceDirectory,
                 FileSystem.ConfigDirectory,
                 FileSystem.ApplicationFile);
             return resource.Read();
         }
 
-        public Repository[] GetRepositoryConfig(string workspaceDirectory)
+        public Repository[] GetRepositoryConfig(string workspaceDirectory, string userspaceDirectory)
         {
             var resource = _resourceManager.GetResource<Repository[]>(
                 workspaceDirectory,
+                userspaceDirectory,
                 FileSystem.ConfigDirectory,
                 FileSystem.ToolkitFile);
             return resource.Read();
         }
 
-        public Workspace GetWorkspaceConfig()
+        public Workspace GetWorkspaceConfig(string userspaceDirectory)
         {
             var resource = _resourceManager.GetResource<Workspace>(
+                userspaceDirectory,
                 FileSystem.ConfigDirectory,
                 FileSystem.WorkspaceFile);
             return resource.Read();

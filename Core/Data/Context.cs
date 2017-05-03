@@ -1,30 +1,20 @@
 ﻿using System;
-using System.IO;
 
 namespace AstralKeks.Workbench.Core.Data
 {
     public class Context
     {
         private readonly string _workspaceDirectory;
+        private readonly string _userspaceDirectory;
 
-        public Context(string workspaceDirectory)
+        public Context(string workspaceDirectory, string userspaceDirectory)
         {
-            if (workspaceDirectory == null)
-                throw new ArgumentNullException(nameof(workspaceDirectory));
-
-            _workspaceDirectory = workspaceDirectory;
+            _workspaceDirectory = workspaceDirectory ?? throw new ArgumentNullException(nameof(workspaceDirectory));
+            _userspaceDirectory = userspaceDirectory ?? throw new ArgumentNullException(nameof(userspaceDirectory));
         }
 
-        public Context ApplyToEnvironment()
-        {
-            Directory.SetCurrentDirectory(_workspaceDirectory);
-            return this;
-        }
+        public string WorkspaceDirectory => _workspaceDirectory;
 
-        public Context ApplyToCmdlet(Action<string> scriptInvoker)
-        {
-            scriptInvoker($"Set-Location '{_workspaceDirectory}'");
-            return this;
-        }
+        public string UserspaceDirectory => _userspaceDirectory;
     }
 }

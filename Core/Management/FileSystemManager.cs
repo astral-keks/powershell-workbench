@@ -1,7 +1,5 @@
-﻿using AstralKeks.Workbench.Core.Data;
-using System;
+﻿using System;
 using System.IO;
-using System.Reflection;
 
 namespace AstralKeks.Workbench.Core.Management
 {
@@ -12,9 +10,9 @@ namespace AstralKeks.Workbench.Core.Management
             switch (OperatingSystemManager.Current)
             {
                 case OperatingSystemManager.Windows:
-                    return Path.Combine(Environment.GetEnvironmentVariable("LOCALAPPDATA"), FileSystem.WorkbenchDirectory);
+                    return Path.Combine(Environment.GetEnvironmentVariable("LOCALAPPDATA"));
                 case OperatingSystemManager.Linux:
-                    return Path.Combine(Environment.GetEnvironmentVariable("HOME"), FileSystem.WorkbenchDirectory);
+                    return Path.Combine(Environment.GetEnvironmentVariable("HOME"));
                 default:
                     throw new NotSupportedException();
             }

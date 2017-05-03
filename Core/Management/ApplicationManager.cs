@@ -8,22 +8,25 @@ namespace AstralKeks.Workbench.Core.Management
 {
     public class ApplicationManager
     {
-        private readonly ConfigurationManager _configurationManager;
         private readonly WorkspaceManager _workspaceManager;
+        private readonly UserspaceManager _userspaceManager;
+        private readonly ConfigurationManager _configurationManager;
         private readonly MacrosManager _macrosManager;
 
-        public ApplicationManager(ConfigurationManager configurationManager, WorkspaceManager workspaceManager,
-            MacrosManager macrosManager)
+        public ApplicationManager(WorkspaceManager workspaceManager, UserspaceManager userspaceManager,
+            ConfigurationManager configurationManager, MacrosManager macrosManager)
         {
-            _configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
             _workspaceManager = workspaceManager ?? throw new ArgumentNullException(nameof(workspaceManager));
+            _userspaceManager = userspaceManager ?? throw new ArgumentNullException(nameof(userspaceManager));
+            _configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
             _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
         }
 
         public Application[] GetApplications()
         {
-            var workspaceDirectory = _workspaceManager.GetCurrentWorkspaceDirectory();
-            return _configurationManager.GetApplicationConfig(workspaceDirectory);
+            var workspaceDirectory = _workspaceManager.GetWorkspaceDirectory();
+            var userspaceDirectory = _userspaceManager.GetUserspaceDirectory();
+            return _configurationManager.GetApplicationConfig(workspaceDirectory, userspaceDirectory);
         }
 
         public Command[] GetCommands(string applicationName)

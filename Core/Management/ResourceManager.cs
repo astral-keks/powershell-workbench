@@ -12,10 +12,11 @@ namespace AstralKeks.Workbench.Core.Management
             _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
         }
 
-        public void InitializeResource(string workspaceDirectory, string directory, string filename)
+        public void InitializeResource(string workspaceDirectory, string userspaceDirectory, 
+            string directory, string filename)
         {
             var workspacePath = _fileSystemManager.GetAbsolutePath(workspaceDirectory, directory, filename);
-            var userspacePath = _fileSystemManager.GetAbsolutePath(_fileSystemManager.GetUserDirectoryPath(), directory, filename);
+            var userspacePath = _fileSystemManager.GetAbsolutePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
 
             var workspaceProvider = new FileResourceProvider(workspacePath);
@@ -28,10 +29,11 @@ namespace AstralKeks.Workbench.Core.Management
         }
 
 
-        public Resource<TObject> GetResource<TObject>(string workspaceDirectory, string directory, string filename)
+        public Resource<TObject> GetResource<TObject>(string workspaceDirectory, string userspaceDirectory, 
+            string directory, string filename)
         {
             var workspacePath = _fileSystemManager.GetAbsolutePath(workspaceDirectory, directory, filename);
-            var userspacePath = _fileSystemManager.GetAbsolutePath(_fileSystemManager.GetUserDirectoryPath(), directory, filename);
+            var userspacePath = _fileSystemManager.GetAbsolutePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
 
             var workspaceProvider = new FileResourceProvider(workspacePath);
@@ -42,9 +44,9 @@ namespace AstralKeks.Workbench.Core.Management
             return new Resource<TObject>(format, workspaceProvider, userspaceProvider, defaults);
         }
 
-        public Resource<TObject> GetResource<TObject>(string directory, string filename)
+        public Resource<TObject> GetResource<TObject>(string userspaceDirectory, string directory, string filename)
         {
-            var userspacePath = _fileSystemManager.GetAbsolutePath(_fileSystemManager.GetUserDirectoryPath(), directory, filename);
+            var userspacePath = _fileSystemManager.GetAbsolutePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
 
             var userspaceProvider = new FileResourceProvider(userspacePath);

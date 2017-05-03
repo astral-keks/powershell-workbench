@@ -1,4 +1,5 @@
-﻿namespace AstralKeks.Workbench.Core.Data
+﻿
+namespace AstralKeks.Workbench.Core.Data
 {
     internal static class FileSystem
     {
