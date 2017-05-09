@@ -14,31 +14,60 @@ namespace AstralKeks.Workbench.Core.Management
 
         public Application[] GetApplicationConfig(string workspaceDirectory, string userspaceDirectory)
         {
-            var resource = _resourceManager.GetResource<Application[]>(
-                workspaceDirectory,
-                userspaceDirectory,
-                FileSystem.ConfigDirectory,
-                FileSystem.ApplicationFile);
-            return resource.Read();
+            return GetConfig<Application[]>(workspaceDirectory, userspaceDirectory, FileSystem.ApplicationFile);
+        }
+
+        public string GetApplicationConfigPath(string workspaceOrUserspaceDirectory)
+        {
+            return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ApplicationFile);
         }
 
         public Repository[] GetRepositoryConfig(string workspaceDirectory, string userspaceDirectory)
         {
-            var resource = _resourceManager.GetResource<Repository[]>(
-                workspaceDirectory,
-                userspaceDirectory,
-                FileSystem.ConfigDirectory,
-                FileSystem.ToolkitFile);
-            return resource.Read();
+            return GetConfig<Repository[]>(workspaceDirectory, userspaceDirectory, FileSystem.ToolkitFile);
+        }
+
+        public string GetRepositoryConfigPath(string workspaceOrUserspaceDirectory)
+        {
+            return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ToolkitFile);
         }
 
         public Workspace GetWorkspaceConfig(string userspaceDirectory)
         {
-            var resource = _resourceManager.GetResource<Workspace>(
-                userspaceDirectory,
-                FileSystem.ConfigDirectory,
-                FileSystem.WorkspaceFile);
+            return GetConfig<Workspace>(userspaceDirectory, FileSystem.WorkspaceFile);
+        }
+
+        public string GetWorkspaceConfigPath(string userspaceDirectory)
+        {
+            return GetConfigPath(userspaceDirectory, FileSystem.WorkspaceFile);
+        }
+
+        public TConfig GetConfig<TConfig>(string workspaceDirectory, string userspaceDirectory, string configFile)
+        {
+            var resource = _resourceManager.GetResource<TConfig>(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory,
+                configFile);
             return resource.Read();
+        }
+
+        public TConfig GetConfig<TConfig>(string userspaceDirectory, string configFile)
+        {
+            var resource = _resourceManager.GetResource<TConfig>(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            return resource.Read();
+        }
+
+        public string GetConfigPath(string workspaceOrUserspaceDirectory, string configFile)
+        {
+            return _resourceManager.GetResourcePath(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory, configFile);
+        }
+
+        public string[] GetConfigFiles()
+        {
+            return new[]
+            {
+                FileSystem.ApplicationFile,
+                FileSystem.ToolkitFile,
+                FileSystem.WorkspaceFile
+            };
         }
     }
 }

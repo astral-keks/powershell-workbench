@@ -5,6 +5,7 @@ namespace AstralKeks.Workbench.Core.Data
     public class Application
     {
         public const string Default = "WorkspaceTerminal";
+        public const string Editor = "Editor";
 
         public string Name { get; set; }
         public string Executable { get; set; }

@@ -31,6 +31,8 @@ namespace AstralKeks.Workbench.Core
 
         public InstallationManager InstallationManager => _installationManager;
 
+        public ConfigurationManager ConfigurationManager => _configurationManager;
+        
         public ApplicationManager ApplicationManager => _applicationManager;
 
         public UserspaceManager UserspaceManager => _userspaceManager;

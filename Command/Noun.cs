@@ -5,8 +5,7 @@ namespace AstralKeks.Workbench.Command
     {
         public const string WB = "WB";
         public const string WBEnvironment = WB + "Environment";
-        public const string WBUserspace = WB + "Userspace";
-        public const string WBUserspaceDirectory = WBUserspace + "Directory";
+        public const string WBConfiguration = WB + "Configuration";
         public const string WBApplication = WB + "Application";
     }
 }

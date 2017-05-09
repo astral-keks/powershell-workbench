@@ -41,11 +41,13 @@ namespace AstralKeks.Workbench.Core.Management
                .ToArray();
         }
 
-        public void StartApplication(string applicationName = null, string commandName = null, List<string> arguments = null)
+        public void StartApplication(string applicationName = null, string commandName = null, 
+            List<string> arguments = null, string pipeline = null)
         {
             applicationName = applicationName ?? Application.Default;
             commandName = commandName ?? Command.Default;
-            arguments = arguments ?? new List<string>();
+            arguments = (arguments ?? Enumerable.Empty<string>()).Select(a => $"\"{a}\"").ToList();
+            pipeline = $"\"{pipeline ?? string.Empty}\"";
 
             var applications = GetApplications();
             var application = applications.FirstOrDefault(app => ApplicationHasName(app, applicationName));
@@ -61,7 +63,7 @@ namespace AstralKeks.Workbench.Core.Management
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = application.Executable,
-                    Arguments = _macrosManager.ResolveMacros(command.Arguments, arguments),
+                    Arguments = _macrosManager.ResolveMacros(command.Arguments, pipeline, arguments),
                     UseShellExecute = command.UseShellExecute,
                     CreateNoWindow = command.NoWindow
                 }

@@ -15,8 +15,8 @@ namespace AstralKeks.Workbench.Core.Management
         public void InitializeResource(string workspaceDirectory, string userspaceDirectory, 
             string directory, string filename)
         {
-            var workspacePath = _fileSystemManager.GetAbsolutePath(workspaceDirectory, directory, filename);
-            var userspacePath = _fileSystemManager.GetAbsolutePath(userspaceDirectory, directory, filename);
+            var workspacePath = GetResourcePath(workspaceDirectory, directory, filename);
+            var userspacePath = GetResourcePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
 
             var workspaceProvider = new FileResourceProvider(workspacePath);
@@ -27,13 +27,12 @@ namespace AstralKeks.Workbench.Core.Management
             var resource = new Resource<string>(format, workspaceProvider, userspaceProvider, defaults);
             resource.Read();
         }
-
-
+        
         public Resource<TObject> GetResource<TObject>(string workspaceDirectory, string userspaceDirectory, 
             string directory, string filename)
         {
-            var workspacePath = _fileSystemManager.GetAbsolutePath(workspaceDirectory, directory, filename);
-            var userspacePath = _fileSystemManager.GetAbsolutePath(userspaceDirectory, directory, filename);
+            var workspacePath = GetResourcePath(workspaceDirectory, directory, filename);
+            var userspacePath = GetResourcePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
 
             var workspaceProvider = new FileResourceProvider(workspacePath);
@@ -46,7 +45,7 @@ namespace AstralKeks.Workbench.Core.Management
 
         public Resource<TObject> GetResource<TObject>(string userspaceDirectory, string directory, string filename)
         {
-            var userspacePath = _fileSystemManager.GetAbsolutePath(userspaceDirectory, directory, filename);
+            var userspacePath = GetResourcePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
 
             var userspaceProvider = new FileResourceProvider(userspacePath);
@@ -54,6 +53,11 @@ namespace AstralKeks.Workbench.Core.Management
             var format = new JsonResourceFormat<TObject>();
 
             return new Resource<TObject>(format, userspaceProvider, defaults);
+        }
+
+        public string GetResourcePath(string rootDirectory, string directory, string filename)
+        {
+            return _fileSystemManager.GetAbsolutePath(rootDirectory, directory, filename);
         }
 
         public string GetResourceName(string name)

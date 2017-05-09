@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AstralKeks.Workbench.Core.Management
 {
@@ -13,10 +14,16 @@ namespace AstralKeks.Workbench.Core.Management
             _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
         }
 
+        public string ResolveMacros(string input, string pipeline, List<string> arguments)
+        {
+            return ResolveMacros(input, arguments)
+                .Replace("{$Pipeline}", pipeline ?? string.Empty);
+        }
+
         public string ResolveMacros(string input, List<string> arguments)
         {
             return ResolveMacros(input)
-                .Replace("{$Args}", string.Join(" ", arguments));
+                .Replace("{$Args}", string.Join(" ", arguments ?? Enumerable.Empty<string>()));
         }
 
         public string ResolveMacros(string input)

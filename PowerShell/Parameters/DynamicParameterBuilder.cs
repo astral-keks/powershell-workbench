@@ -3,6 +3,8 @@ using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
 using AstralKeks.Workbench.PowerShell.Attributes;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AstralKeks.Workbench.PowerShell.Parameters
 {
@@ -26,13 +28,14 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
                         .SingleOrDefault()
                 })
                 .Where(p => p.Attribute != null)
-                .Select(p => BuildParameter(_cmdlet, p.Property, p.Attribute));
+                .Select(p => BuildParameter(_cmdlet, p.Property, p.Attribute, container));
 
             foreach (var parameter in parameters)
                 container.Add(parameter.Name, parameter);
         }
 
-        private RuntimeDefinedParameter BuildParameter(Cmdlet cmdlet, PropertyInfo property, DynamicParameterAttribute attribute)
+        private RuntimeDefinedParameter BuildParameter(Cmdlet cmdlet, PropertyInfo property, DynamicParameterAttribute attribute,
+            DynamicParameterContainer container)
         {
             var parameter = new RuntimeDefinedParameter
             {
@@ -48,7 +51,7 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
             if (validateSetAttribute != null)
                 parameter.Attributes.Add(validateSetAttribute);
 
-            var argumentCompleterAttribute = BuildArgumentCompleterAttribute(cmdlet, property);
+            var argumentCompleterAttribute = BuildArgumentCompleterAttribute(cmdlet, property, container);
             if (argumentCompleterAttribute != null)
                 parameter.Attributes.Add(argumentCompleterAttribute);
 
@@ -57,16 +60,12 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
 
         private ParameterAttribute BuildParameterAttribute(DynamicParameterAttribute attribute)
         {
-            ParameterAttribute parameterAttribute = null;
+            var parameterAttribute = new ParameterAttribute();
             if (attribute.Position >= 0)
-            {
-                parameterAttribute = new ParameterAttribute();
                 parameterAttribute.Position = attribute.Position;
-                parameterAttribute.Mandatory = attribute.Mandatory;
-                parameterAttribute.ValueFromPipeline = attribute.ValueFromPipeline;
-                parameterAttribute.ParameterSetName = attribute.ParameterSetName;
-            }
-
+            parameterAttribute.ParameterSetName = attribute.ParameterSetName;
+            parameterAttribute.Mandatory = attribute.Mandatory;
+            parameterAttribute.ValueFromPipeline = attribute.ValueFromPipeline;
             return parameterAttribute;
         }
 
@@ -96,7 +95,8 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
             return validateSetAttribute;
         }
 
-        private ArgumentCompleterAttribute BuildArgumentCompleterAttribute(Cmdlet cmdlet, PropertyInfo property)
+        private ArgumentCompleterAttribute BuildArgumentCompleterAttribute(Cmdlet cmdlet, PropertyInfo property, 
+            DynamicParameterContainer container)
         {
             ArgumentCompleterAttribute argumentCompleterAttribute = null;
 
@@ -115,6 +115,7 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
                         : new object[0];
                     DynamicParameterCompleter.RegisterCompleter(command, parameter,
                         w => completerFunction.Invoke(cmdlet, arguments.Concat(new object[] {w}).ToArray()));
+                    DynamicParameterCompleter.RegisterContainer(command, container);
 
                     argumentCompleterAttribute = new ArgumentCompleterAttribute(typeof(DynamicParameterCompleter));
                 }
