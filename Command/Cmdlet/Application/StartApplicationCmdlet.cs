@@ -1,8 +1,6 @@
-﻿using AstralKeks.Workbench.Core;
-using AstralKeks.Workbench.PowerShell.Attributes;
+﻿using AstralKeks.Workbench.PowerShell.Attributes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
 

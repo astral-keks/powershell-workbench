@@ -4,20 +4,19 @@ namespace AstralKeks.Workbench.Core.Data
 {
     public class Workspace
     {
-        public Workspace(string[] directories, WorkspaceFile[] files)
+        public const string Default = "Default";
+
+        public Workspace(string name, string[] directories, string[] files)
         {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             Directories = directories ?? throw new ArgumentNullException(nameof(directories));
             Files = files ?? throw new ArgumentNullException(nameof(files));
         }
 
+        public string Name { get; }
+
         public string[] Directories { get; }
 
-        public WorkspaceFile[] Files { get; }
-    }
-
-    public class WorkspaceFile
-    {
-        public string Directory { get; set; }
-        public string Filename { get; set; }
+        public string[] Files { get; }
     }
 }

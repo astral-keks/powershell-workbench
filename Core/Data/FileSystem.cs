@@ -13,6 +13,7 @@ namespace AstralKeks.Workbench.Core.Data
         public static string ApplicationFile => "Application.json";
         public static string ToolkitFile => "Toolkit.json";
         public static string WorkspaceFile => "Workspace.json";
+        public static string HistoryFile => "History.json";
         public static string WorkspaceMarkerFile => ".Workspace";
     }
 }

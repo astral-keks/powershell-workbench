@@ -55,6 +55,10 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
             if (argumentCompleterAttribute != null)
                 parameter.Attributes.Add(argumentCompleterAttribute);
 
+            var otherAttributes = BuildOtherAttributes(property);
+            foreach (var otherAttribute in otherAttributes)
+                parameter.Attributes.Add(otherAttribute);
+
             return parameter;
         }
 
@@ -122,6 +126,18 @@ namespace AstralKeks.Workbench.PowerShell.Parameters
             }
 
             return argumentCompleterAttribute;
+        }
+
+        private List<Attribute> BuildOtherAttributes(PropertyInfo property)
+        {
+            return property.GetCustomAttributes()
+                .Cast<Attribute>()
+                .Where(a => 
+                    !(a is DynamicParameterAttribute) &&
+                    !(a is DynamicCompleterAttribute) &&
+                    !(a is ValidateDynamicSetAttribute)
+                )
+                .ToList();
         }
     }
 }

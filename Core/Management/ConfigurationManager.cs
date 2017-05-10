@@ -32,9 +32,9 @@ namespace AstralKeks.Workbench.Core.Management
             return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ToolkitFile);
         }
 
-        public Workspace GetWorkspaceConfig(string userspaceDirectory)
+        public Workspace[] GetWorkspaceConfig(string userspaceDirectory)
         {
-            return GetConfig<Workspace>(userspaceDirectory, FileSystem.WorkspaceFile);
+            return GetConfig<Workspace[]>(userspaceDirectory, FileSystem.WorkspaceFile);
         }
 
         public string GetWorkspaceConfigPath(string userspaceDirectory)

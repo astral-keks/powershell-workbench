@@ -19,9 +19,8 @@ namespace AstralKeks.Workbench.Command
         {
             Env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
 
-            var context = Env.ContextManager.GetContext();
-            SessionState.PSVariable.Set("Workbench", context);
-            InvokeCommand.InvokeScript($"Set-Location '{context.WorkspaceDirectory}'");
+            var workspaceDirectory = Env.WorkspaceManager.GetWorkspaceDirectory();
+            InvokeCommand.InvokeScript($"Set-Location '{workspaceDirectory}'");
         }
 
         private void InitializeAliases()
@@ -34,25 +33,6 @@ namespace AstralKeks.Workbench.Command
             var applications = Env.ApplicationManager.GetApplications();
             foreach (var application in applications)
                 InvokeCommand.InvokeScript($"Set-Alias {application.Name} {cmdletInfo.VerbName}-{cmdletInfo.NounName} -Scope Global");
-
-            foreach (var configuration in Env.ConfigurationManager.GetConfigFiles().Select(Path.GetFileNameWithoutExtension))
-            {
-                if (configuration != "Workspace")
-                {
-                    InvokeCommand.InvokeScript($"function global:Edit-{Noun.WB}Workspace{configuration} " +
-                        $"{{ " +
-                            $"Edit-{Noun.WBConfiguration} Workspace {configuration} " +
-                        $"}}");
-                }
-            }
-
-            foreach (var configuration in Env.ConfigurationManager.GetConfigFiles().Select(Path.GetFileNameWithoutExtension))
-            {
-                InvokeCommand.InvokeScript($"function global:Edit-{Noun.WB}Userspace{configuration} " +
-                    $"{{ " +
-                        $"Edit-{Noun.WBConfiguration} Userspace {configuration} " +
-                    $"}}");
-            }
         }
 
         private void InitializeToolkits()

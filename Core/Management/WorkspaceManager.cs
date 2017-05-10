@@ -24,9 +24,17 @@ namespace AstralKeks.Workbench.Core.Management
         public string GetWorkspaceDirectory()
         {
             if (string.IsNullOrEmpty(CurrentWorkspaceDirectory))
-                CurrentWorkspaceDirectory = FindWorkspaceDirectory(Directory.GetCurrentDirectory());
+                CurrentWorkspaceDirectory = GetWorkspaceDirectory(Directory.GetCurrentDirectory());
 
             return CurrentWorkspaceDirectory;
+        }
+
+        public string GetWorkspaceDirectory(string directory)
+        {
+            if (string.IsNullOrWhiteSpace(directory))
+                throw new ArgumentException("Value is empty", nameof(directory));
+
+            return _fileSystemManager.FindParentDirectory(directory, ExistsWorkspace);
         }
 
         public void SwitchWorkspace(string directory)
@@ -35,7 +43,7 @@ namespace AstralKeks.Workbench.Core.Management
                 throw new ArgumentException("Value is empty", nameof(directory));
 
             directory = Path.GetFullPath(directory);
-            var workspaceDirectory = FindWorkspaceDirectory(directory);
+            var workspaceDirectory = GetWorkspaceDirectory(directory);
 
             CreateWorkspace(workspaceDirectory);
 
@@ -43,14 +51,18 @@ namespace AstralKeks.Workbench.Core.Management
             Directory.SetCurrentDirectory(workspaceDirectory);
         }
 
-        public void CreateWorkspace(string directory)
+        public void CreateWorkspace(string directory, string workspaceTemplate = null)
         {
             if (string.IsNullOrWhiteSpace(directory))
                 throw new ArgumentException("Value is empty", nameof(directory));
+            workspaceTemplate = workspaceTemplate ?? Workspace.Default;
 
             var workspaceDirectory = Path.GetFullPath(directory);
             var userspaceDirectory = _userspaceManager.GetUserspaceDirectory();
-            var workspace = _configurationManager.GetWorkspaceConfig(userspaceDirectory);
+            var workspaceConfig = _configurationManager.GetWorkspaceConfig(userspaceDirectory);
+            var workspace = workspaceConfig.FirstOrDefault(w => w.Name == workspaceTemplate);
+            if (workspace == null)
+                throw new ArgumentException($"Workspace template {workspaceTemplate} was not found");
 
             _fileSystemManager.CreateDirectoryIfNotExists(workspaceDirectory);
 
@@ -58,7 +70,11 @@ namespace AstralKeks.Workbench.Core.Management
                 _fileSystemManager.CreateDirectoryIfNotExists(innerDirectory);
 
             foreach (var file in workspace.Files)
-                _resourceManager.InitializeResource(workspaceDirectory, userspaceDirectory, file.Directory, file.Filename);
+            {
+                var resourceDirectory = Path.GetDirectoryName(file);
+                var resourceFilename = Path.GetFileName(file);
+                _resourceManager.InitializeResource(workspaceDirectory, userspaceDirectory, resourceDirectory, resourceFilename);
+            }
             _resourceManager.InitializeResource(workspaceDirectory, userspaceDirectory, 
                 FileSystem.ConfigDirectory, FileSystem.WorkspaceMarkerFile);
         }
@@ -67,11 +83,6 @@ namespace AstralKeks.Workbench.Core.Management
         {
             var markerPath = _fileSystemManager.GetAbsolutePath(directory, FileSystem.ConfigDirectory, FileSystem.WorkspaceMarkerFile);
             return File.Exists(markerPath);
-        }
-
-        private string FindWorkspaceDirectory(string directory)
-        {
-            return _fileSystemManager.FindParentDirectory(directory, ExistsWorkspace);
         }
 
         private string CurrentWorkspaceDirectory

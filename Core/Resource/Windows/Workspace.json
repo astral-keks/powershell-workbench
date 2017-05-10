@@ -1,13 +1,13 @@
-﻿{
-  "Directories": [
-    "Config",
-    "Source",
-    "Temp"
-  ],
-  "Files": [
-    {
-      "Directory": "",
-      "Filename": "Workspace.bat"
-    }
-  ]
-}
+﻿[
+  {
+    "Name": "Default",
+    "Directories": [
+      "Config",
+      "Source",
+      "Temp"
+    ],
+    "Files": [
+      "Workspace.bat"
+    ]
+  }
+]
