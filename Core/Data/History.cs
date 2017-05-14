@@ -11,8 +11,8 @@ namespace AstralKeks.Workbench.Core.Data
             Entries = new List<string>();
         }
 
-        public HistoryType Type { get; set; }
-        public List<string> Entries { get; set; }
+        public HistoryType Type { get; }
+        public List<string> Entries { get; }
     }
 
     public enum HistoryType

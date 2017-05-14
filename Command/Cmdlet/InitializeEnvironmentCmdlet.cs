@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using AstralKeks.Workbench.Core.Data;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Management.Automation;
 
@@ -12,7 +14,7 @@ namespace AstralKeks.Workbench.Command
         {
             InitializeWorkspace();
             InitializeAliases();
-            InitializeToolkits();
+            WriteObject(InitializeToolkits(), true);
         }
 
         private void InitializeWorkspace()
@@ -35,23 +37,21 @@ namespace AstralKeks.Workbench.Command
                 InvokeCommand.InvokeScript($"Set-Alias {application.Name} {cmdletInfo.VerbName}-{cmdletInfo.NounName} -Scope Global");
         }
 
-        private void InitializeToolkits()
+        private IEnumerable<Toolkit> InitializeToolkits()
         {
-            var psModulePathDirectories = Env.ToolkitManager.GetToolkitDirectories().ToList();
+            var psModulePathDirectories = Env.ToolkitManager.GetToolkitDirectories();
             var psModulePath = string.Join(";", psModulePathDirectories.Where(p => !string.IsNullOrWhiteSpace(p)));
             var oldPsModulePath = SessionState.PSVariable.GetValue("env:PSModulePath");
             try
             {
                 InvokeCommand.InvokeScript($"$env:PSModulePath = '{psModulePath}'");
 
-                var modules = InvokeCommand.InvokeScript("Get-Module -ListAvailable")
-                    .Select(o => Env.ToolkitManager.ResolveToolkitModule(
+                return InvokeCommand.InvokeScript("Get-Module -ListAvailable")
+                    .Select(o => Env.ToolkitManager.ResolveToolkit(
                         o.Properties.FirstOrDefault(p => p.Name == "Name")?.Value as string,
                         o.Properties.FirstOrDefault(p => p.Name == "ModuleBase")?.Value as string,
                         psModulePathDirectories))
-                    .Where(tm => tm != null);
-
-                WriteObject(modules, true);
+                    .Where(t => t != null);
             }
             finally
             {

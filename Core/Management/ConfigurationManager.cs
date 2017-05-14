@@ -1,5 +1,7 @@
 ﻿using AstralKeks.Workbench.Core.Data;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace AstralKeks.Workbench.Core.Management
 {
@@ -55,19 +57,35 @@ namespace AstralKeks.Workbench.Core.Management
             return resource.Read();
         }
 
+        public void ResetConfig(string workspaceDirectory, string userspaceDirectory, string configFile)
+        {
+            _resourceManager.RemoveResource(workspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.InitializeResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+        }
+
+        public void ResetConfig(string userspaceDirectory, string configFile)
+        {
+            _resourceManager.RemoveResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.InitializeResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+        }
+
         public string GetConfigPath(string workspaceOrUserspaceDirectory, string configFile)
         {
             return _resourceManager.GetResourcePath(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory, configFile);
         }
 
-        public string[] GetConfigFiles()
+        public string[] GetConfigFiles(string workspaceOrUserspaceDirectory)
         {
-            return new[]
+            var allConfigFiles = new[]
             {
                 FileSystem.ApplicationFile,
                 FileSystem.ToolkitFile,
                 FileSystem.WorkspaceFile
             };
+
+            return _resourceManager.GetResourcePaths(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory)
+                .Where(p => allConfigFiles.Contains(Path.GetFileName(p)))
+                .ToArray();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Linq;
+using AstralKeks.Workbench.Core.Data;
 
 namespace AstralKeks.Workbench.Core.Management
 {
@@ -20,21 +21,21 @@ namespace AstralKeks.Workbench.Core.Management
             _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
         }
 
-        public IEnumerable<string> GetToolkitDirectories()
+        public string[] GetToolkitDirectories()
         {
             var workspaceDirectory = _workspaceManager.GetWorkspaceDirectory();
             var userspaceDirectory = _userspaceManager.GetUserspaceDirectory();
             var repositoryConfig = _configurationManager.GetRepositoryConfig(workspaceDirectory, userspaceDirectory);
-            return repositoryConfig.Select(r => _macrosManager.ResolveMacros(r.Directory));
+            return repositoryConfig.Select(r => _macrosManager.ResolveMacros(r.Directory)).ToArray();
         }
 
-        public string ResolveToolkitModule(string moduleName, string moduleBase, ICollection<string> directories)
+        public Toolkit ResolveToolkit(string moduleName, string moduleBase, ICollection<string> directories)
         {
-            var isResolved = !string.IsNullOrWhiteSpace(moduleName) &&
-                !string.IsNullOrWhiteSpace(moduleBase) &&
-                directories.Any(moduleBase.StartsWith);
+            string directory = null;
+            if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleBase))
+                directory = directories.FirstOrDefault(moduleBase.StartsWith);
 
-            return isResolved ? moduleName : null;
+            return directory != null ? new Toolkit(directory, moduleName) : null;
         }
 
     }

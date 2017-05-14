@@ -32,6 +32,12 @@ namespace AstralKeks.Workbench.Core.Management
             return Path.GetFullPath(new Uri(combinedPath).LocalPath);
         }
 
+        public string[] GetFilesInDirectory(string parentPath, string childPath = null)
+        {
+            var path = GetAbsolutePath(parentPath, childPath);
+            return Directory.GetFiles(path);
+        }
+
         public string GetBinDirectoryPath()
         {
             //var codeBase = typeof(FileSystemManager).GetTypeInfo().Assembly.CodeBase;
@@ -63,6 +69,12 @@ namespace AstralKeks.Workbench.Core.Management
             CreateDirectoryIfNotExists(Path.GetDirectoryName(path));
             if (!File.Exists(path))
                 File.WriteAllText(path, content);
+        }
+
+        public void DeleeteFile(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
         }
     }
 }

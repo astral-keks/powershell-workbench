@@ -1,4 +1,11 @@
 
+## 0.0.6
+### Added
+- Reset-WBConfiguration cmdlet
+- Get-WBToolkit cmdlet
+### Changed
+- Minor refactoring
+
 ## 0.0.5
 ### Added
 - Get-WBWorkspace cmdlet
