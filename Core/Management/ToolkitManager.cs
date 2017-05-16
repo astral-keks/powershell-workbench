@@ -21,22 +21,32 @@ namespace AstralKeks.Workbench.Core.Management
             _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
         }
 
-        public string[] GetToolkitDirectories()
+        public Repository[] GetToolkitRepositories()
         {
             var workspaceDirectory = _workspaceManager.GetWorkspaceDirectory();
             var userspaceDirectory = _userspaceManager.GetUserspaceDirectory();
-            var repositoryConfig = _configurationManager.GetRepositoryConfig(workspaceDirectory, userspaceDirectory);
-            return repositoryConfig.Select(r => _macrosManager.ResolveMacros(r.Directory)).ToArray();
+            var repositories = _configurationManager.GetRepositoryConfig(workspaceDirectory, userspaceDirectory);
+            foreach (var repository in repositories)
+                repository.Directory = _macrosManager.ResolveMacros(repository.Directory);
+            return repositories;
         }
 
-        public Toolkit ResolveToolkit(string moduleName, string moduleBase, ICollection<string> directories)
+        public string ResolveToolkitModule(string moduleName, string moduleBase, ICollection<Repository> repositories)
         {
-            string directory = null;
+            Repository repository = null;
             if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleBase))
-                directory = directories.FirstOrDefault(moduleBase.StartsWith);
+            {
+                repository = repositories
+                    .Where(r => !string.IsNullOrWhiteSpace(r.Directory))
+                    .FirstOrDefault(r => moduleBase.StartsWith(r.Directory));
+            }
+            if (repository != null && repository.Modules != null && repository.Modules.Any())
+            {
+                if (repository.Modules.All(m => m != moduleName))
+                    repository = null;
+            }
 
-            return directory != null ? new Toolkit(directory, moduleName) : null;
+            return repository != null ? moduleName : null;
         }
-
     }
 }

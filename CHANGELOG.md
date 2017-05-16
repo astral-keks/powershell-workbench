@@ -1,4 +1,8 @@
 
+## 0.0.7
+### Added
+- Module list in Toolkit.json
+
 ## 0.0.6
 ### Added
 - Reset-WBConfiguration cmdlet

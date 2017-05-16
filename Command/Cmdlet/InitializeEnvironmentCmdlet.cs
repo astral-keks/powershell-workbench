@@ -37,26 +37,43 @@ namespace AstralKeks.Workbench.Command
                 InvokeCommand.InvokeScript($"Set-Alias {application.Name} {cmdletInfo.VerbName}-{cmdletInfo.NounName} -Scope Global");
         }
 
-        private IEnumerable<Toolkit> InitializeToolkits()
+        private IList<string> InitializeToolkits()
         {
-            var psModulePathDirectories = Env.ToolkitManager.GetToolkitDirectories();
-            var psModulePath = string.Join(";", psModulePathDirectories.Where(p => !string.IsNullOrWhiteSpace(p)));
+            var toolkitRepositories = Env.ToolkitManager.GetToolkitRepositories();
+            var directoryToolkitRepositories = toolkitRepositories
+                .Where(t => !string.IsNullOrWhiteSpace(t.Directory) && (t.Modules == null || !t.Modules.Any()))
+                .ToList();
+
+            var modules = toolkitRepositories.
+                SelectMany(r => r.Modules ?? new string[0])
+                .ToList();
+
+            var directories = toolkitRepositories
+                .Select(r => r.Directory)
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .ToArray();
+            var psModulePath = string.Join(";", directories.Where(p => !string.IsNullOrWhiteSpace(p)));
             var oldPsModulePath = SessionState.PSVariable.GetValue("env:PSModulePath");
+
             try
             {
                 InvokeCommand.InvokeScript($"$env:PSModulePath = '{psModulePath}'");
 
-                return InvokeCommand.InvokeScript("Get-Module -ListAvailable")
-                    .Select(o => Env.ToolkitManager.ResolveToolkit(
+                var resolvedModules = InvokeCommand.InvokeScript("Get-Module -ListAvailable")
+                    .Select(o => Env.ToolkitManager.ResolveToolkitModule(
                         o.Properties.FirstOrDefault(p => p.Name == "Name")?.Value as string,
                         o.Properties.FirstOrDefault(p => p.Name == "ModuleBase")?.Value as string,
-                        psModulePathDirectories))
+                        directoryToolkitRepositories))
                     .Where(t => t != null);
+
+                modules.AddRange(resolvedModules);
             }
             finally
             {
                 InvokeCommand.InvokeScript($"$env:PSModulePath = '{oldPsModulePath};{psModulePath}'");
             }
+
+            return modules;
         }
     }
 }
