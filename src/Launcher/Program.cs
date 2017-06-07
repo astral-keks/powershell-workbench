@@ -13,7 +13,10 @@ namespace AstralKeks.Workbench.Launcher
 
         public static int Main(string[] args)
         {
-            var app = new CommandLineApplication();
+            var app = new CommandLineApplication()
+            {
+                Description = Description.Default
+            };
             app.OnExecute(() => Default());
             app.Command(Nouns.Environment, noun =>
             {
@@ -51,7 +54,6 @@ namespace AstralKeks.Workbench.Launcher
                 noun.OnExecute(() => HandleHelp(noun));
                 noun.HelpOption(Options.HelpTemplate);
             });
-            app.Description = Description.Default;
             app.HelpOption(Options.HelpTemplate);
 
             try

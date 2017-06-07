@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <AssemblyName>AstralKeks.Workbench.Command</AssemblyName>
+    <RootNamespace>AstralKeks.Workbench.Command</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="AstralKeks.Workbench.Command.dll-Help.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Script\Initialize-Workbench.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Workbench.Core.csproj" />
+    <ProjectReference Include="..\PowerShell\Workbench.PowerShell.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management.Automation.dll" Version="10.0.10586" />
+  </ItemGroup>
+
+</Project>

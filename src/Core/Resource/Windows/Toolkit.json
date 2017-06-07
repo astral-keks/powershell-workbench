@@ -1,0 +1,17 @@
+﻿// Toolkits discovery locations and modules
+[
+  {
+    // Directory to look in for toolkits
+    "Directory": "{$Bin}\\Toolkits"
+    // Macro variables
+    // {$Bin}  - path to workbench installation directory
+    // {$User} - %LOCALAPPDATA%
+
+    // Modules from the directory to import automatically
+    // All discovered modules from this directory are imported if this list is ommitted
+    // "Modules": [
+    //  "Some.Module"
+    //  "Other.Module"
+    //]
+  }
+]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
+using System.Reflection;
 
 namespace AstralKeks.Workbench.Command
 {
@@ -28,6 +29,7 @@ namespace AstralKeks.Workbench.Command
         private void InitializeAliases()
         {
             var cmdletInfo = typeof(StartApplicationCmdlet)
+                .GetTypeInfo()
                 .GetCustomAttributes(typeof(CmdletAttribute), true)
                 .Cast<CmdletAttribute>()
                 .First();

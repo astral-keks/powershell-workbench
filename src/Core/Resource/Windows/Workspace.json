@@ -1,0 +1,21 @@
+﻿// Workspace templates
+[
+  {
+    // This template is used if no template name is specified when creating workspace
+    "Name": "Default",
+
+    // These are directories which should be created inside new workspace
+    "Directories": [
+      "Config",
+      "Source",
+      "Temp"
+    ],
+
+    // These are names of files which should be copied from .Workbench userspace directory into new workspace
+    // Example 1: Workspace.bat is copied to workspace root.
+    // Example 2: SomeDir/SomeFile.ext is be copied int SomeDir/SomeFile.ext inside workspace
+    "Files": [
+      "Workspace.bat"
+    ]
+  }
+]

@@ -1,3 +1,7 @@
+## 0.1.0
+### Added
+- Documentation
+- New directory structure
 
 ## 0.0.7
 ### Added

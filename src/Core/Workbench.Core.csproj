@@ -5,7 +5,7 @@
     <AssemblyName>AstralKeks.Workbench.Core</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Core</RootNamespace>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <EmbeddedResource Include="Resource\Windows\.Workspace" />
     <EmbeddedResource Include="Resource\Windows\History.json" />

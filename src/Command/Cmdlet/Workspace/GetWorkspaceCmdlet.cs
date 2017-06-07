@@ -4,6 +4,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Get, Noun.WBWorkspace)]
+    [OutputType(typeof(string))]
     public class GetWorkspaceCmdlet : WorkbenchDynamicCmdlet
     {
         [DynamicParameter(Position = 0)]
