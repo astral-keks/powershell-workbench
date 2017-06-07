@@ -2,6 +2,7 @@
 ### Added
 - Documentation
 - New directory structure
+- Build scripts
 
 ## 0.0.7
 ### Added
