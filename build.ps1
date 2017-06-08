@@ -5,8 +5,8 @@ $package = "$PSScriptRoot\package"
 $tmp = "$artifact\tmp"
 
 # Build binaries
-Remove-Item $artifact -Recurse
-Remove-Item $package -Recurse
+if (Test-Path $artifact) { Remove-Item $artifact -Recurse }
+if (Test-Path $package) { Remove-Item $package -Recurse }
 dotnet restore $src\Launcher\Workbench.Launcher.csproj
 dotnet build $src\Launcher\Workbench.Launcher.csproj --configuration Release -o  $artifact
 dotnet restore $src\Command\Workbench.Command.csproj
@@ -14,6 +14,7 @@ dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o  $
 
 # Build help xml
 (Get-Content $doc\Commands.md -Raw) -split "<br><br>" |
+    Select-Object -Skip 1 |
     ForEach-Object {
         $_ = $_.Trim()
         $name = $_.Substring(0, $_.IndexOf("`r`n")).Trim("#").Trim()
@@ -31,4 +32,4 @@ dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o  $
 Import-Module platyPS
 New-ExternalHelp $tmp -OutputPath $artifact -Force
 
-Remove-Item $tmp -Recurse
+if (Test-Path $tmp) { Remove-Item $tmp -Recurse }
