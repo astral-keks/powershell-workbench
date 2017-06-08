@@ -1,3 +1,7 @@
+## 0.1.1
+### Changed
+- Output path in .csproj files changed to artifacts folder
+
 ## 0.1.0
 ### Added
 - Documentation

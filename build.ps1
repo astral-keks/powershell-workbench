@@ -1,6 +1,6 @@
 $src = "$PSScriptRoot\src"
 $doc = "$PSScriptRoot\doc"
-$artifact = "$PSScriptRoot\artifact"
+$artifact = "$PSScriptRoot\artifact\net462"
 $package = "$PSScriptRoot\package"
 $tmp = "$artifact\tmp"
 

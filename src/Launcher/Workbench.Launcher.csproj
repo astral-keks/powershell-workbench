@@ -5,10 +5,7 @@
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Launcher</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Launcher</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>..\..\artifact</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.PowerShell</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.PowerShell</RootNamespace>
+    <OutputPath>..\..\artifact</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

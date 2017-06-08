@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Workbench.Launcher": {
-      "commandName": "Project",
-      "commandLineArgs": "application info terminal"
-    }
-  }
-}

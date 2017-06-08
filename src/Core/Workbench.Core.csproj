@@ -4,8 +4,9 @@
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Core</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Core</RootNamespace>
+    <OutputPath>..\..\artifact</OutputPath>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Resource\Windows\.Workspace" />
     <EmbeddedResource Include="Resource\Windows\History.json" />
