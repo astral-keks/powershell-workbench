@@ -1,4 +1,4 @@
-# Workbench.bat
+# Workbench Launcher
 
 This console application is used to perform several basic Workbench operations without starting PowerShell.
 
