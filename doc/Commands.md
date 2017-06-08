@@ -1,3 +1,13 @@
+# Workbench Commands
+
+- [Initialize-WBEnvironment](#initialize-wbenvironment)
+- [Edit-WBConfiguration](#edit-wbconfiguration)
+- [Reset-WBConfiguration](#reset-wbconfiguration)
+- [New-WBWorkspace](#new-wbworkspace)
+- [Get-WBWorkspace](#get-wbworkspace)
+- [Switch-WBWorkspace](#switch-wbworkspace)
+- [Start-WBApplication](#start-wbapplication)
+<br><br>
 # Initialize-WBEnvironment
 
 ## SYNOPSIS
