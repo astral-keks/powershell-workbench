@@ -15,45 +15,55 @@ namespace AstralKeks.Workbench.Launcher
         {
             var app = new CommandLineApplication()
             {
-                Description = Description.Default
+                Name = Names.ApplicationName
             };
-            app.OnExecute(() => Default());
+
+            app.OnExecute(() => HandleHelp(app));
+
             app.Command(Nouns.Environment, noun =>
             {
                 noun.Command(Verbs.Install, verb =>
                 {
                     verb.OnExecute(() => EnvironmentInstall());
-                    verb.Description = Description.InstallVerb;
+                    verb.Description = Descriptions.EnvironmentInstallVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
-                noun.OnExecute(() => HandleHelp(noun));
-                noun.HelpOption(Options.HelpTemplate);
-            });
-            app.Command(Nouns.Application, noun =>
-            {
-                noun.Command(Verbs.Start, verb => 
+                noun.Command(Verbs.Uninstall, verb =>
                 {
-                    var appName = verb.Argument(Arguments.ApplicationName, Description.ApplicationNameArg);
-                    var cmdName = verb.Argument(Arguments.CommandName, Description.CommandNameArg);
-                    var argList = verb.Argument(Arguments.ArgumentsList, Description.ArgumentsArg, true);
-                    verb.OnExecute(() => ApplicationStart(appName, cmdName, argList));
-                    verb.Description = Description.StartVerb;
+                    verb.OnExecute(() => EnvironmentUninstall());
+                    verb.Description = Descriptions.EnvironmentUninstallVerb;
+                    verb.HelpOption(Options.HelpTemplate);
+                });
+                noun.Command(Verbs.Reset, verb =>
+                {
+                    verb.OnExecute(() => EnvironmentReset());
+                    verb.Description = Descriptions.EnvironmentResetVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
                 noun.OnExecute(() => HandleHelp(noun));
                 noun.HelpOption(Options.HelpTemplate);
             });
+
             app.Command(Nouns.Workspace, noun =>
             {
                 noun.Command(Verbs.Create, verb =>
                 {
                     verb.OnExecute(() => WorkspaceCreate());
-                    verb.Description = Description.CreateVerb;
+                    verb.Description = Descriptions.WorkspaceCreateVerb;
+                    verb.HelpOption(Options.HelpTemplate);
+                });
+                noun.Command(Verbs.Start, verb =>
+                {
+                    var appName = verb.Argument(Arguments.ApplicationName, Descriptions.ApplicationNameArg);
+                    var argList = verb.Argument(Arguments.ArgumentsList, Descriptions.ArgumentsArg, true);
+                    verb.OnExecute(() => WorkspaceStart(appName, argList));
+                    verb.Description = Descriptions.WorkspaceStartVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
                 noun.OnExecute(() => HandleHelp(noun));
                 noun.HelpOption(Options.HelpTemplate);
             });
+
             app.HelpOption(Options.HelpTemplate);
 
             try
@@ -66,27 +76,35 @@ namespace AstralKeks.Workbench.Launcher
             }
         }
 
-        private static int Default()
-        {
-            var host = new WorkbenchHost();
-            host.StartDefaultApplication();
-            return HandleSuccess();
-        }
-
-
         private static int EnvironmentInstall()
         {
             var host = new WorkbenchHost();
             host.InstallEnvironment();
 
-            Console.WriteLine("Environment installation succeeded");
             return HandleSuccess();
         }
 
-        private static int ApplicationStart(CommandArgument applicationName, CommandArgument commandName, CommandArgument args)
+        private static int EnvironmentUninstall()
         {
             var host = new WorkbenchHost();
-            host.StartApplication(applicationName.Value, commandName.Value, args.Values);
+            host.UninstallEnvironment();
+
+            return HandleSuccess();
+        }
+
+        private static int EnvironmentReset()
+        {
+            var host = new WorkbenchHost();
+            host.ResetEnvironment();
+
+            return HandleSuccess();
+        }
+
+        private static int WorkspaceStart(CommandArgument applicationName, CommandArgument args)
+        {
+            var host = new WorkbenchHost();
+            host.StartWorkspace(applicationName.Value, args.Values);
+
             return HandleSuccess();
         }
 
@@ -94,7 +112,7 @@ namespace AstralKeks.Workbench.Launcher
         {
             var host = new WorkbenchHost();
             host.CreateWorkspace();
-            Console.WriteLine("Workspace creation succeeded");
+
             return HandleSuccess();
         }
 

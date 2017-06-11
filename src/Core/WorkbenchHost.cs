@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AstralKeks.Workbench.Core.Data;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AstralKeks.Workbench.Core
@@ -7,21 +9,28 @@ namespace AstralKeks.Workbench.Core
     {
         private readonly WorkbenchEnvironment _env = new WorkbenchEnvironment();
 
-        public string InstallEnvironment()
+        public void InstallEnvironment()
         {
-            return _env.InstallationManager.PerformInstallation();
+            _env.InstallationManager.InstallVariables();
+            _env.InstallationManager.InstallConfiguration();
         }
 
-        public void StartDefaultApplication()
+        public void UninstallEnvironment()
         {
-            _env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
-            _env.ApplicationManager.StartApplication();
+            _env.InstallationManager.UninstallVariables();
+            _env.InstallationManager.UninstallConfiguration();
         }
 
-        public void StartApplication(string applicationName, string commandName, List<string> arguments)
+        public void ResetEnvironment()
+        {
+            UninstallEnvironment();
+            InstallEnvironment();
+        }
+
+        public void StartWorkspace(string applicationName, List<string> arguments)
         {
             _env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
-            _env.ApplicationManager.StartApplication(applicationName, commandName, arguments);
+            _env.ApplicationManager.StartApplication(applicationName, Command.Workspace, arguments);
         }
 
         public void CreateWorkspace()

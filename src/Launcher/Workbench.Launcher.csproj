@@ -9,17 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ContentWithTargetPath Include="Script\Workbench.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>Workbench.bat</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Workbench.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Workbench.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

@@ -4,36 +4,38 @@ This console application is used to perform several basic Workbench operations w
 
 ## Syntax
 ```
-workbench [command] [verb] [arguments] [options]
+workbench command verb [arguments] [options]
 ```
+## Options
+ - `-h|--help|-?` Show help information.
 
-## Commands
+## Commands, verbs, arguments
 ```
-workbench
+workbench environment install
 ```
-Searches for workspace or creates it using Default template and starts Terminal in current directory.
+Installs Workbench environment variables and configurations.
 <br><br>
 ```
-workbench environment install [options]
+workbench environment uninstall
 ```
-Adds Workbench directory to PATH variable.
+Uninstalls Workbench environment variables and configurations.
 <br><br>
 ```
-workbench workspace create [options]
+workbench environment reset
 ```
-Creates workspace in current directory using Default template.
+Resets Workbench environment variables and configurations to defaults.
 <br><br>
 ```
-workbench application start [arguments] [options]
+workbench workspace create
 ```
-Searches for workspace or creates it using Default template and starts application in current directory.
+Creates workspace in current directory.
+<br><br>
+```
+workbench workspace start [arguments]
+```
+Finds or creates workspace and starts application in current directory.
 
 Arguments:
-- `[name]`     application name
-- `[command]`  application command name
-- `[args]`     application arguments
+- `[app]` application name. Terminal is used by default.
+- `[args]` application arguments.
 
-
-## Options
-
- - `-h|--help|-?` Show help information.

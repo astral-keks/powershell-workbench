@@ -1,2 +1,2 @@
 ﻿@echo off
-Workbench Application Start WorkspaceEditor
+Workbench Workspace Start Editor

@@ -13,10 +13,12 @@ namespace AstralKeks.Workbench.Command
             switch (Location)
             {
                 case Workspace:
-                    Env.ConfigurationManager.ResetConfig(workspaceDirectory, userspaceDirectory, ConfigFile);
+                    Env.ConfigurationManager.DeleteConfig(workspaceDirectory, ConfigFile);
+                    Env.ConfigurationManager.CreateConfig(workspaceDirectory, userspaceDirectory, ConfigFile);
                     break;
                 case Userspace:
-                    Env.ConfigurationManager.ResetConfig(userspaceDirectory, ConfigFile);
+                    Env.ConfigurationManager.DeleteConfig(userspaceDirectory, ConfigFile);
+                    Env.ConfigurationManager.CreateConfig(userspaceDirectory, ConfigFile);
                     break;
                 default:
                     throw new NotSupportedException(Location);

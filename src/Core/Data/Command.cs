@@ -4,6 +4,7 @@ namespace AstralKeks.Workbench.Core.Data
     public class Command
     {
         public const string Default = "Default";
+        public const string Workspace = "Workspace";
 
         public string Name { get; set; }
         public string Arguments { get; set; }

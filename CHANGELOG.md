@@ -1,6 +1,6 @@
-## 0.1.1
+## 0.1.2
 ### Changed
-- Output path in .csproj files changed to artifacts folder
+- Reworked Launcher command-line interface
 
 ## 0.1.0
 ### Added

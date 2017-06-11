@@ -5,7 +5,6 @@ namespace AstralKeks.Workbench.Core
     public class WorkbenchEnvironment
     {
         private readonly FileSystemManager _fileSystemManager;
-        private readonly InstallationManager _installationManager;
         private readonly MacrosManager _macrosManager;
         private readonly ResourceManager _resourceManager;
         private readonly ConfigurationManager _configurationManager;
@@ -13,13 +12,11 @@ namespace AstralKeks.Workbench.Core
         private readonly WorkspaceManager _workspaceManager;
         private readonly ApplicationManager _applicationManager;
         private readonly ToolkitManager _toolkitManager;
-        private readonly ContextManager _contextManager;
-        private readonly HistoryManager _historyManager;
+        private readonly InstallationManager _installationManager;
 
         public WorkbenchEnvironment()
         {
             _fileSystemManager = new FileSystemManager();
-            _installationManager = new InstallationManager(_fileSystemManager);
             _macrosManager = new MacrosManager(_fileSystemManager);
             _resourceManager = new ResourceManager(_fileSystemManager);
             _configurationManager = new ConfigurationManager(_resourceManager);
@@ -27,8 +24,7 @@ namespace AstralKeks.Workbench.Core
             _workspaceManager = new WorkspaceManager(_userspaceManager, _configurationManager, _fileSystemManager, _resourceManager);
             _applicationManager = new ApplicationManager(_workspaceManager, _userspaceManager, _configurationManager, _macrosManager);
             _toolkitManager = new ToolkitManager(_workspaceManager, _userspaceManager, _configurationManager, _macrosManager);
-            _contextManager = new ContextManager(_workspaceManager, _userspaceManager);
-            _historyManager = new HistoryManager(_userspaceManager, _resourceManager);
+            _installationManager = new InstallationManager(_fileSystemManager, _userspaceManager, _configurationManager);
         }
 
         public InstallationManager InstallationManager => _installationManager;
@@ -44,9 +40,5 @@ namespace AstralKeks.Workbench.Core
         public ToolkitManager ToolkitManager => _toolkitManager;
 
         public FileSystemManager FileSystemManager => _fileSystemManager;
-
-        public ContextManager ContextManager => _contextManager;
-
-        public HistoryManager HistoryManager => _historyManager;
     }
 }

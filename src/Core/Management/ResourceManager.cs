@@ -12,7 +12,7 @@ namespace AstralKeks.Workbench.Core.Management
             _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
         }
 
-        public void InitializeResource(string workspaceDirectory, string userspaceDirectory, 
+        public void CreateResource(string workspaceDirectory, string userspaceDirectory, 
             string directory, string filename)
         {
             var workspacePath = GetResourcePath(workspaceDirectory, directory, filename);
@@ -28,7 +28,7 @@ namespace AstralKeks.Workbench.Core.Management
             resource.Read();
         }
 
-        public void InitializeResource(string userspaceDirectory, string directory, string filename)
+        public void CreateResource(string userspaceDirectory, string directory, string filename)
         {
             var userspacePath = GetResourcePath(userspaceDirectory, directory, filename);
             var embeddedResourceName = GetResourceName(filename);
@@ -78,7 +78,7 @@ namespace AstralKeks.Workbench.Core.Management
             return _fileSystemManager.GetFilesInDirectory(rootDirectory, directory);
         }
 
-        public void RemoveResource(string rootDirectory, string directory, string filename)
+        public void DeleteResource(string rootDirectory, string directory, string filename)
         {
             var resourcePath = GetResourcePath(rootDirectory, directory, filename);
             _fileSystemManager.DeleeteFile(resourcePath);

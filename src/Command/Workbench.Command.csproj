@@ -8,12 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="AstralKeks.Workbench.Command.dll-Help.xml">
+    <ContentWithTargetPath Include="Script\Initialize-Workbench.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Script\Initialize-Workbench.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+      <TargetPath>Initialize-Workbench.ps1</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 
   <ItemGroup>

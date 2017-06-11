@@ -57,16 +57,19 @@ namespace AstralKeks.Workbench.Core.Management
             return resource.Read();
         }
 
-        public void ResetConfig(string workspaceDirectory, string userspaceDirectory, string configFile)
+        public void CreateConfig(string workspaceDirectory, string userspaceDirectory, string configFile)
         {
-            _resourceManager.RemoveResource(workspaceDirectory, FileSystem.ConfigDirectory, configFile);
-            _resourceManager.InitializeResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.CreateResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+        }
+        
+        public void CreateConfig(string userspaceDirectory, string configFile)
+        {
+            _resourceManager.CreateResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
         }
 
-        public void ResetConfig(string userspaceDirectory, string configFile)
+        public void DeleteConfig(string workspaceOrUserspaceDirectory, string configFile)
         {
-            _resourceManager.RemoveResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
-            _resourceManager.InitializeResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.DeleteResource(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory, configFile);
         }
 
         public string GetConfigPath(string workspaceOrUserspaceDirectory, string configFile)
@@ -76,16 +79,19 @@ namespace AstralKeks.Workbench.Core.Management
 
         public string[] GetConfigFiles(string workspaceOrUserspaceDirectory)
         {
-            var allConfigFiles = new[]
+            return _resourceManager.GetResourcePaths(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory)
+                .Select(Path.GetFileNameWithoutExtension)
+                .ToArray();
+        }
+
+        public string[] GetConfigFiles()
+        {
+            return new[]
             {
                 FileSystem.ApplicationFile,
                 FileSystem.ToolkitFile,
                 FileSystem.WorkspaceFile
             };
-
-            return _resourceManager.GetResourcePaths(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory)
-                .Where(p => allConfigFiles.Contains(Path.GetFileName(p)))
-                .ToArray();
         }
     }
 }

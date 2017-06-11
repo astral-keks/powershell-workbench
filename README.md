@@ -32,7 +32,7 @@ I understand that there already exists software which solves these problems one 
   ```
 - To verify installation initialize new workspace and start PowerShell by executing following command in any empty directory:
   ```
-  workbench
+  workbench workspace start
   ```
   All Workbench commands should be available in created PowerShell session.
 

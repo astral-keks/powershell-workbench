@@ -25,9 +25,7 @@ namespace AstralKeks.Workbench.Command
 
         public string[] GetConfigurations(string word)
         {
-            return Env.ConfigurationManager.GetConfigFiles(RootDirectory)
-                .Select(Path.GetFileNameWithoutExtension)
-                .ToArray();
+            return Env.ConfigurationManager.GetConfigFiles(RootDirectory);
         }
 
         protected string RootDirectory
@@ -51,7 +49,7 @@ namespace AstralKeks.Workbench.Command
             get
             {
                 return Env.ConfigurationManager.GetConfigFiles(RootDirectory)
-                    .FirstOrDefault(f => f.StartsWith(Configuration));
+                    .FirstOrDefault(f => f.Contains(Configuration));
             }
         }
     }

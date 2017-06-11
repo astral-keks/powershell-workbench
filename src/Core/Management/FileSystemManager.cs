@@ -76,5 +76,10 @@ namespace AstralKeks.Workbench.Core.Management
             if (File.Exists(path))
                 File.Delete(path);
         }
+
+        public string ReadFile(string path)
+        {
+            return File.Exists(path) ? File.ReadAllText(path) : null;
+        }
     }
 }

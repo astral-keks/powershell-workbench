@@ -3,7 +3,7 @@
   {
     // Application name as well as PowerShell alias
     "Name": "Editor",
-    
+
     // Path to application executable
     "Executable": "C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe",
 
@@ -26,6 +26,12 @@
 
         // Wait for the application to exit
         "WaitForExit": false
+      },
+      {
+        "Name": "Workspace", // Used by Workspace Start command in launcher
+        "Arguments": ".",
+        "UseShellExecute": false,
+        "WaitForExit": false
       }
     ]
   },
@@ -38,6 +44,12 @@
         "Arguments": "",
         "UseShellExecute": true,
         "WaitForExit": false
+      },
+      {
+        "Name": "Workspace", // Used by Workspace Start command in launcher
+        "Arguments": "-NoExit -File \"{$Bin}\\Initialize-Workbench.ps1\"",
+        "UseShellExecute": false,
+        "WaitForExit": true
       }
     ]
   },
@@ -60,33 +72,6 @@
       {
         "Name": "Default",
         "Arguments": "/f {$Pipeline}",
-        "UseShellExecute": false,
-        "WaitForExit": false
-      }
-    ]
-  },
-
-  // Prefined applications used by Workbench
-  // Modify with caution
-  {
-    "Name": "WorkspaceTerminal",
-    "Executable": "C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
-    "Commands": [
-      {
-        "Name": "Default",
-        "Arguments": "-NoExit -File \"{$Bin}\\Script\\Initialize-Workbench.ps1\"",
-        "UseShellExecute": false,
-        "WaitForExit": true
-      }
-    ]
-  },
-  {
-    "Name": "WorkspaceEditor",
-    "Executable": "C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe",
-    "Commands": [
-      {
-        "Name": "Default",
-        "Arguments": ".",
         "UseShellExecute": false,
         "WaitForExit": false
       }
