@@ -13,9 +13,7 @@
 
     // These are names of files which should be copied from .Workbench userspace directory into new workspace
     // Example 1: Workspace.bat is copied to workspace root.
-    // Example 2: SomeDir/SomeFile.ext is be copied int SomeDir/SomeFile.ext inside workspace
-    "Files": [
-      "Workspace.bat"
-    ]
+    // Example 2: SomeDir/SomeFile.ext is be copied into SomeDir/SomeFile.ext inside workspace
+    "Files": []
   }
 ]

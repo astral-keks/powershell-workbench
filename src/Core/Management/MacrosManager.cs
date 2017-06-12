@@ -28,7 +28,7 @@ namespace AstralKeks.Workbench.Core.Management
 
         public string ResolveMacros(string input)
         {
-            return input
+            return (input ?? string.Empty)
                 .Replace("{$Bin}", PreparePath(_fileSystemManager.GetBinDirectoryPath()))
                 .Replace("{$User}", PreparePath(_fileSystemManager.GetUserDirectoryPath()));
         }

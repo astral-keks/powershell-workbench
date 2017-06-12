@@ -47,11 +47,15 @@ namespace AstralKeks.Workbench.Core.Management
             applicationName = applicationName ?? Application.Default;
             commandName = commandName ?? Command.Default;
             arguments = (arguments ?? Enumerable.Empty<string>()).Select(a => $"\"{a}\"").ToList();
-            pipeline = $"\"{pipeline ?? string.Empty}\"";
+            pipeline = !string.IsNullOrEmpty(pipeline) ? $"\"{pipeline ?? string.Empty}\"" : string.Empty;
 
             var applications = GetApplications();
             var application = applications.FirstOrDefault(app => ApplicationHasName(app, applicationName));
             var command = application?.Commands.FirstOrDefault(cmd => CommandHasName(cmd, commandName));
+            var commandArguments = (command?.Arguments ?? new List<string>())
+                .Select(a => _macrosManager.ResolveMacros(a, pipeline, arguments))
+                .Where(a => !string.IsNullOrEmpty(a))
+                .ToList();
 
             if (application == null)
                 throw new ArgumentException($"Application '{applicationName}' is not configured");
@@ -63,7 +67,7 @@ namespace AstralKeks.Workbench.Core.Management
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = application.Executable,
-                    Arguments = _macrosManager.ResolveMacros(command.Arguments, pipeline, arguments),
+                    Arguments = string.Join(" ", commandArguments),
                     UseShellExecute = command.UseShellExecute,
                     CreateNoWindow = command.NoWindow
                 }

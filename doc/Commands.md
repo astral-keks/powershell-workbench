@@ -415,7 +415,7 @@ Equivalent to Example 1.
 
 ### Example 3
 ```
-PS C:\> Terminal SomeCommand '.\Some\Path\For\Example'
+PS C:\> Terminal '.\Some\Path\For\Example' -CommandName SomeCommand
 ```
 
 Starts Terminal application using SomeCommand command.
@@ -446,7 +446,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -461,7 +461,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -476,7 +476,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

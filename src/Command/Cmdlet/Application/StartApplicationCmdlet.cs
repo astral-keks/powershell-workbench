@@ -13,14 +13,14 @@ namespace AstralKeks.Workbench.Command
         [DynamicCompleter(nameof(GetApplications))]
         public string ApplicationName => Parameters.GetValue<string>(nameof(ApplicationName)) ?? MyInvocation.InvocationName;
 
-        [DynamicParameter(Position = 0)]
+        [DynamicParameter]
         [DynamicCompleter(nameof(GetCommands))]
         public string CommandName => Parameters.GetValue<string>(nameof(CommandName));
 
-        [DynamicParameter(Position = 1)]
+        [DynamicParameter(Position = 0)]
         public List<string> Arguments => Parameters.GetValue<List<string>>(nameof(Arguments));
 
-        [DynamicParameter(Position = 2, ValueFromPipeline = true)]
+        [DynamicParameter(ValueFromPipeline = true)]
         public string Pipeline => Parameters.GetValue<string>(nameof(Pipeline));
 
         protected override void ProcessRecord()

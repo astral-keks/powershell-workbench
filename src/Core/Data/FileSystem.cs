@@ -8,12 +8,10 @@ namespace AstralKeks.Workbench.Core.Data
         public static string SourceDirectory => "Source";
         public static string TempDirectory => "Temp";
 
-
-        public static string LauncherFile => "Start-Workspace.bat";
         public static string ApplicationFile => "Application.json";
         public static string ToolkitFile => "Toolkit.json";
         public static string WorkspaceFile => "Workspace.json";
         public static string HistoryFile => "History.json";
-        public static string WorkspaceMarkerFile => ".Workspace";
+        public static string WorkspaceLauncherFile => "Workspace.bat";
     }
 }

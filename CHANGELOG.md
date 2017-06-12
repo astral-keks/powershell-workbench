@@ -1,3 +1,10 @@
+## 0.1.3
+### Removed
+- .Workspace file from workspace Config directory
+### Fixed
+- Incorrect Edit-WBConfiguration autosuggest
+- Incorrect Start-WBApplication application arguments resolution
+
 ## 0.1.2
 ### Changed
 - Reworked Launcher command-line interface

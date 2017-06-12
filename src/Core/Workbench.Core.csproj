@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resource\Windows\.Workspace" />
     <EmbeddedResource Include="Resource\Windows\Workspace.bat" />
     <EmbeddedResource Include="Resource\Windows\Workspace.json" />
     <EmbeddedResource Include="Resource\Windows\Application.json" />

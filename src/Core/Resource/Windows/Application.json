@@ -14,7 +14,7 @@
         "Name": "Default",
 
         // Arguments to pass to executable when starting the application
-        "Arguments": "{$Pipeline} {$Args}",
+        "Arguments": ["{$Pipeline}", "{$Args}"],
         // Macro variables
         // {$Bin}      - path to workbench installation directory
         // {$User}     - `%LOCALAPPDATA%`
@@ -29,7 +29,7 @@
       },
       {
         "Name": "Workspace", // Used by Workspace Start command in launcher
-        "Arguments": ".",
+        "Arguments": ["."],
         "UseShellExecute": false,
         "WaitForExit": false
       }
@@ -41,13 +41,13 @@
     "Commands": [
       {
         "Name": "Default",
-        "Arguments": "",
+        "Arguments": [],
         "UseShellExecute": true,
         "WaitForExit": false
       },
       {
         "Name": "Workspace", // Used by Workspace Start command in launcher
-        "Arguments": "-NoExit -File \"{$Bin}\\Initialize-Workbench.ps1\"",
+        "Arguments": ["-NoExit", "-File \"{$Bin}\\Initialize-Workbench.ps1\""],
         "UseShellExecute": false,
         "WaitForExit": true
       }
@@ -59,7 +59,7 @@
     "Commands": [
       {
         "Name": "Default",
-        "Arguments": "{$Pipeline} {$Args}",
+        "Arguments": ["{$Pipeline}", "{$Args}"],
         "UseShellExecute": false,
         "WaitForExit": false
       }
@@ -71,7 +71,7 @@
     "Commands": [
       {
         "Name": "Default",
-        "Arguments": "/f {$Pipeline}",
+        "Arguments": ["/f {$Pipeline}"],
         "UseShellExecute": false,
         "WaitForExit": false
       }

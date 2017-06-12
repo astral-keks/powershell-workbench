@@ -80,7 +80,8 @@ namespace AstralKeks.Workbench.Core.Management
         public string[] GetConfigFiles(string workspaceOrUserspaceDirectory)
         {
             return _resourceManager.GetResourcePaths(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory)
-                .Select(Path.GetFileNameWithoutExtension)
+                .Select(Path.GetFileName)
+                .Where(f => !string.IsNullOrWhiteSpace(f))
                 .ToArray();
         }
 
