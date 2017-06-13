@@ -55,7 +55,7 @@ namespace AstralKeks.Workbench.Core.Management
             while (workspaceDirectory != null && !predicate(workspaceDirectory))
                 workspaceDirectory = Path.GetDirectoryName(workspaceDirectory);
 
-            return workspaceDirectory ?? innerDirectory;
+            return workspaceDirectory;
         }
 
         public void CreateDirectoryIfNotExists(string directory)

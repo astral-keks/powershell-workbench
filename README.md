@@ -21,6 +21,7 @@ I understand that there already exists software which solves these problems one 
 - Windows or ~~Linux~~ (will be supported later).
 - .NET Framework >=4.6.2 or ~~.NET Core 2.0~~ (will be supported later).
 - Windows PowerShell or ~~PowerShell Core~~ (will be supported later).
+- platyPS PowerShell module (Optional. Required only for building help files).
 
 ### Building
 
@@ -37,7 +38,11 @@ Build produces 2 directories nearby `src` directory:
   ```
   workbench environment install
   ```
-- To verify installation initialize new workspace and start PowerShell by executing following command in any empty directory:
+- To verify installation create new workspace in any directory:
+  ```
+  workbench workspace create
+  ```
+  And start it:
   ```
   workbench workspace start
   ```

@@ -21,7 +21,7 @@ namespace AstralKeks.Workbench.Core.Management
             _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
         }
 
-        public Repository[] GetToolkitRepositories()
+        public ToolkitRepository[] GetToolkitRepositories()
         {
             var workspaceDirectory = _workspaceManager.GetWorkspaceDirectory();
             var userspaceDirectory = _userspaceManager.GetUserspaceDirectory();
@@ -31,9 +31,9 @@ namespace AstralKeks.Workbench.Core.Management
             return repositories;
         }
 
-        public string ResolveToolkitModule(string moduleName, string moduleBase, ICollection<Repository> repositories)
+        public string ResolveToolkitModule(string moduleName, string moduleBase, ICollection<ToolkitRepository> repositories)
         {
-            Repository repository = null;
+            ToolkitRepository repository = null;
             if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleBase))
             {
                 repository = repositories

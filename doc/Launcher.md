@@ -33,9 +33,8 @@ Creates workspace in current directory.
 ```
 workbench workspace start [arguments]
 ```
-Finds or creates workspace and starts application in current directory.
+Starts application (Terminal by default) in current directory.
 
 Arguments:
 - `[app]` application name. Terminal is used by default.
 - `[args]` application arguments.
-

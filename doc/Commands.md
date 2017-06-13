@@ -20,7 +20,7 @@ Initialize-WBEnvironment
 ```
 
 ## DESCRIPTION
-This command creates aliases for applications, discovers toolkits and tries to find a workspace in any directory from the current up to the root. If no existing workspace was found a new one is created in the current directory. The output is list of paths to discovered toolkit modules. 
+This command creates aliases for applications, discovers toolkits and tries to find a workspace in any directory starting from the current up to the root. If no existing workspace was found error is thrown. The output is list of paths to discovered toolkit modules. 
 
 This command is executed by startup script right after PowerShell starts.
 
@@ -31,7 +31,7 @@ This command is executed by startup script right after PowerShell starts.
 PS C:\WorkpsaceDirectory\Some\Sub\Directory> Initialize-WBEnvironment
 ```
 
-If `C:\WorkpsaceDirectory` is workspace it is used by Workbench. Otherwise a new one is created in `C:\WorkpsaceDirectory\Some\Sub\Directory`.
+If `C:\WorkpsaceDirectory` is workspace it is used by Workbench.
 
 
 ## PARAMETERS
@@ -197,7 +197,7 @@ Accept wildcard characters: False
 # New-WBWorkspace
 
 ## SYNOPSIS
-Creates new workspace in specified directory using template from `Workspace.json`.
+Creates a new workspace in specified directory using template from `Workspace.json`.
 
 ## SYNTAX
 
@@ -284,7 +284,7 @@ Get-WBWorkspace [[-Directory] <String>]
 ```
 
 ## DESCRIPTION
-This command gets workspace root searching for it in any directory from the one specified in -Directory parameter up to the root. If -Directory parameter is omitted the current directory is used as search starting point. If no existing workspace was found -Directory is returned.
+This command gets workspace root searching for it in any directory starting from the one specified in -Directory parameter up to the root. If -Directory parameter is omitted the current directory is used as search starting point. If no existing workspace was found error is thrown.
 
 ## EXAMPLES
 
@@ -293,7 +293,7 @@ This command gets workspace root searching for it in any directory from the one 
 PS C:\> Get-WBWorkspace C:\WorkpsaceDirectory\Some\Sub\Directory
 ```
 
-If `C:\WorkpsaceDirectory` is workspace the command returns it. Otherwise `C:\WorkpsaceDirectory\Some\Sub\Directory` is returned.
+If `C:\WorkpsaceDirectory` is workspace the command returns it.
 
 ## PARAMETERS
 
@@ -330,7 +330,7 @@ Accept wildcard characters: False
 # Switch-WBWorkspace
 
 ## SYNOPSIS
-Sets workspace current workspace.
+Sets current workspace.
 
 ## SYNTAX
 
@@ -339,7 +339,7 @@ Switch-WBWorkspace [-Directory] <String>
 ```
 
 ## DESCRIPTION
-This command sets current workspace searching for it in any directory from the one specified in -Directory parameter up to the root. If no existing workspace was found a new one is created in -Directory.
+This command sets current workspace searching for it in any directory starting from the one specified in -Directory parameter up to the root. If no existing workspace was found error is thrown.
 
 ## EXAMPLES
 
@@ -348,7 +348,7 @@ This command sets current workspace searching for it in any directory from the o
 PS C:\> Switch-WBWorkspace C:\WorkpsaceDirectory\Some\Sub\Directory
 ```
 
-If `C:\WorkpsaceDirectory` is workspace it is set as current. Otherwise a new one is created in `C:\WorkpsaceDirectory\Some\Sub\Directory`.
+If `C:\WorkpsaceDirectory` is workspace it is set as current.
 
 ## PARAMETERS
 

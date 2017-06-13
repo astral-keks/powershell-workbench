@@ -1,3 +1,7 @@
+## 0.1.4
+### Removed
+- Automatic workspace creation
+
 ## 0.1.3
 ### Removed
 - .Workspace file from workspace Config directory

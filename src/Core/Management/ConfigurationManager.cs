@@ -24,9 +24,9 @@ namespace AstralKeks.Workbench.Core.Management
             return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ApplicationFile);
         }
 
-        public Repository[] GetRepositoryConfig(string workspaceDirectory, string userspaceDirectory)
+        public ToolkitRepository[] GetRepositoryConfig(string workspaceDirectory, string userspaceDirectory)
         {
-            return GetConfig<Repository[]>(workspaceDirectory, userspaceDirectory, FileSystem.ToolkitFile);
+            return GetConfig<ToolkitRepository[]>(workspaceDirectory, userspaceDirectory, FileSystem.ToolkitFile);
         }
 
         public string GetRepositoryConfigPath(string workspaceOrUserspaceDirectory)
@@ -34,9 +34,9 @@ namespace AstralKeks.Workbench.Core.Management
             return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ToolkitFile);
         }
 
-        public Workspace[] GetWorkspaceConfig(string userspaceDirectory)
+        public WorkspaceTemplate[] GetWorkspaceConfig(string userspaceDirectory)
         {
-            return GetConfig<Workspace[]>(userspaceDirectory, FileSystem.WorkspaceFile);
+            return GetConfig<WorkspaceTemplate[]>(userspaceDirectory, FileSystem.WorkspaceFile);
         }
 
         public string GetWorkspaceConfigPath(string userspaceDirectory)

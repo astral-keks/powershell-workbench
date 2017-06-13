@@ -5,8 +5,6 @@ namespace AstralKeks.Workbench.Core.Data
     {
         public static string WorkbenchDirectory => ".Workbench";
         public static string ConfigDirectory => "Config";
-        public static string SourceDirectory => "Source";
-        public static string TempDirectory => "Temp";
 
         public static string ApplicationFile => "Application.json";
         public static string ToolkitFile => "Toolkit.json";
