@@ -24,19 +24,22 @@ namespace AstralKeks.Workbench.Launcher
             {
                 noun.Command(Verbs.Install, verb =>
                 {
-                    verb.OnExecute(() => EnvironmentInstall());
+                    var quiet = verb.Option(Options.QuietTemplate, Descriptions.QuietOption, CommandOptionType.NoValue);
+                    verb.OnExecute(() => EnvironmentInstall(quiet));
                     verb.Description = Descriptions.EnvironmentInstallVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
                 noun.Command(Verbs.Uninstall, verb =>
                 {
-                    verb.OnExecute(() => EnvironmentUninstall());
+                    var quiet = verb.Option(Options.QuietTemplate, Descriptions.QuietOption, CommandOptionType.NoValue);
+                    verb.OnExecute(() => EnvironmentUninstall(quiet));
                     verb.Description = Descriptions.EnvironmentUninstallVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
                 noun.Command(Verbs.Reset, verb =>
                 {
-                    verb.OnExecute(() => EnvironmentReset());
+                    var quiet = verb.Option(Options.QuietTemplate, Descriptions.QuietOption, CommandOptionType.NoValue);
+                    verb.OnExecute(() => EnvironmentReset(quiet));
                     verb.Description = Descriptions.EnvironmentResetVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
@@ -48,7 +51,8 @@ namespace AstralKeks.Workbench.Launcher
             {
                 noun.Command(Verbs.Create, verb =>
                 {
-                    verb.OnExecute(() => WorkspaceCreate());
+                    var quiet = verb.Option(Options.QuietTemplate, Descriptions.QuietOption, CommandOptionType.NoValue);
+                    verb.OnExecute(() => WorkspaceCreate(quiet));
                     verb.Description = Descriptions.WorkspaceCreateVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
@@ -56,7 +60,8 @@ namespace AstralKeks.Workbench.Launcher
                 {
                     var appName = verb.Argument(Arguments.ApplicationName, Descriptions.ApplicationNameArg);
                     var argList = verb.Argument(Arguments.ArgumentsList, Descriptions.ArgumentsArg, true);
-                    verb.OnExecute(() => WorkspaceStart(appName, argList));
+                    var quiet = verb.Option(Options.QuietTemplate, Descriptions.QuietOption, CommandOptionType.NoValue);
+                    verb.OnExecute(() => WorkspaceStart(appName, argList, quiet));
                     verb.Description = Descriptions.WorkspaceStartVerb;
                     verb.HelpOption(Options.HelpTemplate);
                 });
@@ -75,49 +80,52 @@ namespace AstralKeks.Workbench.Launcher
                 return HandleError(e);
             }
         }
-
-        private static int EnvironmentInstall()
+        
+        private static int EnvironmentInstall(CommandOption quiet)
         {
             var host = new WorkbenchHost();
-            host.InstallEnvironment();
+            host.InstallEnvironment(() => quiet.HasValue() || Prompt.YesNo(Messages.InstallEnvironment));
 
-            return HandleSuccess();
+            return HandleSuccess(Messages.Success, quiet);
         }
 
-        private static int EnvironmentUninstall()
+        private static int EnvironmentUninstall(CommandOption quiet)
         {
             var host = new WorkbenchHost();
-            host.UninstallEnvironment();
+            host.UninstallEnvironment(() => quiet.HasValue() || Prompt.YesNo(Messages.UninstallEnvironment));
 
-            return HandleSuccess();
+            return HandleSuccess(Messages.Success, quiet);
         }
 
-        private static int EnvironmentReset()
+        private static int EnvironmentReset(CommandOption quiet)
         {
             var host = new WorkbenchHost();
-            host.ResetEnvironment();
+            host.ResetEnvironment(() => quiet.HasValue() || Prompt.YesNo(Messages.ResetEnvironment));
 
-            return HandleSuccess();
+            return HandleSuccess(Messages.Success, quiet);
         }
 
-        private static int WorkspaceStart(CommandArgument applicationName, CommandArgument args)
+        private static int WorkspaceStart(CommandArgument applicationName, CommandArgument args, CommandOption quiet)
         {
             var host = new WorkbenchHost();
-            host.StartWorkspace(applicationName.Value, args.Values);
+            host.StartWorkspace(applicationName.Value, args.Values, 
+                d => quiet.HasValue() || Prompt.YesNo(string.Format(Messages.WorkspaceStart, d)));
 
-            return HandleSuccess();
+            return HandleSuccess(null, quiet);
         }
 
-        private static int WorkspaceCreate()
+        private static int WorkspaceCreate(CommandOption quiet)
         {
             var host = new WorkbenchHost();
-            host.CreateWorkspace();
+            host.CreateWorkspace(d => quiet.HasValue() || Prompt.YesNo(string.Format(Messages.WorkspaceCreate, d)));
 
-            return HandleSuccess();
+            return HandleSuccess(Messages.Success, quiet);
         }
 
-        private static int HandleSuccess()
+        private static int HandleSuccess(string message, CommandOption quiet)
         {
+            if (!string.IsNullOrWhiteSpace(message) && !quiet.HasValue())
+                Console.WriteLine(message);
             return SuccessCode;
         }
 

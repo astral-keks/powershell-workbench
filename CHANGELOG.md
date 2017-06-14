@@ -1,3 +1,7 @@
+## 0.1.5
+### Added
+- Prompts for user input in Launcher
+
 ## 0.1.4
 ### Removed
 - Automatic workspace creation

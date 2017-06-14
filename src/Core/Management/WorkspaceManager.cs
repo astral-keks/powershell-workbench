@@ -34,6 +34,14 @@ namespace AstralKeks.Workbench.Core.Management
             return FindWorkspaceDirectory(directory, true);
         }
         
+        public bool ExistsWorkspace(string directory)
+        {
+            if (string.IsNullOrWhiteSpace(directory))
+                throw new ArgumentException("Value is empty", nameof(directory));
+
+            return FindWorkspaceDirectory(directory, false) != null;
+        }
+
         public void SwitchWorkspace(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
@@ -71,7 +79,7 @@ namespace AstralKeks.Workbench.Core.Management
             _resourceManager.CreateResource(workspaceDirectory, userspaceDirectory, null, FileSystem.WorkspaceLauncherFile);
         }
 
-        public string FindWorkspaceDirectory(string directory, bool throwOnMissing)
+        private string FindWorkspaceDirectory(string directory, bool throwOnMissing)
         {
             var workspaceDirectory = _fileSystemManager.FindParentDirectory(directory, d =>
             {

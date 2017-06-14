@@ -8,6 +8,7 @@ workbench command verb [arguments] [options]
 ```
 ## Options
  - `-h|--help|-?` Show help information.
+ - `-q|--quiet|-?` Produce no prompts or output.
 
 ## Commands, verbs, arguments
 ```

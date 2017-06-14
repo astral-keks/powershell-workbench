@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AstralKeks.Workbench.Core
 {
@@ -9,33 +10,50 @@ namespace AstralKeks.Workbench.Core
     {
         private readonly WorkbenchEnvironment _env = new WorkbenchEnvironment();
 
-        public void InstallEnvironment()
+        public void InstallEnvironment(Func<bool> prompt)
         {
-            _env.InstallationManager.InstallVariables();
-            _env.InstallationManager.InstallConfiguration();
+            if (prompt())
+            {
+                _env.InstallationManager.InstallVariables();
+                _env.InstallationManager.InstallConfiguration();
+            }
         }
 
-        public void UninstallEnvironment()
+        public void UninstallEnvironment(Func<bool> prompt)
         {
-            _env.InstallationManager.UninstallVariables();
-            _env.InstallationManager.UninstallConfiguration();
+            if (prompt())
+            {
+                _env.InstallationManager.UninstallVariables();
+                _env.InstallationManager.UninstallConfiguration();
+            }
         }
 
-        public void ResetEnvironment()
+        public void ResetEnvironment(Func<bool> prompt)
         {
-            UninstallEnvironment();
-            InstallEnvironment();
+            if (prompt())
+            {
+                _env.InstallationManager.UninstallVariables();
+                _env.InstallationManager.UninstallConfiguration();
+                _env.InstallationManager.InstallVariables();
+                _env.InstallationManager.InstallConfiguration(); 
+            }
         }
 
-        public void StartWorkspace(string applicationName, List<string> arguments)
+        public void StartWorkspace(string applicationName, List<string> arguments, Func<string, bool> prompt)
         {
-            _env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
+            var currentDirectory = Directory.GetCurrentDirectory();
+            if (!_env.WorkspaceManager.ExistsWorkspace(currentDirectory) && prompt(currentDirectory))
+                _env.WorkspaceManager.CreateWorkspace(currentDirectory);
+
+            _env.WorkspaceManager.SwitchWorkspace(currentDirectory);
             _env.ApplicationManager.StartApplication(applicationName, Command.Workspace, arguments);
         }
 
-        public void CreateWorkspace()
+        public void CreateWorkspace(Func<string, bool> prompt)
         {
-            _env.WorkspaceManager.CreateWorkspace(Directory.GetCurrentDirectory());
+            var currentDirectory = Directory.GetCurrentDirectory();
+            if (prompt(currentDirectory))
+                _env.WorkspaceManager.CreateWorkspace(currentDirectory);
         }
     }
 }
