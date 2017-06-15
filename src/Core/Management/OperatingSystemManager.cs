@@ -8,7 +8,7 @@ namespace AstralKeks.Workbench.Core.Management
         public const string Windows = "Windows";
         public const string Linux = "Linux";
 
-        public static string Current
+        public static string CurrentOS
         {
             get
             {

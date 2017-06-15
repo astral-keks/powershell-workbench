@@ -8,7 +8,7 @@ namespace AstralKeks.Workbench.Command
         public const string WBConfiguration = WB + "Configuration";
         public const string WBApplication = WB + "Application";
         public const string WBWorkspace = WB + "Workspace";
-        public const string WBToolkit = WB + "WBToolkit";
+        public const string WBToolkit = WB + "Toolkit";
         public const string WBToolkitProject = WBToolkit + "Project";
     }
 }

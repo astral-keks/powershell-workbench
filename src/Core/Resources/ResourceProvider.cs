@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace AstralKeks.Workbench.Core.Resource
+namespace AstralKeks.Workbench.Core.Resources
 {
     public interface IResourceProvider
     {

@@ -14,6 +14,20 @@ namespace AstralKeks.Workbench.Core.Management
             _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
         }
 
+        public string ResolveMacros(string input, object data)
+        {
+            var type = data.GetType();
+            var properties = type.GetProperties();
+            foreach (var property in properties)
+            {
+                var propertyName = property.Name;
+                var propertyValue = property.GetValue(data)?.ToString();
+                input = input.Replace($"{{${propertyName}}}", propertyValue);
+            }
+
+            return input;
+        }
+        
         public string ResolveMacros(string input, string pipeline, List<string> arguments)
         {
             return ResolveMacros(input, arguments)
@@ -37,6 +51,5 @@ namespace AstralKeks.Workbench.Core.Management
         {
             return path.TrimEnd(Path.DirectorySeparatorChar);
         }
-
     }
 }

@@ -8,10 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resource\Windows\Workspace.bat" />
-    <EmbeddedResource Include="Resource\Windows\Workspace.json" />
-    <EmbeddedResource Include="Resource\Windows\Application.json" />
-    <EmbeddedResource Include="Resource\Windows\Toolkit.json" />
+    <None Remove="Resources\Windows\.+.psd1" />
+    <None Remove="Resources\Windows\.gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Windows\.+.psd1" />
+    <EmbeddedResource Include="Resources\Windows\.gitignore" />
+    <EmbeddedResource Include="Resources\Windows\Workspace.bat" />
+    <EmbeddedResource Include="Resources\Windows\Workspace.json" />
+    <EmbeddedResource Include="Resources\Windows\Application.json" />
+    <EmbeddedResource Include="Resources\Windows\Toolkit.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Windows\.+.Command.csproj" />
+    <EmbeddedResource Include="Resources\Windows\.+.Core.csproj" />
+    <EmbeddedResource Include="Resources\Windows\.+.sln" />
   </ItemGroup>
 
   <ItemGroup>

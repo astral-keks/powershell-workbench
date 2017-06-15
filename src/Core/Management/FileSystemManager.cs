@@ -7,7 +7,7 @@ namespace AstralKeks.Workbench.Core.Management
     {
         public string GetUserDirectoryPath()
         {
-            switch (OperatingSystemManager.Current)
+            switch (OperatingSystemManager.CurrentOS)
             {
                 case OperatingSystemManager.Windows:
                     return Path.Combine(Environment.GetEnvironmentVariable("LOCALAPPDATA"));
@@ -64,11 +64,11 @@ namespace AstralKeks.Workbench.Core.Management
                 Directory.CreateDirectory(directory);
         }
 
-        public void CreateFileIfNotExists(string path, string content)
+        public void CreateFileIfNotExists(string path, string content = null)
         {
             CreateDirectoryIfNotExists(Path.GetDirectoryName(path));
             if (!File.Exists(path))
-                File.WriteAllText(path, content);
+                File.WriteAllText(path, content ?? string.Empty);
         }
 
         public void DeleeteFile(string path)

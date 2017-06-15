@@ -1,3 +1,7 @@
+## 0.1.6
+### Added
+- New-WBToolkitProject cmdlet
+
 ## 0.1.5
 ### Added
 - Prompts for user input in Launcher

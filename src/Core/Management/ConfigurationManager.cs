@@ -46,20 +46,20 @@ namespace AstralKeks.Workbench.Core.Management
 
         public TConfig GetConfig<TConfig>(string workspaceDirectory, string userspaceDirectory, string configFile)
         {
-            var resource = _resourceManager.GetResource<TConfig>(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory,
+            var resource = _resourceManager.GetResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory,
                 configFile);
-            return resource.Read();
+            return resource.Read<TConfig>();
         }
 
         public TConfig GetConfig<TConfig>(string userspaceDirectory, string configFile)
         {
-            var resource = _resourceManager.GetResource<TConfig>(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
-            return resource.Read();
+            var resource = _resourceManager.GetResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            return resource.Read<TConfig>();
         }
 
         public void CreateConfig(string workspaceDirectory, string userspaceDirectory, string configFile)
         {
-            _resourceManager.CreateResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.GetResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory, configFile);
         }
         
         public void CreateConfig(string userspaceDirectory, string configFile)

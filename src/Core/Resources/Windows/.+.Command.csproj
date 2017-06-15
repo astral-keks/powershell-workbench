@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>{$TargetFramework}</TargetFramework>
+    <AssemblyName>{$CommandAssemblyName}</AssemblyName>
+    <RootNamespace>{$CommandAssemblyName}</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutDir>bin\$(Configuration)\{$OutputDirectoryPart}</OutDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\{$CoreProjectFilename}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="{$ManifestFilename}">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

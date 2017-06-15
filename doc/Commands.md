@@ -495,3 +495,89 @@ Accept wildcard characters: False
 
 ## RELATED LINKS
 
+
+<br><br>
+# New-WBToolkitProject
+
+## SYNOPSIS
+Creates new toolkit project in local directory.
+
+## SYNTAX
+
+```
+New-WBToolkitProject -Name <String> -Author <String> -Directory <String>
+```
+
+## DESCRIPTION
+Creates directory structure and some files for toolkit development in directory specified in -Directory parameter. 
+-Name and -Author parameters are used for substitution in created files.
+
+## EXAMPLES
+
+### Example 1
+```
+PS C:\> New-WBToolkitProject -Name TestProject -Author 'Astral Keks' -Directory .\Directory\For\test-project
+```
+
+Initializes project directories and files in C:\Directory\For\test-project using provided parameters.
+
+## PARAMETERS
+
+### -Author
+Toolkit project author
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Directory
+Directory to create toolkit project in.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+Toolkit name.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### None
+
+
+## OUTPUTS
+
+### System.Object
+
+## NOTES
+
+## RELATED LINKS
+
