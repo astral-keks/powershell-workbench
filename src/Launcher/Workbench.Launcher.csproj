@@ -5,7 +5,6 @@
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Launcher</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Launcher</RootNamespace>
-    <OutputPath>..\..\artifact</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

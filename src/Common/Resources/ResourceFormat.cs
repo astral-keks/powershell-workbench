@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 
-namespace AstralKeks.Workbench.Core.Resources
+namespace AstralKeks.Workbench.Common.Resources
 {
     public interface IResourceFormat
     {

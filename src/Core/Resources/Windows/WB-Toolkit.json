@@ -4,8 +4,10 @@
     // Directory to look in for toolkits
     "Directory": "{$Bin}\\Toolkits"
     // Macro variables
-    // {$Bin}  - path to workbench installation directory
     // {$User} - %LOCALAPPDATA%
+    // {$Bin}  - path to workbench installation directory
+    // {$Workspace} - path to current workspace directory
+    // {$Userspace} - path to userspace directory
 
     // Modules from the directory to import automatically
     // All discovered modules from this directory are imported if this list is ommitted

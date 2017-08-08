@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AstralKeks.Workbench.Common.FileSystem;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,11 +8,13 @@ namespace AstralKeks.Workbench.Core.Management
 {
     public class MacrosManager
     {
-        private readonly FileSystemManager _fileSystemManager;
+        private readonly WorkspaceManager _workspaceManager;
+        private readonly UserspaceManager _userspaceManager;
 
-        public MacrosManager(FileSystemManager fileSystemManager)
+        public MacrosManager(WorkspaceManager workspaceManager, UserspaceManager userspaceManager)
         {
-            _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
+            _workspaceManager = workspaceManager ?? throw new ArgumentNullException(nameof(workspaceManager));
+            _userspaceManager = userspaceManager ?? throw new ArgumentNullException(nameof(userspaceManager));
         }
 
         public string ResolveMacros(string input, object data)
@@ -43,8 +46,10 @@ namespace AstralKeks.Workbench.Core.Management
         public string ResolveMacros(string input)
         {
             return (input ?? string.Empty)
-                .Replace("{$Bin}", PreparePath(_fileSystemManager.GetBinDirectoryPath()))
-                .Replace("{$User}", PreparePath(_fileSystemManager.GetUserDirectoryPath()));
+                .Replace("{$Bin}", PreparePath(FsPath.BinDirectory()))
+                .Replace("{$User}", PreparePath(FsPath.UserDirectory()))
+                .Replace("{$Workspace}", PreparePath(_workspaceManager.GetWorkspaceDirectory()))
+                .Replace("{$Userspace}", PreparePath(_userspaceManager.GetUserspaceDirectory()));
         }
 
         private string PreparePath(string path)

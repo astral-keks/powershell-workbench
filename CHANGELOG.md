@@ -1,3 +1,9 @@
+## 0.1.7
+### Added
+- AstralKeks.Workbench.Common library
+### Changed
+- VS build output directory is separate for each project
+
 ## 0.1.6
 ### Added
 - New-WBToolkitProject cmdlet

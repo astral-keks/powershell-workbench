@@ -2,22 +2,24 @@
 using System.IO;
 using AstralKeks.Workbench.Core.Data;
 using System.Linq;
+using AstralKeks.Workbench.Common.FileSystem;
+using AstralKeks.Workbench.Common.Resources;
+using AstralKeks.Workbench.Common.Data;
+using AstralKeks.Workbench.Core.Resources;
 
 namespace AstralKeks.Workbench.Core.Management
 {
     public class WorkspaceManager
     {
         private readonly UserspaceManager _userspaceManager;
-        private readonly FileSystemManager _fileSystemManager;
         private readonly ConfigurationManager _configurationManager;
         private readonly ResourceManager _resourceManager;
 
         public WorkspaceManager(UserspaceManager userspaceManager, ConfigurationManager configurationManager, 
-            FileSystemManager fileSystemManager, ResourceManager resourceManager)
+            ResourceManager resourceManager)
         {
             _userspaceManager = userspaceManager ?? throw new ArgumentNullException(nameof(userspaceManager));
             _configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
-            _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
             _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
         }
 
@@ -47,8 +49,8 @@ namespace AstralKeks.Workbench.Core.Management
             if (string.IsNullOrWhiteSpace(directory))
                 throw new ArgumentException("Value is empty", nameof(directory));
 
-            CurrentWorkspaceDirectory = FindWorkspaceDirectory(directory, true);
-            Directory.SetCurrentDirectory(CurrentWorkspaceDirectory);
+            SystemVariable.WorkspaceDirectory = FindWorkspaceDirectory(directory, true);
+            Directory.SetCurrentDirectory(SystemVariable.WorkspaceDirectory);
         }
 
         public void CreateWorkspace(string directory, string workspaceTemplateName = null)
@@ -64,37 +66,31 @@ namespace AstralKeks.Workbench.Core.Management
             if (workspaceTemplate == null)
                 throw new ArgumentException($"Workspace template {workspaceTemplateName} was not found");
 
-            _fileSystemManager.CreateDirectoryIfNotExists(workspaceDirectory);
+            FsOperation.CreateDirectoryIfNotExists(workspaceDirectory);
             foreach (var innerDirectoryName in workspaceTemplate.Directories)
             {
-                var innerDirectory = _fileSystemManager.GetAbsolutePath(workspaceDirectory, innerDirectoryName);
-                _fileSystemManager.CreateDirectoryIfNotExists(innerDirectory);
+                var innerDirectory = FsPath.Absolute(workspaceDirectory, innerDirectoryName);
+                FsOperation.CreateDirectoryIfNotExists(innerDirectory);
             }
             foreach (var file in workspaceTemplate.Files)
             {
                 var resourceDirectory = Path.GetDirectoryName(file);
                 var resourceFilename = Path.GetFileName(file);
-                _resourceManager.CreateResource(workspaceDirectory, userspaceDirectory, resourceDirectory, resourceFilename);
+                _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, resourceDirectory, resourceFilename);
             }
-            _resourceManager.CreateResource(workspaceDirectory, userspaceDirectory, null, FileSystem.WorkspaceLauncherFile);
+            _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, null, Files.WorkspaceLauncher);
         }
 
         private string FindWorkspaceDirectory(string directory, bool throwOnMissing)
         {
-            var workspaceDirectory = _fileSystemManager.FindParentDirectory(directory, d =>
+            var workspaceDirectory = FsOperation.FindParentDirectory(directory, d =>
             {
-                var markerPath = _fileSystemManager.GetAbsolutePath(d, null, FileSystem.WorkspaceLauncherFile);
+                var markerPath = FsPath.Absolute(d, null, Files.WorkspaceLauncher);
                 return File.Exists(markerPath);
             });
             if (workspaceDirectory == null && throwOnMissing)
                 throw new ArgumentException("Workspace directory was not found");
             return workspaceDirectory;
-        }
-
-        private string CurrentWorkspaceDirectory
-        {
-            get { return Environment.GetEnvironmentVariable("WBWorkspaceDirectory"); }
-            set { Environment.SetEnvironmentVariable("WBWorkspaceDirectory", value); }
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using AstralKeks.Workbench.Core.Data;
+﻿using AstralKeks.Workbench.Common.FileSystem;
+using AstralKeks.Workbench.Common.Resources;
+using AstralKeks.Workbench.Core.Data;
+using AstralKeks.Workbench.Core.Resources;
 using System;
 using System.IO;
 using System.Linq;
@@ -16,82 +19,66 @@ namespace AstralKeks.Workbench.Core.Management
 
         public Application[] GetApplicationConfig(string workspaceDirectory, string userspaceDirectory)
         {
-            return GetConfig<Application[]>(workspaceDirectory, userspaceDirectory, FileSystem.ApplicationFile);
-        }
-
-        public string GetApplicationConfigPath(string workspaceOrUserspaceDirectory)
-        {
-            return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ApplicationFile);
+            return GetConfig<Application[]>(workspaceDirectory, userspaceDirectory, Files.Application);
         }
 
         public ToolkitRepository[] GetRepositoryConfig(string workspaceDirectory, string userspaceDirectory)
         {
-            return GetConfig<ToolkitRepository[]>(workspaceDirectory, userspaceDirectory, FileSystem.ToolkitFile);
-        }
-
-        public string GetRepositoryConfigPath(string workspaceOrUserspaceDirectory)
-        {
-            return GetConfigPath(workspaceOrUserspaceDirectory, FileSystem.ToolkitFile);
+            return GetConfig<ToolkitRepository[]>(workspaceDirectory, userspaceDirectory, Files.Toolkit);
         }
 
         public WorkspaceTemplate[] GetWorkspaceConfig(string userspaceDirectory)
         {
-            return GetConfig<WorkspaceTemplate[]>(userspaceDirectory, FileSystem.WorkspaceFile);
+            return GetConfig<WorkspaceTemplate[]>(userspaceDirectory, Files.Workspace);
         }
 
-        public string GetWorkspaceConfigPath(string userspaceDirectory)
+        public TConfig GetConfig<TConfig>(string workspaceDirectory, string userspaceDirectory, string configFileName)
         {
-            return GetConfigPath(userspaceDirectory, FileSystem.WorkspaceFile);
-        }
-
-        public TConfig GetConfig<TConfig>(string workspaceDirectory, string userspaceDirectory, string configFile)
-        {
-            var resource = _resourceManager.GetResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory,
-                configFile);
+            var resource = _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, Directories.Config, configFileName);
             return resource.Read<TConfig>();
         }
 
-        public TConfig GetConfig<TConfig>(string userspaceDirectory, string configFile)
+        public TConfig GetConfig<TConfig>(string userspaceDirectory, string configFileName)
         {
-            var resource = _resourceManager.GetResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            var resource = _resourceManager.ObtainResource(userspaceDirectory, Directories.Config, configFileName);
             return resource.Read<TConfig>();
         }
 
-        public void CreateConfig(string workspaceDirectory, string userspaceDirectory, string configFile)
+        public void CreateConfig(string workspaceDirectory, string userspaceDirectory, string configFileName)
         {
-            _resourceManager.GetResource(workspaceDirectory, userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, Directories.Config, configFileName);
         }
         
-        public void CreateConfig(string userspaceDirectory, string configFile)
+        public void CreateConfig(string userspaceDirectory, string configFileName)
         {
-            _resourceManager.CreateResource(userspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.ObtainResource(userspaceDirectory, Directories.Config, configFileName);
         }
 
-        public void DeleteConfig(string workspaceOrUserspaceDirectory, string configFile)
+        public void DeleteConfig(string directory, string configFileName)
         {
-            _resourceManager.DeleteResource(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            _resourceManager.DeleteResource(directory, Directories.Config, configFileName);
         }
 
-        public string GetConfigPath(string workspaceOrUserspaceDirectory, string configFile)
+        public string GetConfigPath(string directory, string configFileName)
         {
-            return _resourceManager.GetResourcePath(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory, configFile);
+            return new ResourceLocator(directory, Directories.Config, configFileName).Path;
         }
 
-        public string[] GetConfigFiles(string workspaceOrUserspaceDirectory)
+        public string[] GetConfigFiles(string directory)
         {
-            return _resourceManager.GetResourcePaths(workspaceOrUserspaceDirectory, FileSystem.ConfigDirectory)
+            return FsOperation.GetFilesInDirectory(directory, Directories.Config)
                 .Select(Path.GetFileName)
                 .Where(f => !string.IsNullOrWhiteSpace(f))
                 .ToArray();
         }
 
-        public string[] GetConfigFiles()
+        public string[] GetConfigFileNames()
         {
             return new[]
             {
-                FileSystem.ApplicationFile,
-                FileSystem.ToolkitFile,
-                FileSystem.WorkspaceFile
+                Files.Application,
+                Files.Toolkit,
+                Files.Workspace
             };
         }
     }

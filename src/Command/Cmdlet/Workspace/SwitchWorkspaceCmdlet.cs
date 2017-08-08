@@ -1,5 +1,4 @@
-﻿using AstralKeks.Workbench.Core.Data;
-using AstralKeks.Workbench.PowerShell.Attributes;
+﻿using AstralKeks.Workbench.PowerShell.Attributes;
 using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command

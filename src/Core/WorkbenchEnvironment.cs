@@ -1,13 +1,13 @@
-﻿using AstralKeks.Workbench.Core.Management;
+﻿using AstralKeks.Workbench.Common.Resources;
+using AstralKeks.Workbench.Core.Management;
 
 namespace AstralKeks.Workbench.Core
 {
     public class WorkbenchEnvironment
     {
-        private readonly FileSystemManager _fileSystemManager;
-        private readonly MacrosManager _macrosManager;
         private readonly ResourceManager _resourceManager;
         private readonly ConfigurationManager _configurationManager;
+        private readonly MacrosManager _macrosManager;
         private readonly UserspaceManager _userspaceManager;
         private readonly WorkspaceManager _workspaceManager;
         private readonly ApplicationManager _applicationManager;
@@ -16,16 +16,14 @@ namespace AstralKeks.Workbench.Core
 
         public WorkbenchEnvironment()
         {
-            _fileSystemManager = new FileSystemManager();
-            _macrosManager = new MacrosManager(_fileSystemManager);
-            _resourceManager = new ResourceManager(_fileSystemManager);
+            _resourceManager = new ResourceManager(typeof(WorkbenchEnvironment));
             _configurationManager = new ConfigurationManager(_resourceManager);
-            _userspaceManager = new UserspaceManager(_fileSystemManager);
-            _workspaceManager = new WorkspaceManager(_userspaceManager, _configurationManager, _fileSystemManager, _resourceManager);
+            _userspaceManager = new UserspaceManager();
+            _workspaceManager = new WorkspaceManager(_userspaceManager, _configurationManager, _resourceManager);
+            _macrosManager = new MacrosManager(_workspaceManager, _userspaceManager);
             _applicationManager = new ApplicationManager(_workspaceManager, _userspaceManager, _configurationManager, _macrosManager);
-            _installationManager = new InstallationManager(_fileSystemManager, _userspaceManager, _configurationManager);
-            _toolkitManager = new ToolkitManager(_workspaceManager, _userspaceManager, _configurationManager, 
-                _fileSystemManager, _resourceManager, _macrosManager);
+            _installationManager = new InstallationManager(_userspaceManager, _configurationManager);
+            _toolkitManager = new ToolkitManager(_workspaceManager, _userspaceManager, _configurationManager, _resourceManager, _macrosManager);
         }
 
         public InstallationManager InstallationManager => _installationManager;
@@ -39,7 +37,5 @@ namespace AstralKeks.Workbench.Core
         public WorkspaceManager WorkspaceManager => _workspaceManager;
 
         public ToolkitManager ToolkitManager => _toolkitManager;
-
-        public FileSystemManager FileSystemManager => _fileSystemManager;
     }
 }

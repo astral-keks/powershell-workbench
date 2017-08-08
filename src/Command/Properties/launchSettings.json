@@ -1,10 +1,9 @@
 {
   "profiles": {
     "Workbench.Command": {
-      "commandLineArgs": "-NoExit -File .\\Initialize-Workbench.ps1",
+      "commandLineArgs": "-NoExit -File .\\bin\\$(Configuration)\\$(TargetFramework)\\Initialize-Workbench.ps1",
       "commandName": "Executable",
-      "executablePath": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
-      "workingDirectory": "..\\..\\artifact\\net462"
+      "executablePath": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe"
     }
   }
 }

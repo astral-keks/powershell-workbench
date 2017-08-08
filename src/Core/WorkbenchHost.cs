@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace AstralKeks.Workbench.Core
 {
@@ -45,6 +44,7 @@ namespace AstralKeks.Workbench.Core
             if (!_env.WorkspaceManager.ExistsWorkspace(currentDirectory) && prompt(currentDirectory))
                 _env.WorkspaceManager.CreateWorkspace(currentDirectory);
 
+            _env.UserspaceManager.SwitchUserspace();
             _env.WorkspaceManager.SwitchWorkspace(currentDirectory);
             _env.ApplicationManager.StartApplication(applicationName, Command.Workspace, arguments);
         }

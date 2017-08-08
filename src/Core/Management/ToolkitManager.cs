@@ -2,7 +2,9 @@
 using System;
 using System.Linq;
 using AstralKeks.Workbench.Core.Data;
-using System.IO;
+using AstralKeks.Workbench.Common.FileSystem;
+using AstralKeks.Workbench.Common.Resources;
+using AstralKeks.Workbench.Core.Resources;
 
 namespace AstralKeks.Workbench.Core.Management
 {
@@ -11,18 +13,15 @@ namespace AstralKeks.Workbench.Core.Management
         private readonly WorkspaceManager _workspaceManager;
         private readonly UserspaceManager _userspaceManager;
         private readonly ConfigurationManager _configurationManager;
-        private readonly FileSystemManager _fileSystemManager;
-        private readonly ResourceManager _resourceManager;
         private readonly MacrosManager _macrosManager;
+        private readonly ResourceManager _resourceManager;
 
         public ToolkitManager(WorkspaceManager workspaceManager, UserspaceManager userspaceManager,
-            ConfigurationManager configurationManager, FileSystemManager fileSystemManager,
-            ResourceManager resourceManager, MacrosManager macrosManager)
+            ConfigurationManager configurationManager, ResourceManager resourceManager, MacrosManager macrosManager)
         {
             _workspaceManager = workspaceManager ?? throw new ArgumentNullException(nameof(workspaceManager));
             _userspaceManager = userspaceManager ?? throw new ArgumentNullException(nameof(userspaceManager));
             _configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
-            _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
             _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
             _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
         }
@@ -51,7 +50,7 @@ namespace AstralKeks.Workbench.Core.Management
             {
                 repository = repositories
                     .Where(r => !string.IsNullOrWhiteSpace(r.Directory))
-                    .FirstOrDefault(r => moduleBase.StartsWith(r.Directory));
+                    .FirstOrDefault(r => moduleBase.StartsWith(r.Directory, StringComparison.OrdinalIgnoreCase));
             }
             if (repository != null && repository.Modules != null && repository.Modules.Any())
             {
@@ -69,10 +68,10 @@ namespace AstralKeks.Workbench.Core.Management
             if (string.IsNullOrWhiteSpace(toolkitAuthor))
                 throw new ArgumentException("Toolkit author is not set", nameof(toolkitAuthor));
 
-            directory = _fileSystemManager.GetAbsolutePath(directory);
-            var srcDirectory = _fileSystemManager.GetAbsolutePath(directory, FileSystem.SourceDirectory);
-            var coreDirectory = _fileSystemManager.GetAbsolutePath(srcDirectory, FileSystem.CoreDirectory);
-            var commandDirectory = _fileSystemManager.GetAbsolutePath(srcDirectory, FileSystem.CommandDirectory);
+            directory = FsPath.Absolute(directory);
+            var srcDirectory = FsPath.Absolute(directory, Directories.Source);
+            var coreDirectory = FsPath.Absolute(srcDirectory, Directories.Core);
+            var commandDirectory = FsPath.Absolute(srcDirectory, Directories.Command);
 
             var author = new string(toolkitAuthor.Where(char.IsLetterOrDigit).ToArray());
             var moduleName = $"{author}.{toolkitName}";
@@ -90,25 +89,25 @@ namespace AstralKeks.Workbench.Core.Management
                 ModuleCopyright = $"(c) {DateTime.UtcNow.Year} {toolkitAuthor}. All rights reserved.",
 
                 TargetFramework = targetFramework,
-                CoreProjectName = $"{toolkitName}.{FileSystem.CoreDirectory}",
-                CoreAssemblyName = $"{author}.{toolkitName}.{FileSystem.CoreDirectory}",
-                CommandProjectName = $"{toolkitName}.{FileSystem.CommandDirectory}",
-                CommandAssemblyName = $"{author}.{toolkitName}.{FileSystem.CommandDirectory}",
+                CoreProjectName = $"{toolkitName}.{Directories.Core}",
+                CoreAssemblyName = $"{author}.{toolkitName}.{Directories.Core}",
+                CommandProjectName = $"{toolkitName}.{Directories.Command}",
+                CommandAssemblyName = $"{author}.{toolkitName}.{Directories.Command}",
                 OutputDirectoryPart = $"{targetFramework}\\{moduleName}\\{moduleVersion}",
                 
                 RootDirectory = directory,
                 SolutionDirectory = srcDirectory,
                 SolutionFilename = $"{toolkitName}.sln",
                 CoreProjectDirectory = coreDirectory,
-                CoreProjectFilename = $"{toolkitName}.{FileSystem.CoreDirectory}.csproj",
+                CoreProjectFilename = $"{toolkitName}.{Directories.Core}.csproj",
                 CommandProjectDirectory = commandDirectory,
-                CommandProjectFilename = $"{toolkitName}.{FileSystem.CommandDirectory}.csproj",
+                CommandProjectFilename = $"{toolkitName}.{Directories.Command}.csproj",
                 ManifestFilename = $"{moduleName}.psd1",
-                GitignoreFilename = FileSystem.GitignoreFile,
-                CmdletDirectory = _fileSystemManager.GetAbsolutePath(commandDirectory, FileSystem.CmdletDirectory),
-                ChangeLogPath = _fileSystemManager.GetAbsolutePath(directory, FileSystem.ChangeLogFile),
-                LicencePath = _fileSystemManager.GetAbsolutePath(directory, FileSystem.LicenceFile),
-                ReadmePath = _fileSystemManager.GetAbsolutePath(directory, FileSystem.ReadmeFile),
+                GitignoreFilename = Files.Gitignore,
+                CmdletDirectory = FsPath.Absolute(commandDirectory, Directories.Cmdlet),
+                ChangeLogPath = FsPath.Absolute(directory, Files.ChangeLog),
+                LicencePath = FsPath.Absolute(directory, Files.Licence),
+                ReadmePath = FsPath.Absolute(directory, Files.Readme),
             };
         }
 
@@ -117,32 +116,31 @@ namespace AstralKeks.Workbench.Core.Management
             if (projectInfo == null)
                 throw new ArgumentNullException(nameof(projectInfo));
 
-            var slnRes = _resourceManager.GetResource(projectInfo.SolutionDirectory, projectInfo.SolutionFilename);
+            var slnRes = _resourceManager.ObtainResource(projectInfo.SolutionDirectory, projectInfo.SolutionFilename);
             var slnResContent = slnRes.Read<string>();
             slnResContent = _macrosManager.ResolveMacros(slnResContent, projectInfo);
             slnRes.Write(slnResContent);
 
-            var coreRes = _resourceManager.GetResource(projectInfo.CoreProjectDirectory, projectInfo.CoreProjectFilename);
+            var coreRes = _resourceManager.ObtainResource(projectInfo.CoreProjectDirectory, projectInfo.CoreProjectFilename);
             var coreResContent = coreRes.Read<string>();
             coreResContent = _macrosManager.ResolveMacros(coreResContent, projectInfo);
             coreRes.Write(coreResContent);
 
-            var commandRes = _resourceManager.GetResource(projectInfo.CommandProjectDirectory, projectInfo.CommandProjectFilename);
+            var commandRes = _resourceManager.ObtainResource(projectInfo.CommandProjectDirectory, projectInfo.CommandProjectFilename);
             var commandResContent = commandRes.Read<string>();
             commandResContent = _macrosManager.ResolveMacros(commandResContent, projectInfo);
             commandRes.Write(commandResContent);
 
-            var manifestRes = _resourceManager.GetResource(projectInfo.CommandProjectDirectory, projectInfo.ManifestFilename);
+            var manifestRes = _resourceManager.ObtainResource(projectInfo.CommandProjectDirectory, projectInfo.ManifestFilename);
             var manifestResContent = manifestRes.Read<string>();
             manifestResContent = _macrosManager.ResolveMacros(manifestResContent, projectInfo);
             manifestRes.Write(manifestResContent);
 
-            _resourceManager.CreateResource(projectInfo.RootDirectory, projectInfo.GitignoreFilename);
+            _resourceManager.ObtainResource(projectInfo.RootDirectory, projectInfo.GitignoreFilename);
 
-            _fileSystemManager.CreateDirectoryIfNotExists(projectInfo.CmdletDirectory);
-            _fileSystemManager.CreateFileIfNotExists(projectInfo.ChangeLogPath);
-            _fileSystemManager.CreateFileIfNotExists(projectInfo.LicencePath);
-            _fileSystemManager.CreateFileIfNotExists(projectInfo.ReadmePath);
+            FsOperation.CreateFileIfNotExists(projectInfo.ChangeLogPath);
+            FsOperation.CreateFileIfNotExists(projectInfo.LicencePath);
+            FsOperation.CreateFileIfNotExists(projectInfo.ReadmePath);
         }
     }
 }

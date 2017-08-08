@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace AstralKeks.Workbench.Core.Resources
+namespace AstralKeks.Workbench.Common.Resources
 {
     public interface IResourceProvider
     {
@@ -41,13 +41,15 @@ namespace AstralKeks.Workbench.Core.Resources
         private readonly Assembly _assembly;
         private readonly string _resourceName;
 
-        public EmbeddedResourceProvider(string resourceName, Assembly assembly = null)
+        public EmbeddedResourceProvider(string resourceName, Assembly assembly)
         {
             if (string.IsNullOrWhiteSpace(resourceName))
                 throw new ArgumentException("Resource name is not set", nameof(resourceName));
+            if (assembly == null)
+                throw new ArgumentNullException(nameof(assembly));
 
             _resourceName = resourceName;
-            _assembly = assembly ?? typeof(EmbeddedResourceProvider).GetTypeInfo().Assembly;
+            _assembly = assembly;
         }
 
         public string Read()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AstralKeks.Workbench.Core.Resources
+namespace AstralKeks.Workbench.Common.Resources
 {
     [Serializable]
     public class ResourceException : Exception

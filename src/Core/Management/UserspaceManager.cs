@@ -1,21 +1,20 @@
-﻿using AstralKeks.Workbench.Core.Data;
-using System;
+﻿using AstralKeks.Workbench.Common.Data;
+using AstralKeks.Workbench.Common.FileSystem;
+using AstralKeks.Workbench.Core.Resources;
 using System.IO;
 
 namespace AstralKeks.Workbench.Core.Management
 {
     public class UserspaceManager
     {
-        private readonly FileSystemManager _fileSystemManager;
-
-        public UserspaceManager(FileSystemManager fileSystemManager)
+        public void SwitchUserspace()
         {
-            _fileSystemManager = fileSystemManager ?? throw new ArgumentNullException(nameof(fileSystemManager));
+            SystemVariable.UserspaceDirectory = GetUserspaceDirectory();
         }
 
         public string GetUserspaceDirectory()
         {
-            return Path.Combine(_fileSystemManager.GetUserDirectoryPath(), FileSystem.WorkbenchDirectory);
+            return Path.Combine(FsPath.UserDirectory(), Directories.Workbench);
         }
     }
 }

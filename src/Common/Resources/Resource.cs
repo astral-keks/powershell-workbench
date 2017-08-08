@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AstralKeks.Workbench.Core.Resources
+namespace AstralKeks.Workbench.Common.Resources
 {
     public class Resource
     {

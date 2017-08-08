@@ -1,21 +1,21 @@
 ﻿using System;
 using System.IO;
 
-namespace AstralKeks.Workbench.Core.Management
+namespace AstralKeks.Workbench.Common.Data
 {
-    public class OperatingSystemManager
+    public class Platform
     {
         public const string Windows = "Windows";
-        public const string Linux = "Linux";
+        public const string Unix = "Unix";
 
-        public static string CurrentOS
+        public static string Current
         {
             get
             {
                 switch (Path.DirectorySeparatorChar)
                 {
                     case '/':
-                        return Linux;
+                        return Unix;
                     case '\\':
                         return Windows;
                     default:
@@ -23,6 +23,5 @@ namespace AstralKeks.Workbench.Core.Management
                 }
             }
         }
-
     }
 }

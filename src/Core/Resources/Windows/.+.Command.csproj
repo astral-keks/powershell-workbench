@@ -4,9 +4,6 @@
     <TargetFramework>{$TargetFramework}</TargetFramework>
     <AssemblyName>{$CommandAssemblyName}</AssemblyName>
     <RootNamespace>{$CommandAssemblyName}</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <OutDir>bin\$(Configuration)\{$OutputDirectoryPart}</OutDir>
   </PropertyGroup>
 

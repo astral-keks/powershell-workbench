@@ -1,5 +1,4 @@
-﻿using AstralKeks.Workbench.Core.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -20,6 +19,7 @@ namespace AstralKeks.Workbench.Command
 
         private void InitializeWorkspace()
         {
+            Env.UserspaceManager.SwitchUserspace();
             Env.WorkspaceManager.SwitchWorkspace(Directory.GetCurrentDirectory());
 
             var workspaceDirectory = Env.WorkspaceManager.GetWorkspaceDirectory();

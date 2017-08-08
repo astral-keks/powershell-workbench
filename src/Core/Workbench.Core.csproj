@@ -4,7 +4,6 @@
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Core</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Core</RootNamespace>
-    <OutputPath>..\..\artifact</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,9 +15,9 @@
     <EmbeddedResource Include="Resources\Windows\.+.psd1" />
     <EmbeddedResource Include="Resources\Windows\.gitignore" />
     <EmbeddedResource Include="Resources\Windows\Workspace.bat" />
-    <EmbeddedResource Include="Resources\Windows\Workspace.json" />
-    <EmbeddedResource Include="Resources\Windows\Application.json" />
-    <EmbeddedResource Include="Resources\Windows\Toolkit.json" />
+    <EmbeddedResource Include="Resources\Windows\WB-Workspace.json" />
+    <EmbeddedResource Include="Resources\Windows\WB-Application.json" />
+    <EmbeddedResource Include="Resources\Windows\WB-Toolkit.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +28,10 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Workbench.Common.csproj" />
   </ItemGroup>
 
 </Project>

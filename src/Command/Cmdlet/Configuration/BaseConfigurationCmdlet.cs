@@ -1,6 +1,5 @@
 ﻿using AstralKeks.Workbench.PowerShell.Attributes;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace AstralKeks.Workbench.Command
