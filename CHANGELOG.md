@@ -3,6 +3,7 @@
 - AstralKeks.Workbench.Common library
 ### Changed
 - VS build output directory is separate for each project
+- Configuration files names got WB- prefix
 
 ## 0.1.6
 ### Added
