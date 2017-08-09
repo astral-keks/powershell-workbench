@@ -3,6 +3,7 @@ namespace AstralKeks.Workbench.Core.Resources
 {
     internal class Files
     {
+        public const string Alias = "WB-Alias.json";
         public const string Application = "WB-Application.json";
         public const string Toolkit = "WB-Toolkit.json";
         public const string Workspace = "WB-Workspace.json";

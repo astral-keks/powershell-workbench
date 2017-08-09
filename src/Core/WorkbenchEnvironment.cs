@@ -13,6 +13,7 @@ namespace AstralKeks.Workbench.Core
         private readonly ApplicationManager _applicationManager;
         private readonly InstallationManager _installationManager;
         private readonly ToolkitManager _toolkitManager;
+        private readonly AliasManager _aliasManager;
 
         public WorkbenchEnvironment()
         {
@@ -24,6 +25,7 @@ namespace AstralKeks.Workbench.Core
             _applicationManager = new ApplicationManager(_workspaceManager, _userspaceManager, _configurationManager, _macrosManager);
             _installationManager = new InstallationManager(_userspaceManager, _configurationManager);
             _toolkitManager = new ToolkitManager(_workspaceManager, _userspaceManager, _configurationManager, _resourceManager, _macrosManager);
+            _aliasManager = new AliasManager(_workspaceManager, _userspaceManager, _configurationManager);
         }
 
         public InstallationManager InstallationManager => _installationManager;
@@ -37,5 +39,7 @@ namespace AstralKeks.Workbench.Core
         public WorkspaceManager WorkspaceManager => _workspaceManager;
 
         public ToolkitManager ToolkitManager => _toolkitManager;
+        
+        public AliasManager AliasManager => _aliasManager;
     }
 }

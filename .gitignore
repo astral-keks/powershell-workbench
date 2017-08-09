@@ -4,6 +4,7 @@
 _ReSharper.*
 package/
 artifact/
+.vs
 */.vs/
 *.user
 *.suo

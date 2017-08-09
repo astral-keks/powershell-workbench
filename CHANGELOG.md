@@ -1,3 +1,10 @@
+## 0.1.8
+### Added
+- Alias config
+### Fixed
+- Incorrect {$Bin} directory resolution
+- Resource locating without subdirectory
+
 ## 0.1.7
 ### Added
 - AstralKeks.Workbench.Common library

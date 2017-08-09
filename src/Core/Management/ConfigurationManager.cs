@@ -17,6 +17,11 @@ namespace AstralKeks.Workbench.Core.Management
             _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
         }
 
+        public Alias[] GetAliasConfig(string workspaceDirectory, string userspaceDirectory)
+        {
+            return GetConfig<Alias[]>(workspaceDirectory, userspaceDirectory, Files.Alias);
+        }
+
         public Application[] GetApplicationConfig(string workspaceDirectory, string userspaceDirectory)
         {
             return GetConfig<Application[]>(workspaceDirectory, userspaceDirectory, Files.Application);
@@ -76,6 +81,7 @@ namespace AstralKeks.Workbench.Core.Management
         {
             return new[]
             {
+                Files.Alias,
                 Files.Application,
                 Files.Toolkit,
                 Files.Workspace

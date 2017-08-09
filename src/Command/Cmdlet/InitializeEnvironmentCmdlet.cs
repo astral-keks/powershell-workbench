@@ -28,15 +28,9 @@ namespace AstralKeks.Workbench.Command
 
         private void InitializeAliases()
         {
-            var cmdletInfo = typeof(StartApplicationCmdlet)
-                .GetTypeInfo()
-                .GetCustomAttributes(typeof(CmdletAttribute), true)
-                .Cast<CmdletAttribute>()
-                .First();
-
-            var applications = Env.ApplicationManager.GetApplications();
-            foreach (var application in applications)
-                InvokeCommand.InvokeScript($"Set-Alias {application.Name} {cmdletInfo.VerbName}-{cmdletInfo.NounName} -Scope Global");
+            var aliases = Env.AliasManager.GetAliases();
+            foreach (var alias in aliases)
+                InvokeCommand.InvokeScript($"Set-Alias {alias.Name} {alias.Command} -Scope Global");
         }
 
         private IList<string> InitializeToolkits()

@@ -1,0 +1,18 @@
+﻿[
+  {
+    "Name": "Editor",
+    "Command": "Start-WBApplication"
+  },
+  {
+    "Name": "Terminal",
+    "Command": "Start-WBApplication"
+  },
+  {
+    "Name": "IDE",
+    "Command": "Start-WBApplication"
+  },
+  {
+    "Name": "Mail",
+    "Command": "Start-WBApplication"
+  }
+]

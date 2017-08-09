@@ -1,6 +1,7 @@
 ﻿using AstralKeks.Workbench.Common.Data;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace AstralKeks.Workbench.Common.FileSystem
 {
@@ -21,11 +22,10 @@ namespace AstralKeks.Workbench.Common.FileSystem
 
         public static string BinDirectory()
         {
-            //var codeBase = typeof(FileSystemManager).GetTypeInfo().Assembly.CodeBase;
-            //var uri = new UriBuilder(codeBase);
-            //var path = Uri.UnescapeDataString(uri.Path);
-            //return Path.GetDirectoryName(path);
-            return AppContext.BaseDirectory;
+            var codeBase = typeof(FsPath).GetTypeInfo().Assembly.CodeBase;
+            var uri = new UriBuilder(codeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
         }
         
         public static string Absolute(string parentPath, string middlePath, string childPath)

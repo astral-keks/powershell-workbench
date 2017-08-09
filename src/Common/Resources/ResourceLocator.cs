@@ -23,8 +23,6 @@ namespace AstralKeks.Workbench.Common.Resources
         {
             if (location == null)
                 throw new ArgumentNullException(nameof(location));
-            if (string.IsNullOrWhiteSpace(directory))
-                throw new ArgumentNullException(nameof(directory));
             if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentNullException(nameof(filename));
 
