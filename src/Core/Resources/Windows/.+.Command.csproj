@@ -12,9 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="{$ManifestFilename}">
+    <ContentWithTargetPath Include="Manifest.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+      <TargetPath>{$ManifestFilename}</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 
 </Project>

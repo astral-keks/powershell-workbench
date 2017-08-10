@@ -1,3 +1,7 @@
+## 0.1.9
+### Changed
+- New toolkit project manifest filename is changed to Manifest.psd1
+
 ## 0.1.8
 ### Added
 - Alias config

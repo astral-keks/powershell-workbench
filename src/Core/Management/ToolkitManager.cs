@@ -102,6 +102,7 @@ namespace AstralKeks.Workbench.Core.Management
                 CoreProjectFilename = $"{toolkitName}.{Directories.Core}.csproj",
                 CommandProjectDirectory = commandDirectory,
                 CommandProjectFilename = $"{toolkitName}.{Directories.Command}.csproj",
+                ManifestSourceFilename = Files.Manifest,
                 ManifestFilename = $"{moduleName}.psd1",
                 GitignoreFilename = Files.Gitignore,
                 CmdletDirectory = FsPath.Absolute(commandDirectory, Directories.Cmdlet),
@@ -131,7 +132,7 @@ namespace AstralKeks.Workbench.Core.Management
             commandResContent = _macrosManager.ResolveMacros(commandResContent, projectInfo);
             commandRes.Write(commandResContent);
 
-            var manifestRes = _resourceManager.ObtainResource(projectInfo.CommandProjectDirectory, projectInfo.ManifestFilename);
+            var manifestRes = _resourceManager.ObtainResource(projectInfo.CommandProjectDirectory, projectInfo.ManifestSourceFilename);
             var manifestResContent = manifestRes.Read<string>();
             manifestResContent = _macrosManager.ResolveMacros(manifestResContent, projectInfo);
             manifestRes.Write(manifestResContent);

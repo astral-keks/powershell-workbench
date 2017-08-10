@@ -7,13 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Windows\.+.psd1" />
-    <None Remove="Resources\Windows\.gitignore" />
-    <None Remove="Resources\Windows\WB-Alias.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Windows\.+.psd1" />
+    <EmbeddedResource Include="Resources\Windows\Manifest.psd1" />
     <EmbeddedResource Include="Resources\Windows\.gitignore" />
     <EmbeddedResource Include="Resources\Windows\WB-Alias.json" />
     <EmbeddedResource Include="Resources\Windows\Workspace.bat" />
