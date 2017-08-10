@@ -3,8 +3,8 @@ using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command
 {
-    [Cmdlet(VerbsCommon.Switch, Noun.WBWorkspace)]
-    public class SwitchWorkspaceCmdlet : WorkbenchDynamicPSCmdlet
+    //[Cmdlet(VerbsCommon.Switch, Noun.WBWorkspace)]
+    class SwitchWorkspaceCmdlet : WorkbenchDynamicPSCmdlet
     {
         [DynamicParameter(Position = 0, Mandatory = true)]
         [ValidateNotNullOrEmpty]

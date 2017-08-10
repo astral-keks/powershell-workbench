@@ -1,3 +1,10 @@
+## 0.1.10
+### Removed
+- Switch-WBWorkspace cmdlet
+### Changed
+- ResourceManager interface
+- Default workspace template
+
 ## 0.1.9
 ### Changed
 - New toolkit project manifest filename is changed to Manifest.psd1

@@ -10,7 +10,7 @@ namespace AstralKeks.Workbench.Common.Resources
         private readonly IResourceProvider _provider;
         private readonly LinkedList<IResourceProvider> _defaultsProviders;
 
-        public Resource(IResourceFormat format, IResourceProvider provider, params IResourceProvider[] defaultsProviders)
+        public Resource(IResourceFormat format, IResourceProvider provider, IEnumerable<IResourceProvider> defaultsProviders)
         {
             if (!defaultsProviders.Any())
                 throw new ArgumentException("No configuration providers have been specified", nameof(defaultsProviders));

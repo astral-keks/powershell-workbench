@@ -76,9 +76,9 @@ namespace AstralKeks.Workbench.Core.Management
             {
                 var resourceDirectory = Path.GetDirectoryName(file);
                 var resourceFilename = Path.GetFileName(file);
-                _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, resourceDirectory, resourceFilename);
+                _resourceManager.CreateResource(new[] { workspaceDirectory, userspaceDirectory }, resourceDirectory, resourceFilename);
             }
-            _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, null, Files.WorkspaceLauncher);
+            _resourceManager.CreateResource(new[] { workspaceDirectory, userspaceDirectory }, Files.WorkspaceLauncher);
         }
 
         private string FindWorkspaceDirectory(string directory, bool throwOnMissing)

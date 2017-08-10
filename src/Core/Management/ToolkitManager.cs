@@ -117,27 +117,27 @@ namespace AstralKeks.Workbench.Core.Management
             if (projectInfo == null)
                 throw new ArgumentNullException(nameof(projectInfo));
 
-            var slnRes = _resourceManager.ObtainResource(projectInfo.SolutionDirectory, projectInfo.SolutionFilename);
+            var slnRes = _resourceManager.CreateResource(projectInfo.SolutionDirectory, projectInfo.SolutionFilename);
             var slnResContent = slnRes.Read<string>();
             slnResContent = _macrosManager.ResolveMacros(slnResContent, projectInfo);
             slnRes.Write(slnResContent);
 
-            var coreRes = _resourceManager.ObtainResource(projectInfo.CoreProjectDirectory, projectInfo.CoreProjectFilename);
+            var coreRes = _resourceManager.CreateResource(projectInfo.CoreProjectDirectory, projectInfo.CoreProjectFilename);
             var coreResContent = coreRes.Read<string>();
             coreResContent = _macrosManager.ResolveMacros(coreResContent, projectInfo);
             coreRes.Write(coreResContent);
 
-            var commandRes = _resourceManager.ObtainResource(projectInfo.CommandProjectDirectory, projectInfo.CommandProjectFilename);
+            var commandRes = _resourceManager.CreateResource(projectInfo.CommandProjectDirectory, projectInfo.CommandProjectFilename);
             var commandResContent = commandRes.Read<string>();
             commandResContent = _macrosManager.ResolveMacros(commandResContent, projectInfo);
             commandRes.Write(commandResContent);
 
-            var manifestRes = _resourceManager.ObtainResource(projectInfo.CommandProjectDirectory, projectInfo.ManifestSourceFilename);
+            var manifestRes = _resourceManager.CreateResource(projectInfo.CommandProjectDirectory, projectInfo.ManifestSourceFilename);
             var manifestResContent = manifestRes.Read<string>();
             manifestResContent = _macrosManager.ResolveMacros(manifestResContent, projectInfo);
             manifestRes.Write(manifestResContent);
 
-            _resourceManager.ObtainResource(projectInfo.RootDirectory, projectInfo.GitignoreFilename);
+            _resourceManager.CreateResource(projectInfo.RootDirectory, projectInfo.GitignoreFilename);
 
             FsOperation.CreateFileIfNotExists(projectInfo.ChangeLogPath);
             FsOperation.CreateFileIfNotExists(projectInfo.LicencePath);

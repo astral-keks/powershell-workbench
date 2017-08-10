@@ -1,6 +1,7 @@
 ﻿using AstralKeks.Workbench.Common.Data;
 using AstralKeks.Workbench.Common.FileSystem;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -35,40 +36,62 @@ namespace AstralKeks.Workbench.Common.Resources
             _format = format ?? new JsonResourceFormat();
         }
 
-        public Resource ObtainResource(string workspaceLocation, string userspaceLocation,
-            string directoryName, string fileName)
+        public Resource CreateResource(string location, string directoryName, string fileName)
         {
-            var workspacePath = new ResourceLocator(workspaceLocation, directoryName, fileName).Path;
-            var userspacePath = new ResourceLocator(userspaceLocation, directoryName, fileName).Path;
-            var embeddedResourceName = GetResourceName(fileName);
-
-            var workspaceProvider = new FileResourceProvider(workspacePath);
-            var userspaceProvider = new FileResourceProvider(userspacePath);
-            var defaults = new EmbeddedResourceProvider(embeddedResourceName, _assembly);
-            
-            return new Resource(_format, workspaceProvider, userspaceProvider, defaults);
+            return CreateResource(new[] { location }, directoryName, fileName);
         }
 
-        public Resource ObtainResource(string userspaceLocation, string directoryName, string fileName)
+        public Resource CreateResource(string location, string fileName)
         {
-            var userspacePath = new ResourceLocator(userspaceLocation, directoryName, fileName).Path;
-            var embeddedResourceName = GetResourceName(fileName);
-
-            var userspaceProvider = new FileResourceProvider(userspacePath);
-            var defaults = new EmbeddedResourceProvider(embeddedResourceName, _assembly);
-
-            return new Resource(_format, userspaceProvider, defaults);
+            return CreateResource(new[] { location }, fileName);
         }
 
-        public Resource ObtainResource(string location, string fileName)
+        public Resource CreateResource(IEnumerable<string> locations, string directoryName, string fileName)
         {
-            var userspacePath = new ResourceLocator(location, fileName).Path;
-            var embeddedResourceName = GetResourceName(fileName);
+            if (locations == null)
+                throw new ArgumentNullException(nameof(locations));
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException("Invalid name of file", nameof(fileName));
+            locations = locations.Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
 
-            var userspaceProvider = new FileResourceProvider(userspacePath);
-            var defaults = new EmbeddedResourceProvider(embeddedResourceName, _assembly);
+            var mainLocation = locations.FirstOrDefault();
+            var defaultLocations = locations.Skip(1).ToList();
+            if (mainLocation == null)
+                throw new ArgumentException("Location is not set");
 
-            return new Resource(_format, userspaceProvider, defaults);
+            var mainPath = new ResourceLocator(mainLocation, directoryName, fileName).Path;
+            var defaultPaths = defaultLocations.Select(l => new ResourceLocator(l, directoryName, fileName).Path).ToList();
+            var defaultResourceName = GetResourceName(fileName);
+
+            var mainProvider = new FileResourceProvider(mainPath);
+            var defaultProviders = defaultPaths.Select(p => new FileResourceProvider(p)).Cast<IResourceProvider>().ToList();
+            defaultProviders.Add(new EmbeddedResourceProvider(defaultResourceName, _assembly));
+
+            return new Resource(_format, mainProvider, defaultProviders);
+        }
+
+        public Resource CreateResource(IEnumerable<string> locations, string fileName)
+        {
+            if (locations == null)
+                throw new ArgumentNullException(nameof(locations));
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException("Invalid name of file", nameof(fileName));
+            locations = locations.Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
+
+            var mainLocation = locations.FirstOrDefault();
+            var defaultLocations = locations.Skip(1).ToList();
+            if (mainLocation == null)
+                throw new ArgumentException("Location is not set");
+
+            var mainPath = new ResourceLocator(mainLocation, fileName).Path;
+            var defaultPaths = defaultLocations.Select(l => new ResourceLocator(l, fileName).Path).ToList();
+            var defaultResourceName = GetResourceName(fileName);
+
+            var mainProvider = new FileResourceProvider(mainPath);
+            var defaultProviders = defaultPaths.Select(p => new FileResourceProvider(p)).Cast<IResourceProvider>().ToList();
+            defaultProviders.Add(new EmbeddedResourceProvider(defaultResourceName, _assembly));
+
+            return new Resource(_format, mainProvider, defaultProviders);
         }
 
         public void DeleteResource(string location, string directoryName, string fileName)

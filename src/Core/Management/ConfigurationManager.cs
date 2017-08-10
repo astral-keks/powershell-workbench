@@ -39,24 +39,28 @@ namespace AstralKeks.Workbench.Core.Management
 
         public TConfig GetConfig<TConfig>(string workspaceDirectory, string userspaceDirectory, string configFileName)
         {
-            var resource = _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, Directories.Config, configFileName);
+            var locations = new[] { workspaceDirectory, userspaceDirectory };
+            var resource = _resourceManager.CreateResource(locations, Directories.Config, configFileName);
             return resource.Read<TConfig>();
         }
 
         public TConfig GetConfig<TConfig>(string userspaceDirectory, string configFileName)
         {
-            var resource = _resourceManager.ObtainResource(userspaceDirectory, Directories.Config, configFileName);
+            var locations = new[] { userspaceDirectory };
+            var resource = _resourceManager.CreateResource(locations, Directories.Config, configFileName);
             return resource.Read<TConfig>();
         }
 
         public void CreateConfig(string workspaceDirectory, string userspaceDirectory, string configFileName)
         {
-            _resourceManager.ObtainResource(workspaceDirectory, userspaceDirectory, Directories.Config, configFileName);
+            var locations = new[] { workspaceDirectory, userspaceDirectory };
+            _resourceManager.CreateResource(locations, Directories.Config, configFileName);
         }
         
         public void CreateConfig(string userspaceDirectory, string configFileName)
         {
-            _resourceManager.ObtainResource(userspaceDirectory, Directories.Config, configFileName);
+            var locations = new[] { userspaceDirectory };
+            _resourceManager.CreateResource(locations, Directories.Config, configFileName);
         }
 
         public void DeleteConfig(string directory, string configFileName)
