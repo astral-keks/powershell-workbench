@@ -1,5 +1,6 @@
 ﻿using AstralKeks.Workbench.Core.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -62,49 +63,7 @@ namespace AstralKeks.Workbench.Core.Management
             if (command == null)
                 throw new ArgumentException($"Command '{commandName}' in application '{applicationName}' is not configured");
 
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = application.Executable,
-                    Arguments = string.Join(" ", commandArguments),
-                    UseShellExecute = command.UseShellExecute,
-                    CreateNoWindow = command.NoWindow
-                }
-            };
-
-            #region Unsupported
-
-            //if (command.RereadEnvironment)
-            //{
-            //    var variables = Enumerable.Empty<DictionaryEntry>()
-            //        .Concat(Environment.GetEnvironmentVariables().Cast<DictionaryEntry>())
-            //        .Concat(Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine).Cast<DictionaryEntry>())
-            //        .Concat(Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User).Cast<DictionaryEntry>());
-
-            //    foreach (var variable in variables)
-            //    {
-            //        var name = variable.Key as string;
-            //        var value = variable.Value as string;
-
-            //        if (name == "Path")
-            //        {
-            //            var path = string.Join(";", process.StartInfo.Environment[name], value);
-            //            var pathParts = path.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Distinct();
-            //            process.StartInfo.Environment[name] = string.Join(";", pathParts);
-            //        }
-            //        else
-            //        {
-            //            process.StartInfo.Environment[name] = value;
-            //        }
-            //    }
-            //}
-
-            //if (command.RunAs)
-            //    process.StartInfo.Verb = "runas";
-
-            #endregion
-
+            var process = CreateProcess(application, command, commandArguments);
             process.Start();
             if (command.WaitForExit)
                 process.WaitForExit();
@@ -118,6 +77,63 @@ namespace AstralKeks.Workbench.Core.Management
         private bool CommandHasName(Command command, string commandName)
         {
             return string.Equals(command.Name, commandName, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private Process CreateProcess(Application application, Command command, List<string> arguments)
+        {
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = application.Executable,
+                    Arguments = string.Join(" ", arguments),
+                    UseShellExecute = command.UseShellExecute,
+                    CreateNoWindow = command.NoWindow
+                }
+            };
+
+            if (command.ResetVariables)
+                process.StartInfo.Environment.Clear();
+
+            if (command.DeleteVariables?.Any() == true)
+            {
+                foreach (var variableName in command.DeleteVariables)
+                    process.StartInfo.Environment.Remove(variableName);
+            }
+
+            if (command.RereadCurrentVariables || command.RereadMachineVariables || command.RereadUserVariables)
+            {
+                var variables = Enumerable.Empty<DictionaryEntry>();
+                if (command.RereadCurrentVariables)
+                    AppendProcessVariables(process, Environment.GetEnvironmentVariables());
+                if (command.RereadMachineVariables)
+                    AppendProcessVariables(process, Environment.GetEnvironmentVariables(EnvironmentVariableTarget.Machine));
+                if (command.RereadUserVariables)
+                    AppendProcessVariables(process, Environment.GetEnvironmentVariables(EnvironmentVariableTarget.User));
+            }
+
+            return process;
+        }
+        
+        private void AppendProcessVariables(Process process, IDictionary variables)
+        {
+            var environment = process.StartInfo.Environment;
+            foreach (var variable in variables.Cast<DictionaryEntry>())
+            {
+                var name = variable.Key as string;
+                var value = variable.Value as string;
+
+                if (name == "Path")
+                {
+                    var path = string.Join(";", environment.ContainsKey(name) ? environment[name] : string.Empty, value);
+                    var pathParts = path.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Distinct();
+                    process.StartInfo.Environment[name] = string.Join(";", pathParts);
+                }
+                else
+                {
+                    process.StartInfo.Environment[name] = value;
+                }
+            }
         }
     }
 }

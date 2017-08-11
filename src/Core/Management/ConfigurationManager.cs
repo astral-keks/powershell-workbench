@@ -78,6 +78,7 @@ namespace AstralKeks.Workbench.Core.Management
             return FsOperation.GetFilesInDirectory(directory, Directories.Config)
                 .Select(Path.GetFileName)
                 .Where(f => !string.IsNullOrWhiteSpace(f))
+                .Where(GetConfigFileNames().Contains)
                 .ToArray();
         }
 

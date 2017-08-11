@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace AstralKeks.Workbench.Common.Data
+namespace AstralKeks.Workbench.Common.Context
 {
     public class Platform
     {

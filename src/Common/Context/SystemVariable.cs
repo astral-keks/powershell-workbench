@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AstralKeks.Workbench.Common.Data
+namespace AstralKeks.Workbench.Common.Context
 {
     public class SystemVariable
     {

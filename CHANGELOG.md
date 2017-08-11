@@ -1,3 +1,11 @@
+## 0.1.11
+### Added
+- Evironment variables management when starting application
+### Changed
+- Toolkit Command project template
+### Fixed
+- Incorrect behavior of Reset-WBConfiguration cmdlet
+
 ## 0.1.10
 ### Removed
 - Switch-WBWorkspace cmdlet

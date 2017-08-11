@@ -14,12 +14,27 @@
         "Name": "Default",
 
         // Arguments to pass to executable when starting the application
-        "Arguments": ["{$Pipeline}", "{$Args}"],
+        "Arguments": [ "{$Pipeline}", "{$Args}" ],
         // Macro variables
         // {$Bin}      - path to workbench installation directory
         // {$User}     - `%LOCALAPPDATA%`
         // {$Args}     - arguments passed when starting application
         // {$Pipeline} - single value from pipeline passed when starting application
+
+        //Environment variables to delete before starting the application
+        "DeleteVariables": [],
+
+        //Reread environment variables from current process before starting the application
+        "RereadCurrentVariables": false,
+
+        //Reread machine environment variables before starting the application
+        "RereadMachineVariables": false,
+
+        //Reread user environment variables before starting the application
+        "RereadUserVariables": false,
+
+        //Unset all environment variables before starting the application
+        "ResetVariables": false,
 
         // Use operating system shell to start the application
         "UseShellExecute": false,
@@ -59,7 +74,11 @@
     "Commands": [
       {
         "Name": "Default",
-        "Arguments": ["{$Pipeline}", "{$Args}"],
+        "Arguments": [ "{$Pipeline}", "{$Args}" ],
+        "DeleteVariables": [ "WBWorkspaceDirectory", "WBUserspaceDirectory" ],
+        "RereadCurrentVariables": false,
+        "RereadMachineVariables": true,
+        "RereadUserVariables": true,
         "UseShellExecute": false,
         "WaitForExit": false
       }
