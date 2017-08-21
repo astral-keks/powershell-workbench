@@ -10,6 +10,7 @@ namespace AstralKeks.Workbench.Core.Resources
         public const string WorkspaceLauncher = "Workspace.bat";
         public const string Gitignore = ".gitignore";
         public const string ChangeLog = "CHANGELOG.md";
+        public const string Loader = "Loader.psm1";
         public const string Manifest = "Manifest.psd1";
         public const string Licence = "LICENCE.md";
         public const string Readme = "README.md";

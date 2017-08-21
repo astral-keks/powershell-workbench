@@ -1,0 +1,1 @@
+﻿Import-Module ([System.IO.Path]::Combine($PSScriptRoot, '{$CommandAssemblyName}.dll'))

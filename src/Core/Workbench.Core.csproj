@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Windows\Loader.psm1" />
     <EmbeddedResource Include="Resources\Windows\Manifest.psd1" />
     <EmbeddedResource Include="Resources\Windows\.gitignore" />
     <EmbeddedResource Include="Resources\Windows\WB-Alias.json" />
@@ -17,9 +18,6 @@
     <EmbeddedResource Include="Resources\Windows\WB-Workspace.json" />
     <EmbeddedResource Include="Resources\Windows\WB-Application.json" />
     <EmbeddedResource Include="Resources\Windows\WB-Toolkit.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Windows\.+.Command.csproj" />
     <EmbeddedResource Include="Resources\Windows\.+.Core.csproj" />
     <EmbeddedResource Include="Resources\Windows\.+.sln" />

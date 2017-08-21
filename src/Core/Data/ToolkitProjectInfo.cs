@@ -25,8 +25,8 @@ namespace AstralKeks.Workbench.Core.Data
         public string CoreProjectFilename { get; set; }
         public string CommandProjectDirectory { get; set; }
         public string CommandProjectFilename { get; set; }
+        public string LoaderSourceFilename { get; set; }
         public string ManifestSourceFilename { get; set; }
-        public string ManifestFilename { get; set; }
         public string GitignoreFilename { get; set; }
         public string CmdletDirectory { get; set; }
         public string ChangeLogPath { get; set; }

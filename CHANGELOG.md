@@ -1,3 +1,7 @@
+## 0.2.4
+### Added
+- Loader.psm1 file in New-WBToolkitProject
+
 ## 0.2.3
 ### Fixed
 - Proper binaries and nupkg versioning

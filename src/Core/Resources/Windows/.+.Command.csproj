@@ -15,9 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ContentWithTargetPath Include="Loader.psm1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>{$ModuleName}.psm1</TargetPath>
+    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Manifest.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>{$ManifestFilename}</TargetPath>
+      <TargetPath>{$ModuleName}.psd1</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
 
