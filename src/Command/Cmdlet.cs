@@ -1,5 +1,5 @@
 ﻿using AstralKeks.Workbench.Core;
-using AstralKeks.Workbench.PowerShell;
+using AstralKeks.PowerShell.Common;
 using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command

@@ -1,3 +1,7 @@
+## 0.2.2
+### Changed
+- AstralKeks.Workbench.PowerShell -> AstralKeks.PowerShell.Common (NuGet package)
+
 ## 0.2.1
 ### Changed
 - AstralKeks.Workbench.Common NuGet package

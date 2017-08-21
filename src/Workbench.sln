@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench.Command", "Comman
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench.Common", "Common\Workbench.Common.csproj", "{D01D1CD1-21D7-4F2A-8C2C-2BC131C3F43B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench.PowerShell", "PowerShell\Workbench.PowerShell.csproj", "{15B6457C-F741-432E-98AD-70EE6F33EE72}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workbench.Sandbox", "Sandbox\Workbench.Sandbox.csproj", "{77817F7F-D5E0-47C5-BFF4-E00963A7524F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workbench.Sandbox", "Sandbox\Workbench.Sandbox.csproj", "{77817F7F-D5E0-47C5-BFF4-E00963A7524F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +36,6 @@ Global
 		{D01D1CD1-21D7-4F2A-8C2C-2BC131C3F43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01D1CD1-21D7-4F2A-8C2C-2BC131C3F43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D01D1CD1-21D7-4F2A-8C2C-2BC131C3F43B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15B6457C-F741-432E-98AD-70EE6F33EE72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15B6457C-F741-432E-98AD-70EE6F33EE72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15B6457C-F741-432E-98AD-70EE6F33EE72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15B6457C-F741-432E-98AD-70EE6F33EE72}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77817F7F-D5E0-47C5-BFF4-E00963A7524F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77817F7F-D5E0-47C5-BFF4-E00963A7524F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77817F7F-D5E0-47C5-BFF4-E00963A7524F}.Release|Any CPU.ActiveCfg = Release|Any CPU

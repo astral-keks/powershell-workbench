@@ -1,4 +1,4 @@
-﻿using AstralKeks.Workbench.PowerShell.Attributes;
+﻿using AstralKeks.PowerShell.Common.Attributes;
 using System.Linq;
 using System.Management.Automation;
 

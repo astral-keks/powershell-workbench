@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.1.0" />
     <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PowerShell\Workbench.PowerShell.csproj" />
   </ItemGroup>
 
 </Project>

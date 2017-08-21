@@ -1,4 +1,4 @@
-﻿using AstralKeks.Workbench.PowerShell.Provider;
+﻿using AstralKeks.PowerShell.Common.Provider;
 using System.Management.Automation;
 using System.Management.Automation.Provider;
 using System.Collections.Generic;

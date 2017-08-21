@@ -15,10 +15,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Workbench.Core.csproj" />
-    <ProjectReference Include="..\PowerShell\Workbench.PowerShell.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.1.0" />
     <PackageReference Include="System.Management.Automation.dll" Version="10.0.10586" />
   </ItemGroup>
 

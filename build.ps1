@@ -11,10 +11,12 @@ $tmp = "$artifact\tmp"
 if (Test-Path $artifact) { Remove-Item $artifact -Recurse }
 if (Test-Path $package) { Remove-Item $package -Recurse }
 dotnet restore $src\Launcher\Workbench.Launcher.csproj
-dotnet build $src\Launcher\Workbench.Launcher.csproj --configuration Release -o  $bin
+dotnet build $src\Launcher\Workbench.Launcher.csproj --configuration Release -o $bin
 dotnet restore $src\Command\Workbench.Command.csproj
-dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o  $bin
-dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o  $nupkg
+dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o $bin
+
+# Build packages
+dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o $nupkg
 
 # Build help xml
 (Get-Content $doc\Commands.md -Raw) -split "<br><br>" |
