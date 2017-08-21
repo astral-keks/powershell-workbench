@@ -1,3 +1,5 @@
+$version = "0.2.3"
+
 $src = "$PSScriptRoot\src"
 $doc = "$PSScriptRoot\doc"
 $artifact = "$PSScriptRoot\artifact"
@@ -11,12 +13,12 @@ $tmp = "$artifact\tmp"
 if (Test-Path $artifact) { Remove-Item $artifact -Recurse }
 if (Test-Path $package) { Remove-Item $package -Recurse }
 dotnet restore $src\Launcher\Workbench.Launcher.csproj
-dotnet build $src\Launcher\Workbench.Launcher.csproj --configuration Release -o $bin
+dotnet build $src\Launcher\Workbench.Launcher.csproj --configuration Release -o $bin --version-suffix $version
 dotnet restore $src\Command\Workbench.Command.csproj
-dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o $bin
+dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o $bin --version-suffix $version
 
 # Build packages
-dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o $nupkg
+dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o $nupkg --version-suffix $version
 
 # Build help xml
 (Get-Content $doc\Commands.md -Raw) -split "<br><br>" |

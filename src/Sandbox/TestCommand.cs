@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management.Automation;
 
-namespace Test
+namespace AstralKeks.Workbench.Sandbox
 {
     [Cmdlet(VerbsDiagnostic.Test, "Command")]
     [OutputType(typeof(string))]

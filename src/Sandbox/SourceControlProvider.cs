@@ -3,7 +3,7 @@ using System.Management.Automation;
 using System.Management.Automation.Provider;
 using System.Collections.Generic;
 
-namespace AstralKeks.SourceControl.Provider
+namespace AstralKeks.Workbench.Sandbox
 {
     [CmdletProvider("SourceControl", ProviderCapabilities.None)]
     [OutputType(typeof(string), ProviderCmdlet = ProviderCmdlet.ClearItem)]

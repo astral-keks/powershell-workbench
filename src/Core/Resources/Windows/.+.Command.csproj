@@ -4,6 +4,9 @@
     <TargetFramework>{$TargetFramework}</TargetFramework>
     <AssemblyName>{$CommandAssemblyName}</AssemblyName>
     <RootNamespace>{$CommandAssemblyName}</RootNamespace>
+    <Version>$(VersionSuffix)</Version>
+    <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
+    <FileVersion>$(VersionSuffix)</FileVersion>
     <!--<OutDir>bin\$(Configuration)\{$OutputDirectoryPart}</OutDir>-->
   </PropertyGroup>
 

@@ -4,6 +4,9 @@
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Command</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Command</RootNamespace>
+    <Version>$(VersionSuffix)</Version>
+    <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
+    <FileVersion>$(VersionSuffix)</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

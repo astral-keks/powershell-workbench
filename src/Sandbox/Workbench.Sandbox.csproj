@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
+    <AssemblyName>AstralKeks.Workbench.Sandbox</AssemblyName>
+    <RootNamespace>AstralKeks.Workbench.Sandbox</RootNamespace>
+    <Version>$(VersionSuffix)</Version>
+    <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
+    <FileVersion>$(VersionSuffix)</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
