@@ -1,2 +1,2 @@
 @echo off
-powershell -File build.ps1
+powershell -File %~dp0\build.ps1

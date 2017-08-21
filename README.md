@@ -27,7 +27,7 @@ I understand that there already exists software which solves these problems one 
 
 To build Workbench from sources run `build.cmd` on Windows or ~~`build.sh` on Linux~~ (will be supported later).
 Build produces 2 directories nearby `src` directory:
-- `artifacts` - contains Workbench binaries
+- `artifacts` - contains Workbench binaries and NuGet packages
 - `packages` - contains NuGet packages restored during build
 
 ### Installation

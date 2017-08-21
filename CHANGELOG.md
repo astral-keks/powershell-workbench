@@ -1,3 +1,8 @@
+## 0.2.1
+### Changed
+- AstralKeks.Workbench.Common NuGet package
+- build.cmd can be executed from any directory
+
 ## 0.2.0
 ### Added
 - PS Provider base classes
