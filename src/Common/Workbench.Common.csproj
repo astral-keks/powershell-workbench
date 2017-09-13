@@ -17,6 +17,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Json\JsonList.cs" />
+    <Compile Remove="Json\JsonMap.cs" />
+    <Compile Remove="Json\JsonObject.cs" />
+    <Compile Remove="Json\JsonRef.cs" />
+    <Compile Remove="Utilities\JsonConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Json\JsonList.cs" />
+    <None Include="Json\JsonMap.cs" />
+    <None Include="Json\JsonObject.cs" />
+    <None Include="Json\JsonRef.cs" />
+    <None Include="Utilities\JsonConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
 

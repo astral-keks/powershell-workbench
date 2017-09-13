@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AstralKeks.Workbench.Common.Resources
@@ -33,7 +34,7 @@ namespace AstralKeks.Workbench.Common.Resources
         {
             var serializer = _serializers.FirstOrDefault(s => s is IResourceSerializer<TObject>);
             if (serializer == null)
-                throw new ResourceException($"Serializer for {typeof(TObject).FullName} was not found");
+                throw new InvalidOperationException($"Serializer for {typeof(TObject).FullName} was not found");
             return serializer as IResourceSerializer<TObject>;
         }
     }

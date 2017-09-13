@@ -24,8 +24,7 @@ namespace AstralKeks.Workbench.Common.Json
             _filePath = filePath;
 
             var directory = Path.GetDirectoryName(_filePath);
-            if (Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            DirectoryManager.CreateDirectoryIfNotExists(directory);
         }
 
         public virtual TObject Read<TObject>()
@@ -42,8 +41,7 @@ namespace AstralKeks.Workbench.Common.Json
         
         public virtual void Remove()
         {
-            if (File.Exists(_filePath))
-                File.Delete(_filePath);
+            FileManager.DeleteFile(_filePath);
         }
     }
 

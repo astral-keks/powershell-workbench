@@ -10,9 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ContentWithTargetPath Include="Script\Initialize-Workbench.ps1">
+    <ContentWithTargetPath Include="Loader.psm1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>Initialize-Workbench.ps1</TargetPath>
+      <TargetPath>Workbench.psm1</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContentWithTargetPath Include="Manifest.psd1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>Workbench.psd1</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
 
@@ -21,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.1.0" />
+    <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.1.4" />
     <PackageReference Include="System.Management.Automation.dll" Version="10.0.10586" />
   </ItemGroup>
 

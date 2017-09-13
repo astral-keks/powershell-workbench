@@ -1,22 +1,19 @@
-﻿using AstralKeks.PowerShell.Common.Attributes;
+﻿using AstralKeks.Workbench.Models;
 using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Get, Noun.WBWorkspace)]
-    [OutputType(typeof(string))]
-    public class GetWorkspaceCmdlet : WorkbenchDynamicCmdlet
+    [OutputType(typeof(Workspace))]
+    public class GetWorkspaceCmdlet : WorkbenchCmdlet
     {
-        [DynamicParameter(Position = 0)]
-        [ValidateNotNullOrEmpty]
-        public string Directory => Parameters.GetValue<string>(nameof(Directory));
+        [Parameter(Position = 0)]
+        public string Directory { get; }
 
         protected override void ProcessRecord()
         {
-            if (!string.IsNullOrWhiteSpace(Directory))
-                WriteObject(Env.WorkspaceManager.GetWorkspaceDirectory(Directory));
-            else
-                WriteObject(Env.WorkspaceManager.GetWorkspaceDirectory());
+            var workspace = Components.WorkspaceRepository.FindWorkspace(Directory);
+            WriteObject(workspace);
         }
     }
 }

@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputType>exe</OutputType>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Sandbox</AssemblyName>
@@ -7,11 +11,20 @@
     <Version>$(VersionSuffix)</Version>
     <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
     <FileVersion>$(VersionSuffix)</FileVersion>
+    <ApplicationIcon />
+    <OutputTypeEx>exe</OutputTypeEx>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.1.0" />
+    <PackageReference Include="Autofac" Version="4.6.1" />
     <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Workbench.Core.csproj" />
   </ItemGroup>
 
 </Project>

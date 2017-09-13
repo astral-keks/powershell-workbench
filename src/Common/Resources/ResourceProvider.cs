@@ -1,11 +1,13 @@
-﻿using System;
+﻿using AstralKeks.Workbench.Common.Infrastructure;
+using AstralKeks.Workbench.Common.Utilities;
+using System;
 using System.IO;
-using System.Reflection;
 
 namespace AstralKeks.Workbench.Common.Resources
 {
     public interface IResourceProvider
     {
+        bool CanRead { get; }
         string Read();
         void Write(string resource);
     }
@@ -13,59 +15,60 @@ namespace AstralKeks.Workbench.Common.Resources
     public class FileResourceProvider : IResourceProvider
     {
         private readonly string _filePath;
+        private readonly FileSystem _fileSystem;
 
-        public FileResourceProvider(string filePath)
+        public FileResourceProvider(string filePath, FileSystem fileSystem)
         {
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
+            if (fileSystem == null)
+                throw new ArgumentNullException(nameof(fileSystem));
 
             _filePath = filePath;
+            _fileSystem = fileSystem;
             var directory = Path.GetDirectoryName(_filePath);
-            if (directory != null && !Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            if (directory != null)
+                _fileSystem.DirectoryCreate(directory);
         }
+
+        public bool CanRead => File.Exists(_filePath);
 
         public string Read()
         {
-            return File.Exists(_filePath) ? File.ReadAllText(_filePath) : null;
+            return _fileSystem.FileRead(_filePath);
         }
 
         public void Write(string resource)
         {
-            File.WriteAllText(_filePath, resource);
+            _fileSystem.FileWriteAllText(_filePath, resource);
         }
     }
 
     public class EmbeddedResourceProvider : IResourceProvider
     {
-        private readonly Assembly _assembly;
+        private readonly ResourceBundle _resourceBundle;
         private readonly string _resourceName;
+        private readonly Type _assemblyLocator;
 
-        public EmbeddedResourceProvider(string resourceName, Assembly assembly)
+        public EmbeddedResourceProvider(string resourceName, ResourceOrigin origin, ResourceBundle resourceBundle)
         {
             if (string.IsNullOrWhiteSpace(resourceName))
                 throw new ArgumentException("Resource name is not set", nameof(resourceName));
-            if (assembly == null)
-                throw new ArgumentNullException(nameof(assembly));
+            if (origin == null)
+                throw new ArgumentNullException(nameof(origin));
+            if (resourceBundle == null)
+                throw new ArgumentNullException(nameof(resourceBundle));
 
             _resourceName = resourceName;
-            _assembly = assembly;
+            _assemblyLocator = origin.AssemblyLocator;
+            _resourceBundle = resourceBundle;
         }
+
+        public bool CanRead => _resourceBundle.ExistsResource(_resourceName, _assemblyLocator);
 
         public string Read()
         {
-            using (var stream = _assembly.GetManifestResourceStream(_resourceName))
-            {
-                if (stream != null)
-                {
-                    using (var reader = new StreamReader(stream))
-                        return reader.ReadToEnd();
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Cannot find resource {_resourceName}");
-                }
-            }
+            return _resourceBundle.GetResource(_resourceName, _assemblyLocator);
         }
 
         public void Write(string resource)

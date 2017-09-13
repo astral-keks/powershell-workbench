@@ -3,27 +3,27 @@
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Core</AssemblyName>
-    <RootNamespace>AstralKeks.Workbench.Core</RootNamespace>
+    <RootNamespace>AstralKeks.Workbench</RootNamespace>
     <Version>$(VersionSuffix)</Version>
     <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
     <FileVersion>$(VersionSuffix)</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Windows\Application.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Loader.psm1" />
     <EmbeddedResource Include="Resources\Windows\Manifest.psd1" />
     <EmbeddedResource Include="Resources\Windows\.gitignore" />
-    <EmbeddedResource Include="Resources\Windows\WB-Alias.json" />
-    <EmbeddedResource Include="Resources\Windows\Workspace.bat" />
-    <EmbeddedResource Include="Resources\Windows\WB-Workspace.json" />
-    <EmbeddedResource Include="Resources\Windows\WB-Application.json" />
-    <EmbeddedResource Include="Resources\Windows\WB-Toolkit.json" />
-    <EmbeddedResource Include="Resources\Windows\.+.Command.csproj" />
-    <EmbeddedResource Include="Resources\Windows\.+.Core.csproj" />
-    <EmbeddedResource Include="Resources\Windows\.+.sln" />
+    <EmbeddedResource Include="Resources\Windows\Application.US.json" />
+    <EmbeddedResource Include="Resources\Windows\Command.csproj" />
+    <EmbeddedResource Include="Resources\Windows\Core.csproj" />
+    <EmbeddedResource Include="Resources\Windows\Project.sln" />
+    <EmbeddedResource Include="Resources\Windows\Userspace.ps1" />
+    <EmbeddedResource Include="Resources\Windows\Workspace.ps1" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
 

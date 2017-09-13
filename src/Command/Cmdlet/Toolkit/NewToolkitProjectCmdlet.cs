@@ -19,8 +19,7 @@ namespace AstralKeks.Workbench.Command
 
         protected override void ProcessRecord()
         {
-            var projectInfo = Env.ToolkitManager.GetToolkitProjectInfo(Directory, Name, Author);
-            Env.ToolkitManager.CreateToolkitProject(projectInfo);
+            Components.ToolkitСontroller.InitializeToolkitProject(Directory, Name, Author);
         }
     }
 }

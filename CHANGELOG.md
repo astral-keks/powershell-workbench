@@ -1,3 +1,17 @@
+## 0.3.0
+### Removed
+- Workbench command line utility
+- Workspace templates
+- Aliases configuration
+- Toolkits configuration
+### Added
+- Multiple userspaces support
+- Userspace and workspace profiles
+- Session saving/restoration during entering/exiting workspace or userspace
+- Saving recent userspace/workspace paths
+### Changed
+- Userspace/workspace are no longer required for Workbench to work properly
+
 ## 0.2.4
 ### Added
 - Loader.psm1 file in New-WBToolkitProject

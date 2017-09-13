@@ -1,7 +1,7 @@
 {
   "profiles": {
     "Workbench.Command": {
-      "commandLineArgs": "-NoExit -File .\\bin\\$(Configuration)\\$(TargetFramework)\\Initialize-Workbench.ps1",
+      "commandLineArgs": "-NoExit -Command &{Import-Module .\\bin\\$(Configuration)\\$(TargetFramework)\\Workbench.psd1}",
       "commandName": "Executable",
       "executablePath": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe"
     }

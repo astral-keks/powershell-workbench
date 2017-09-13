@@ -1,6 +1,6 @@
 # Workbench for PowerShell
 
-Workbench is a command line tool (launcher) and a set of PowerShell commands which allow users manage workspaces, run applications in a manner similar to PowerShell commands (e.g. using pipelined input) and automatically load PowerShell modules.
+Workbench is a PowerShell module which allows users manage workspaces, run applications in a manner similar to PowerShell commands (e.g. using pipelined input) and automatically load other PowerShell modules.
 
 Under development!
 
@@ -30,42 +30,16 @@ Build produces 2 directories nearby `src` directory:
 - `artifacts` - contains Workbench binaries and NuGet packages
 - `packages` - contains NuGet packages restored during build
 
-### Installation
-
-- Download ~~zip~~ (the link will be provided when development is finished).
-- Extract it to some folder.
-- Run following command in this folder:
-  ```
-  workbench environment install
-  ```
-- To verify installation create new workspace in any directory:
-  ```
-  workbench workspace create
-  ```
-  And start it:
-  ```
-  workbench workspace start
-  ```
-  All Workbench commands should be available in created PowerShell session.
-
 ### Configuration
 
 Workbench creates several configuration files in following locations:
-- `Config` sub-directory inside workspace directory. Configuration files in this directory are used by workbench commands.
-- `Config` sub-directory inside userspace directory (`%LOCALAPPDATA%\.Workbench` on Windows and ~~`$HOME/.Workbench` on Linux~~). Configuration files in this directory are copied to workspace during its creation.
+- `Config` sub-directory inside userspace directory (`%LOCALAPPDATA%\.Workbench` on Windows and ~~`$HOME/.Workbench` on Linux~~).
+- `Config` sub-directory inside workspace directory. 
 
 Those files are:
-- `Application.json` - configuration for application commands.
-- `Toolkit.json` - toolkits discovery configuration.
-- `Workspace.json` (only in userspace) - workspace templates. 
+- `Application.json`
 
 Look through created configuration files on your local machine for more information.
-
-## Reference
-
- - ### [Commands](doc/Commands.md)
-
- - ### [Launcher](doc/Launcher.md)
 
 ## License
 

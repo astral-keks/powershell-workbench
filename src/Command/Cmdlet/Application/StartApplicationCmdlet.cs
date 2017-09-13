@@ -1,5 +1,4 @@
 ﻿using AstralKeks.PowerShell.Common.Attributes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -25,25 +24,19 @@ namespace AstralKeks.Workbench.Command
 
         protected override void ProcessRecord()
         {
-            Env.ApplicationManager.StartApplication(ApplicationName, CommandName, Arguments, Pipeline);
+            Components.ApplicationController.StartApplication(ApplicationName, CommandName, Arguments, Pipeline);
         }
 
-        public string[] GetApplications(string applicationNamePart)
+        public IEnumerable<string> GetApplications(string applicationNamePart)
         {
-            return Env.ApplicationManager.GetApplications()
-                .Select(a => a.Name)
-                .Where(a => a.StartsWith(applicationNamePart ?? string.Empty, StringComparison.OrdinalIgnoreCase))
-                .ToArray();
+            return Components.ApplicationRepository.GetApplications().Select(a => a.Name);
         }
 
-        public string[] GetCommands(string commandNamePart)
+        public IEnumerable<string> GetCommands(string commandNamePart)
         {
             return !string.IsNullOrWhiteSpace(ApplicationName)
-                ? Env.ApplicationManager.GetCommands(ApplicationName)
-                    .Select(c => c.Name)
-                    .Where(c => c.StartsWith(commandNamePart ?? string.Empty, StringComparison.OrdinalIgnoreCase))
-                    .ToArray()
-                : new string[0];
+                ? Components.ApplicationRepository.GetCommands(ApplicationName).Select(c => c.Name)
+                : Enumerable.Empty<string>();
         }
     }
 }

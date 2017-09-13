@@ -1,129 +1,86 @@
-﻿using AstralKeks.Workbench.Common.Context;
-using AstralKeks.Workbench.Common.FileSystem;
+﻿using AstralKeks.Workbench.Common.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace AstralKeks.Workbench.Common.Resources
 {
     public class ResourceManager
     {
-        private readonly Assembly _assembly;
-        private readonly string _namespace;
+        private readonly ResourceOrigin _origin;
+        private readonly FileSystem _fileSystem;
+        private readonly ResourceBundle _resourceBundle;
         private readonly IResourceFormat _format;
 
-        public ResourceManager(Type type, IResourceFormat format = null)
+        public ResourceManager(ResourceOrigin origin, FileSystem fileSystem, ResourceBundle resourceBundle, IResourceFormat format = null)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-
-            _assembly = type.GetTypeInfo().Assembly;
-            _namespace = $"{type.Namespace}.Resources";
+            _origin = origin ?? throw new ArgumentNullException(nameof(origin));
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _resourceBundle = resourceBundle ?? throw new ArgumentNullException(nameof(resourceBundle));
             _format = format ?? new JsonResourceFormat();
         }
 
-        public ResourceManager(Assembly assembly, string @namespace, IResourceFormat format = null)
+        public Resource CreateResource(IEnumerable<string> resourcePaths, string resourceName)
         {
-            if (assembly == null)
-                throw new ArgumentNullException(nameof(assembly));
-            if (string.IsNullOrEmpty(@namespace))
-                throw new ArgumentException("Invalid namespace");
+            if (resourcePaths == null)
+                throw new ArgumentNullException(nameof(resourcePaths));
+            if (string.IsNullOrWhiteSpace(resourceName))
+                throw new ArgumentException("Resource name is not set", nameof(resourceName));
+            resourcePaths = resourcePaths.ToList();
+            if (!resourcePaths.Any())
+                throw new ArgumentException("Resource paths are not set", nameof(resourcePaths));
 
-            _assembly = assembly;
-            _namespace = @namespace;
-            _format = format ?? new JsonResourceFormat();
+            var mainProvider = new FileResourceProvider(resourcePaths.First(), _fileSystem);
+            var defaultProviders = resourcePaths.Skip(1)
+                .Select(p => new FileResourceProvider(p, _fileSystem))
+                .Cast<IResourceProvider>()
+                .Union(new[] { new EmbeddedResourceProvider(resourceName, _origin, _resourceBundle) });
+
+            CreateResource(mainProvider, new LinkedList<IResourceProvider>(defaultProviders).First);
+            return new Resource(_format, mainProvider);
         }
 
-        public Resource CreateResource(string location, string directoryName, string fileName)
+        public Resource GetResource(IEnumerable<string> resourcePaths)
         {
-            return CreateResource(new[] { location }, directoryName, fileName);
+            if (resourcePaths == null)
+                throw new ArgumentNullException(nameof(resourcePaths));
+            resourcePaths = resourcePaths.ToList();
+            if (!resourcePaths.Any())
+                throw new ArgumentException("Resource paths are not set", nameof(resourcePaths));
+
+            var mainProvider = new FileResourceProvider(resourcePaths.First(), _fileSystem);
+            var defaultProviders = resourcePaths.Skip(1)
+                .Select(p => new FileResourceProvider(p, _fileSystem))
+                .Cast<IResourceProvider>();
+
+            var provider = FindResource(mainProvider, new LinkedList<IResourceProvider>(defaultProviders).First);
+            return provider != null ? new Resource(_format, provider) : null;
         }
 
-        public Resource CreateResource(string location, string fileName)
+        private void CreateResource(IResourceProvider provider, LinkedListNode<IResourceProvider> defaultProviderNode)
         {
-            return CreateResource(new[] { location }, fileName);
-        }
-
-        public Resource CreateResource(IEnumerable<string> locations, string directoryName, string fileName)
-        {
-            if (locations == null)
-                throw new ArgumentNullException(nameof(locations));
-            if (string.IsNullOrWhiteSpace(fileName))
-                throw new ArgumentException("Invalid name of file", nameof(fileName));
-            locations = locations.Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
-
-            var mainLocation = locations.FirstOrDefault();
-            var defaultLocations = locations.Skip(1).ToList();
-            if (mainLocation == null)
-                throw new ArgumentException("Location is not set");
-
-            var mainPath = new ResourceLocator(mainLocation, directoryName, fileName).Path;
-            var defaultPaths = defaultLocations.Select(l => new ResourceLocator(l, directoryName, fileName).Path).ToList();
-            var defaultResourceName = GetResourceName(fileName);
-
-            var mainProvider = new FileResourceProvider(mainPath);
-            var defaultProviders = defaultPaths.Select(p => new FileResourceProvider(p)).Cast<IResourceProvider>().ToList();
-            defaultProviders.Add(new EmbeddedResourceProvider(defaultResourceName, _assembly));
-
-            return new Resource(_format, mainProvider, defaultProviders);
-        }
-
-        public Resource CreateResource(IEnumerable<string> locations, string fileName)
-        {
-            if (locations == null)
-                throw new ArgumentNullException(nameof(locations));
-            if (string.IsNullOrWhiteSpace(fileName))
-                throw new ArgumentException("Invalid name of file", nameof(fileName));
-            locations = locations.Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
-
-            var mainLocation = locations.FirstOrDefault();
-            var defaultLocations = locations.Skip(1).ToList();
-            if (mainLocation == null)
-                throw new ArgumentException("Location is not set");
-
-            var mainPath = new ResourceLocator(mainLocation, fileName).Path;
-            var defaultPaths = defaultLocations.Select(l => new ResourceLocator(l, fileName).Path).ToList();
-            var defaultResourceName = GetResourceName(fileName);
-
-            var mainProvider = new FileResourceProvider(mainPath);
-            var defaultProviders = defaultPaths.Select(p => new FileResourceProvider(p)).Cast<IResourceProvider>().ToList();
-            defaultProviders.Add(new EmbeddedResourceProvider(defaultResourceName, _assembly));
-
-            return new Resource(_format, mainProvider, defaultProviders);
-        }
-
-        public void DeleteResource(string location, string directoryName, string fileName)
-        {
-            var path = new ResourceLocator(location, directoryName, fileName).Path;
-            FsOperation.DeleteFile(path);
-        }
-
-        public void DeleteResource(string location, string fileName)
-        {
-            var path = new ResourceLocator(location, fileName).Path;
-            FsOperation.DeleteFile(path);
-        }
-
-        public string GetResourceName(string fileName)
-        {
-            var resourceQuery = $"{_namespace}.{Platform.Current}.{fileName}";
-
-            var resourceNames = _assembly.GetManifestResourceNames();
-            var resourceName = resourceNames
-                .Where(r => r.Contains(Platform.Current))
-                .FirstOrDefault(r => r == resourceQuery);
-            if (resourceName == null)
+            var defaultProvider = defaultProviderNode?.Value;
+            if (!provider.CanRead && defaultProvider != null)
             {
-                resourceName = resourceNames
-                    .Where(r => r.Contains(Platform.Current))
-                    .FirstOrDefault(r => Regex.IsMatch(resourceQuery, r));
+                CreateResource(defaultProvider, defaultProviderNode.Next);
+                if (defaultProvider.CanRead)
+                {
+                    var resourceContent = defaultProvider.Read();
+                    provider.Write(resourceContent);
+                }
             }
-            if (resourceName == null)
-                throw new ArgumentException($"Embedded resource {fileName} was not found");
+        }
 
-            return resourceName;
+        private IResourceProvider FindResource(IResourceProvider provider, LinkedListNode<IResourceProvider> defaultProviderNode)
+        {
+            if (provider.CanRead)
+                return provider;
+
+            var defaultProvider = defaultProviderNode?.Value;
+            if (defaultProvider != null)
+                return FindResource(defaultProvider, defaultProviderNode.Next);
+            else
+                return null;
         }
     }
 }

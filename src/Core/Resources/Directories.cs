@@ -1,9 +1,8 @@
 ﻿
-namespace AstralKeks.Workbench.Core.Resources
+namespace AstralKeks.Workbench.Resources
 {
     internal class Directories
     {
-        public const string Workbench = ".Workbench";
         public const string Config = "Config";
         public const string Core = "Core";
         public const string Command = "Command";
