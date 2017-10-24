@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Json\JsonConverter.cs" />
     <Compile Remove="Json\JsonList.cs" />
     <Compile Remove="Json\JsonMap.cs" />
     <Compile Remove="Json\JsonObject.cs" />
@@ -29,7 +30,7 @@
     <None Include="Json\JsonMap.cs" />
     <None Include="Json\JsonObject.cs" />
     <None Include="Json\JsonRef.cs" />
-    <None Include="Utilities\JsonConverter.cs" />
+    <None Include="Json\JsonConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>

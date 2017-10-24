@@ -11,6 +11,7 @@ namespace AstralKeks.Workbench.Bootstrappers
         protected override void Load(ContainerBuilder builder)
         {
             RegisterApplicationRepository(builder).As<ApplicationRepository>().SingleInstance();
+            RegisterShortcutRepository(builder).As<ShortcutRepository>().SingleInstance();
             RegisterUserspaceRepository(builder).As<UserspaceRepository>().SingleInstance();
             RegisterWorkspaceRepository(builder).As<WorkspaceRepository>().SingleInstance();
 
@@ -20,6 +21,11 @@ namespace AstralKeks.Workbench.Bootstrappers
         protected virtual IRegistrationBuilder<ApplicationRepository, Activator, Style> RegisterApplicationRepository(ContainerBuilder builder)
         {
             return builder.RegisterType<ApplicationRepository>();
+        }
+
+        protected virtual IRegistrationBuilder<ShortcutRepository, Activator, Style> RegisterShortcutRepository(ContainerBuilder builder)
+        {
+            return builder.RegisterType<ShortcutRepository>();
         }
 
         protected virtual IRegistrationBuilder<UserspaceRepository, Activator, Style> RegisterUserspaceRepository(ContainerBuilder builder)

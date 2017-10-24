@@ -8,17 +8,27 @@ namespace AstralKeks.Workbench.Common.Infrastructure
 {
     public class ResourceBundle
     {
-        public bool ExistsResource(string resourceName, Type assemblyLocator)
+        private readonly Type _assemblyLocator;
+
+        public ResourceBundle(Type assemblyLocator)
         {
-            return GetResourceName(resourceName, assemblyLocator) != null;
+            if (assemblyLocator == null)
+                throw new ArgumentNullException(nameof(assemblyLocator));
+
+            _assemblyLocator = assemblyLocator;
         }
 
-        public string GetResource(string resourceName, Type assemblyLocator)
+        public bool ExistsResource(string resourceName)
+        {
+            return GetResourceName(resourceName) != null;
+        }
+
+        public string GetResource(string resourceName)
         {
             string content = null;
 
-            resourceName = GetResourceName(resourceName, assemblyLocator);
-            var assembly = assemblyLocator.GetTypeInfo().Assembly;
+            resourceName = GetResourceName(resourceName);
+            var assembly = _assemblyLocator.GetTypeInfo().Assembly;
             if (!string.IsNullOrWhiteSpace(resourceName))
             {
                 using (var stream = assembly.GetManifestResourceStream(resourceName))
@@ -38,11 +48,11 @@ namespace AstralKeks.Workbench.Common.Infrastructure
         }
 
 
-        private string GetResourceName(string resourceName, Type assemblyLocator)
+        private string GetResourceName(string resourceName)
         {
             var platform = GetPlatform();
-            var assembly = assemblyLocator.GetTypeInfo().Assembly;
-            var resourceQuery = $"{assemblyLocator.Namespace}.Resources.{platform}.{resourceName}";
+            var assembly = _assemblyLocator.GetTypeInfo().Assembly;
+            var resourceQuery = $"{_assemblyLocator.Namespace}.Resources.{platform}.{resourceName}";
 
             var resourceNames = assembly.GetManifestResourceNames();
             resourceName = resourceNames

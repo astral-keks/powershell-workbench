@@ -1,3 +1,8 @@
+## 0.4.0
+### Added
+- Shortcuts support
+- Templates support
+
 ## 0.3.0
 ### Removed
 - Workbench command line utility

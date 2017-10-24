@@ -1,0 +1,15 @@
+{
+  "Static": [],
+  "Dynamic": [
+    {
+      "RootDirectory": "{$Userspace}",
+      "Location": "Userspace",
+      "PathPattern": "{$Userspace}\\Config"
+    },
+    {
+      "RootDirectory": "{$Workspace}",
+      "Location": "Workspace",
+      "PathPattern": "{$Workspace}\\Config"
+    }
+  ]
+}

@@ -10,9 +10,9 @@ namespace AstralKeks.Workbench.Controllers
         private readonly UserspaceContext _userspaceContext;
         private readonly UserspaceRepository _userspaceRepository;
 
-        public UserspaceController(UserspaceContext context, UserspaceRepository userspaceRepository)
+        public UserspaceController(UserspaceContext userspaceContext, UserspaceRepository userspaceRepository)
         {
-            _userspaceContext = context ?? throw new ArgumentNullException(nameof(context));
+            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
             _userspaceRepository = userspaceRepository ?? throw new ArgumentNullException(nameof(userspaceRepository));
         }
 

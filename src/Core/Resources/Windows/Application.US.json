@@ -15,7 +15,7 @@
 
         // Arguments to pass to executable when starting the application
         "Arguments": [],
-        // Macro variables
+        // Template variables
         // {$Bin}      - path to workbench installation directory
         // {$User}     - `%LOCALAPPDATA%`
         // {$Args}     - arguments passed when starting application

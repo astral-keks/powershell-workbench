@@ -1,4 +1,5 @@
 ﻿using AstralKeks.PowerShell.Common.Attributes;
+using AstralKeks.PowerShell.Common.Parameters;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -6,32 +7,35 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsLifecycle.Start, Noun.WBApplication)]
-    public class StartApplicationCmdlet : WorkbenchDynamicPSCmdlet
+    public class StartApplicationCmdlet : WorkbenchPSCmdlet
     {
-        [DynamicParameter]
-        [DynamicCompleter(nameof(GetApplications))]
-        public string ApplicationName => Parameters.GetValue<string>(nameof(ApplicationName)) ?? MyInvocation.InvocationName;
+        [Parameter]
+        [ArgumentCompleter(typeof(ParameterCompleter))]
+        public string ApplicationName { get; set; }
 
-        [DynamicParameter]
-        [DynamicCompleter(nameof(GetCommands))]
-        public string CommandName => Parameters.GetValue<string>(nameof(CommandName));
+        [Parameter]
+        [ArgumentCompleter(typeof(ParameterCompleter))]
+        public string CommandName { get; set; }
 
-        [DynamicParameter(Position = 0)]
-        public List<string> Arguments => Parameters.GetValue<List<string>>(nameof(Arguments));
+        [Parameter(Position = 0)]
+        public List<string> CommandArguments { get; set; }
 
-        [DynamicParameter(ValueFromPipeline = true)]
-        public string Pipeline => Parameters.GetValue<string>(nameof(Pipeline));
+        [Parameter(ValueFromPipeline = true)]
+        public string CommandPipeline { get; set; }
 
         protected override void ProcessRecord()
         {
-            Components.ApplicationController.StartApplication(ApplicationName, CommandName, Arguments, Pipeline);
+            Components.ApplicationController.StartApplication(
+                ApplicationName ?? MyInvocation.InvocationName, CommandName, CommandArguments, CommandPipeline);
         }
 
+        [ParameterCompleter(nameof(ApplicationName))]
         public IEnumerable<string> GetApplications(string applicationNamePart)
         {
             return Components.ApplicationRepository.GetApplications().Select(a => a.Name);
         }
 
+        [ParameterCompleter(nameof(CommandName))]
         public IEnumerable<string> GetCommands(string commandNamePart)
         {
             return !string.IsNullOrWhiteSpace(ApplicationName)

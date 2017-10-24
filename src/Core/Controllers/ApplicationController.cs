@@ -1,5 +1,5 @@
 ﻿using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Macros;
+using AstralKeks.Workbench.Common.Template;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Repositories;
 using System;
@@ -15,15 +15,15 @@ namespace AstralKeks.Workbench.Controllers
         private readonly ApplicationRepository _applicationRepository;
         private readonly SystemVariable _systemVariable;
         private readonly ProcessLauncher _processLauncher;
-        private readonly MacrosResolver _macrosResolver;
+        private readonly TemplateProcessor _templateProcessor;
 
-        public ApplicationController(FileSystem fileSystem, SystemVariable systemVariable, ProcessLauncher processLauncher,
-            ApplicationRepository applicationRepository)
+        public ApplicationController(ApplicationRepository applicationRepository, ProcessLauncher processLauncher,
+            FileSystem fileSystem, SystemVariable systemVariable, TemplateProcessor templateProcessor)
         {
             _applicationRepository = applicationRepository ?? throw new ArgumentNullException(nameof(applicationRepository));
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
             _processLauncher = processLauncher ?? throw new ArgumentNullException(nameof(processLauncher));
-            _macrosResolver = new MacrosResolver(fileSystem, systemVariable);
+            _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
         }
         
         public void StartApplication(string applicationName = null, string commandName = null, 
@@ -37,7 +37,7 @@ namespace AstralKeks.Workbench.Controllers
             var application = _applicationRepository.GetApplication(applicationName);
             var command = _applicationRepository.GetCommand(applicationName, commandName);
             var commandArguments = (command?.Arguments ?? new List<string>())
-                .Select(a => _macrosResolver.ResolveMacros(a, pipeline, arguments))
+                .Select(a => _templateProcessor.Transform(a, TemplateModel.PipelineAndArgs(pipeline, arguments)))
                 .Where(a => !string.IsNullOrEmpty(a))
                 .ToList();
 

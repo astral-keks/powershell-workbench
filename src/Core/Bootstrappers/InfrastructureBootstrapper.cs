@@ -3,6 +3,7 @@ using Autofac.Builder;
 using AstralKeks.Workbench.Common.Infrastructure;
 using Style = Autofac.Builder.SingleRegistrationStyle;
 using Activator = Autofac.Builder.ConcreteReflectionActivatorData;
+using SimpleActivator = Autofac.Builder.SimpleActivatorData;
 
 namespace AstralKeks.Workbench.Bootstrappers
 {
@@ -28,9 +29,9 @@ namespace AstralKeks.Workbench.Bootstrappers
             return builder.RegisterType<SystemVariable>();
         }
 
-        protected virtual IRegistrationBuilder<ResourceBundle, Activator, Style> RegisterResourceBundle(ContainerBuilder builder)
+        protected virtual IRegistrationBuilder<ResourceBundle, SimpleActivator, Style> RegisterResourceBundle(ContainerBuilder builder)
         {
-            return builder.RegisterType<ResourceBundle>();
+            return builder.Register(b => new ResourceBundle(typeof(ComponentContainer)));
         }
 
         protected virtual IRegistrationBuilder<ProcessLauncher, Activator, Style> RegisterProcessLauncher(ContainerBuilder builder)

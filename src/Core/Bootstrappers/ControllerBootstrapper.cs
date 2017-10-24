@@ -14,6 +14,8 @@ namespace AstralKeks.Workbench.Bootstrappers
             RegisterToolkitController(builder).As<ToolkitController>().SingleInstance();
             RegisterUserspaceController(builder).As<UserspaceController>().SingleInstance();
             RegisterWorkspaceController(builder).As<WorkspaceController>().SingleInstance();
+            RegisterShortcutController(builder).As<ShortcutController>().SingleInstance();
+            RegisterTemplateController(builder).As<TemplateController>().SingleInstance();
 
             base.Load(builder);
         }
@@ -36,6 +38,16 @@ namespace AstralKeks.Workbench.Bootstrappers
         protected virtual IRegistrationBuilder<WorkspaceController, Activator, Style> RegisterWorkspaceController(ContainerBuilder builder)
         {
             return builder.RegisterType<WorkspaceController>();
+        }
+
+        protected virtual IRegistrationBuilder<ShortcutController, Activator, Style> RegisterShortcutController(ContainerBuilder builder)
+        {
+            return builder.RegisterType<ShortcutController>();
+        }
+
+        protected virtual IRegistrationBuilder<TemplateController, Activator, Style> RegisterTemplateController(ContainerBuilder builder)
+        {
+            return builder.RegisterType<TemplateController>();
         }
     }
 }

@@ -1,6 +1,7 @@
 using Autofac;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 
 namespace AstralKeks.Workbench.Sandbox
@@ -19,12 +20,12 @@ namespace AstralKeks.Workbench.Sandbox
     {
         public static void Main()
         {
-            var builder = new ContainerBuilder();
-            builder.RegisterType<Controller>();
-            builder.RegisterType<Singleton>().PropertiesAutowired();
+            //var builder = new ContainerBuilder();
+            //builder.RegisterType<Controller>();
+            //builder.RegisterType<Singleton>().PropertiesAutowired();
 
-            var container = builder.Build();
-            Console.WriteLine(container);
+            //var container = builder.Build();
+            //Console.WriteLine(container);
         }
 
         private static object Union(object list1, object list2, Type itemType)

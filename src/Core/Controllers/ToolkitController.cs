@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Linq;
-using AstralKeks.Workbench.Common.Resources;
 using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Resources;
 using AstralKeks.Workbench.Models;
-using AstralKeks.Workbench.Macros;
 using AstralKeks.Workbench.Common.Infrastructure;
+using AstralKeks.Workbench.Common.Content;
+using AstralKeks.Workbench.Common.Template;
 
 namespace AstralKeks.Workbench.Controllers
 {
     public class ToolkitController
     {
         private readonly FileSystem _fileSystem;
-        private readonly MacrosResolver _macrosManager;
-        private readonly ResourceManager _resourceManager;
+        private readonly TemplateProcessor _templateProcessor;
+        private readonly ResourceRepository _resourceRepository;
 
-        public ToolkitController(FileSystem fileSystem, MacrosResolver macrosManager, ResourceManager resourceManager)
+        public ToolkitController(FileSystem fileSystem, TemplateProcessor templateProcessor, ResourceRepository resourceRepository)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _macrosManager = macrosManager ?? throw new ArgumentNullException(nameof(macrosManager));
-            _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
+            _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
+            _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
         public void InitializeToolkitProject(string directory, string toolkitName, string toolkitAuthor)
@@ -77,32 +77,24 @@ namespace AstralKeks.Workbench.Controllers
             if (project == null)
                 throw new ArgumentNullException(nameof(project));
 
-            var slnRes = _resourceManager.CreateResource(new[] { project.SolutionPath }, Files.ProjectSln);
-            var slnResContent = slnRes.Read<string>();
-            slnResContent = _macrosManager.ResolveMacros(slnResContent, project);
-            slnRes.Write(slnResContent);
+            var model = TemplateModel.Object(project);
 
-            var coreRes = _resourceManager.CreateResource(new[] { project.CoreProjectPath }, Files.CoreCsproj);
-            var coreResContent = coreRes.Read<string>();
-            coreResContent = _macrosManager.ResolveMacros(coreResContent, project);
-            coreRes.Write(coreResContent);
+            var slnRes = _resourceRepository.CreateResource(project.SolutionPath, Files.ProjectSln);
+            slnRes.Content = _templateProcessor.Transform(slnRes.Content, model);
 
-            var commandRes = _resourceManager.CreateResource(new[] { project.CommandProjectPath }, Files.CommandCsproj);
-            var commandResContent = commandRes.Read<string>();
-            commandResContent = _macrosManager.ResolveMacros(commandResContent, project);
-            commandRes.Write(commandResContent);
+            var coreRes = _resourceRepository.CreateResource(project.CoreProjectPath, Files.CoreCsproj);
+            coreRes.Content = _templateProcessor.Transform(coreRes.Content, model);
 
-            var manifestRes = _resourceManager.CreateResource(new[] { project.CommandProjectPath }, project.ManifestSourceFilename);
-            var manifestResContent = manifestRes.Read<string>();
-            manifestResContent = _macrosManager.ResolveMacros(manifestResContent, project);
-            manifestRes.Write(manifestResContent);
+            var commandRes = _resourceRepository.CreateResource(project.CommandProjectPath, Files.CommandCsproj);
+            commandRes.Content = _templateProcessor.Transform(commandRes.Content, model);
 
-            var loadertRes = _resourceManager.CreateResource(new[] { project.CommandProjectPath }, project.LoaderSourceFilename);
-            var loadertResContent = loadertRes.Read<string>();
-            loadertResContent = _macrosManager.ResolveMacros(loadertResContent, project);
-            loadertRes.Write(loadertResContent);
+            var manifestRes = _resourceRepository.CreateResource(project.CommandProjectPath, project.ManifestSourceFilename);
+            manifestRes.Content = _templateProcessor.Transform(manifestRes.Content, model);
 
-            _resourceManager.CreateResource(new[] { project.RootDirectory }, project.GitignoreFilename);
+            var loadertRes = _resourceRepository.CreateResource(project.CommandProjectPath, project.LoaderSourceFilename);
+            loadertRes.Content = _templateProcessor.Transform(loadertRes.Content, model);
+
+            _resourceRepository.CreateResource(project.RootDirectory, project.GitignoreFilename);
 
             _fileSystem.FileCreate(project.ChangeLogPath);
             _fileSystem.FileCreate(project.LicencePath);

@@ -1,6 +1,7 @@
-﻿using AstralKeks.Workbench.Common.Context;
+﻿using AstralKeks.Workbench.Common.Content;
+using AstralKeks.Workbench.Common.Context;
 using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Common.Resources;
+using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
@@ -15,13 +16,13 @@ namespace AstralKeks.Workbench.Repositories
     {
         private readonly UserspaceContext _context;
         private readonly FileSystem _fileSystem;
-        private readonly ResourceManager _resourceManager;
+        private readonly ResourceRepository _resourceRepository;
         
-        public UserspaceRepository(UserspaceContext context, FileSystem fileSystem, ResourceManager resourceManager)
+        public UserspaceRepository(UserspaceContext context, FileSystem fileSystem, ResourceRepository resourceRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
+            _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
         
         public Userspace CreateUserspace(string userspaceName)
@@ -35,13 +36,17 @@ namespace AstralKeks.Workbench.Repositories
             if (userspace != null)
             {
                 var configDirectory = PathBuilder.Combine(userspace.Directory, Directories.Config);
-                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.ApplicationUSJson);
 
                 _fileSystem.DirectoryCreate(userspace.Directory);
                 _fileSystem.DirectoryCreate(configDirectory);
 
-                _resourceManager.CreateResource(new[] { userspace.Profile }, Files.UserspacePs1);
-                _resourceManager.CreateResource(new[] { applicationConfigPath }, Files.ApplicationUSJson);
+                _resourceRepository.CreateResource(userspace.Profile, Files.UserspacePs1);
+
+                var shortcutConfigPath = PathBuilder.Combine(configDirectory, Files.WBShortcutJson);
+                _resourceRepository.CreateResource(shortcutConfigPath, Files.ShortcutUSJson);
+
+                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.WBApplicationJson);
+                _resourceRepository.CreateResource(applicationConfigPath, Files.ApplicationUSJson);
             }
 
             return userspace;

@@ -8,5 +8,7 @@ namespace AstralKeks.Workbench.Resources
         public const string Command = "Command";
         public const string Cmdlet = "Cmdlet";
         public const string Source = "src";
+        public const string Temp = "Temp";
+        public const string Workbench = "Workbench";
     }
 }

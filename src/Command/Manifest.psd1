@@ -12,7 +12,7 @@
 RootModule = 'Workbench.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.3.0'
+ModuleVersion = '0.4.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ Author = 'Astral Keks'
 Copyright = '(c) 2017 Astral Keks. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Workbench for PowerShell (Alpha)'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''

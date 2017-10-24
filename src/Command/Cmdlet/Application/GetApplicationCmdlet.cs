@@ -1,4 +1,6 @@
 ﻿using AstralKeks.PowerShell.Common.Attributes;
+using AstralKeks.PowerShell.Common.Parameters;
+using AstralKeks.Workbench.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -6,20 +8,22 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Get, Noun.WBApplication)]
-    public class GetApplicationCmdlet : WorkbenchDynamicCmdlet
+    [OutputType(typeof(Application))]
+    public class GetApplicationCmdlet : WorkbenchCmdlet
     {
-        [DynamicParameter(Position = 0)]
-        [ValidateNotNullOrEmpty, DynamicCompleter(nameof(CompleteApplicationName))]
-        public string Name => Parameters.GetValue<string>(nameof(Name));
+        [Parameter(Position = 0)]
+        [ValidateNotNullOrEmpty, ArgumentCompleter(typeof(ParameterCompleter))]
+        public string ApplicationName { get; set; }
 
         protected override void ProcessRecord()
         {
             var applications = Components.ApplicationRepository.GetApplications();
-            if (!string.IsNullOrWhiteSpace(Name))
-                applications = applications.Where(a => string.Equals(a.Name, Name)).ToArray();
+            if (!string.IsNullOrWhiteSpace(ApplicationName))
+                applications = applications.Where(a => string.Equals(a.Name, ApplicationName)).ToArray();
             WriteObject(applications, true);
         }
 
+        [ParameterCompleter(nameof(ApplicationName))]
         public IEnumerable<string> CompleteApplicationName(string userspaceNamePart)
         {
             return Components.ApplicationRepository.GetApplications().Select(u => u.Name);

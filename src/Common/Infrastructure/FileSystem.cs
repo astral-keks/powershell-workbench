@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AstralKeks.Workbench.Common.Infrastructure
 {
@@ -23,19 +25,32 @@ namespace AstralKeks.Workbench.Common.Infrastructure
             return File.Exists(path);
         }
 
-        public void FileWriteAllText(string path, string text)
-        {
-            File.WriteAllText(path, text);
-        }
-
         public void FileDelete(string path)
         {
             File.Delete(path);
         }
 
-        public string FileRead(string path)
+        public void FileWriteText(string path, string text)
+        {
+            File.WriteAllText(path, text);
+        }
+
+        public void FileWriteLines(string path, string[] lines, bool append = false)
+        {
+            if (append)
+                File.AppendAllLines(path, lines);
+            else
+                File.WriteAllLines(path, lines);
+        }
+
+        public string FileReadText(string path)
         {
             return File.Exists(path) ? File.ReadAllText(path) : null;
+        }
+
+        public IEnumerable<string> FileReadLines(string path)
+        {
+            return File.Exists(path) ? File.ReadLines(path) : Enumerable.Empty<string>();
         }
 
         public bool DirectoryExists(string path)
@@ -48,12 +63,17 @@ namespace AstralKeks.Workbench.Common.Infrastructure
             Directory.CreateDirectory(path);
         }
 
-        public string GetCurrentDirectory()
+        public string[] DirectoryList(string path)
+        {
+            return Directory.GetFileSystemEntries(path);
+        }
+
+        public string DirectoryGetCurrent()
         {
             return Directory.GetCurrentDirectory();
         }
 
-        public void SetCurrentDirectory(string directory)
+        public void DirectorySetCurrent(string directory)
         {
             Directory.SetCurrentDirectory(directory);
         }

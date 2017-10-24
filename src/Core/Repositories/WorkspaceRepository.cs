@@ -1,5 +1,5 @@
 ﻿using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Common.Resources;
+using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
@@ -10,17 +10,17 @@ namespace AstralKeks.Workbench.Repositories
     public class WorkspaceRepository
     {
         private readonly FileSystem _fileSystem;
-        private readonly ResourceManager _resourceManager;
+        private readonly ResourceRepository _resourceRepository;
 
-        public WorkspaceRepository(FileSystem fileSystem, ResourceManager resourceManager)
+        public WorkspaceRepository(FileSystem fileSystem, ResourceRepository resourceRepository)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
+            _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
         public Workspace CreateWorkspace(string directory = null)
         {
-            var workspace = GetWorkspace(directory) ?? GetWorkspace(_fileSystem.GetCurrentDirectory());
+            var workspace = GetWorkspace(directory) ?? GetWorkspace(_fileSystem.DirectoryGetCurrent());
             return CreateWorkspace(workspace);
         }
 
@@ -29,13 +29,17 @@ namespace AstralKeks.Workbench.Repositories
             if (workspace != null)
             {
                 var configDirectory = PathBuilder.Combine(workspace.Directory, Directories.Config);
-                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.ApplicationWSJson);
-
+                
                 _fileSystem.DirectoryCreate(workspace.Directory);
                 _fileSystem.DirectoryCreate(configDirectory);
 
-                _resourceManager.CreateResource(new[] { workspace.Profile }, Files.WorkspacePs1);
-                _resourceManager.CreateResource(new[] { applicationConfigPath }, Files.ApplicationWSJson);
+                _resourceRepository.CreateResource(workspace.Profile, Files.WorkspacePs1);
+
+                var shortcutConfigPath = PathBuilder.Combine(configDirectory, Files.WBShortcutJson);
+                _resourceRepository.CreateResource(shortcutConfigPath, Files.ShortcutWSJson);
+
+                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.WBApplicationJson);
+                _resourceRepository.CreateResource(applicationConfigPath, Files.ApplicationWSJson);
             }
 
             return workspace;

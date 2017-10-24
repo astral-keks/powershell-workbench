@@ -42,7 +42,7 @@ namespace AstralKeks.Workbench.Controllers
             {
                 _workspaceContext.CurrentWorkspaceDirectory = workspace.Directory;
                 _workspaceContext.RecentWorkspaceDirectory = workspace.Directory;
-                _fileSystem.SetCurrentDirectory(_workspaceContext.CurrentWorkspaceDirectory);
+                _fileSystem.DirectorySetCurrent(_workspaceContext.CurrentWorkspaceDirectory);
             }
 
             return workspace;

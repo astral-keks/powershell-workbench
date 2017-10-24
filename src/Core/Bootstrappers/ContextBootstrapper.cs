@@ -1,11 +1,10 @@
-﻿using AstralKeks.Workbench.Common.Context;
+﻿using AstralKeks.Workbench.Common.Content;
+using AstralKeks.Workbench.Common.Context;
 using Autofac;
 using Autofac.Builder;
 using Style = Autofac.Builder.SingleRegistrationStyle;
 using Activator = Autofac.Builder.ConcreteReflectionActivatorData;
-using SimpleActivator = Autofac.Builder.SimpleActivatorData;
-using AstralKeks.Workbench.Common.Resources;
-using AstralKeks.Workbench.Common.Configuration;
+using AstralKeks.Workbench.Common.Template;
 
 namespace AstralKeks.Workbench.Bootstrappers
 {
@@ -15,9 +14,8 @@ namespace AstralKeks.Workbench.Bootstrappers
         {
             RegisterUserspaceContext(builder).As<UserspaceContext>().SingleInstance();
             RegisterWorkspaceContext(builder).As<WorkspaceContext>().SingleInstance();
-            RegisterResourceOrigin(builder).As<ResourceOrigin>().SingleInstance();
-            RegisterResourceManager(builder).As<ResourceManager>().SingleInstance();
-            RegisterConfigurationProvider(builder).As<ConfigurationProvider>().SingleInstance();
+            RegisterTemplateProcessor(builder).As<TemplateProcessor>().SingleInstance();
+            RegisterResourceRepository(builder).As<ResourceRepository>().SingleInstance();
         }
 
         protected virtual IRegistrationBuilder<UserspaceContext, Activator, Style> RegisterUserspaceContext(ContainerBuilder builder)
@@ -30,19 +28,14 @@ namespace AstralKeks.Workbench.Bootstrappers
             return builder.RegisterType<WorkspaceContext>();
         }
 
-        protected virtual IRegistrationBuilder<ResourceOrigin, SimpleActivator, Style> RegisterResourceOrigin(ContainerBuilder builder)
+        protected virtual IRegistrationBuilder<TemplateProcessor, Activator, Style> RegisterTemplateProcessor(ContainerBuilder builder)
         {
-            return builder.Register(b => new ResourceOrigin(typeof(ComponentContainer))); ;
+            return builder.RegisterType<TemplateProcessor>();
         }
 
-        protected virtual IRegistrationBuilder<ResourceManager, Activator, Style> RegisterResourceManager(ContainerBuilder builder)
+        protected virtual IRegistrationBuilder<ResourceRepository, Activator, Style> RegisterResourceRepository(ContainerBuilder builder)
         {
-            return builder.RegisterType<ResourceManager>();
-        }
-
-        protected virtual IRegistrationBuilder<ConfigurationProvider, Activator, Style> RegisterConfigurationProvider(ContainerBuilder builder)
-        {
-            return builder.RegisterType<ConfigurationProvider>();
+            return builder.RegisterType<ResourceRepository>();
         }
     }
 }

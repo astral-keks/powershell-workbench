@@ -1,6 +1,7 @@
-﻿using AstralKeks.Workbench.Common.Configuration;
+﻿using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Context;
 using AstralKeks.Workbench.Common.Utilities;
+using AstralKeks.Workbench.Configuration;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
 using System;
@@ -12,23 +13,28 @@ namespace AstralKeks.Workbench.Repositories
     {
         private readonly UserspaceContext _userspaceContext;
         private readonly WorkspaceContext _workspaceContext;
-        private readonly ConfigurationProvider _configurationProvider;
+        private readonly ResourceRepository _resourceRepository;
 
-        public ApplicationRepository(UserspaceContext userspaceContext, WorkspaceContext workspaceContext,
-            ConfigurationProvider configurationProvider)
+        public ApplicationRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext, 
+            ResourceRepository resourceRepository)
         {
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
             _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
-            _configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
+            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
         public Application[] GetApplications()
         {
-            var userspaceConfigPath = PathBuilder.Combine(
-                _userspaceContext.CurrentUserspaceDirectory, Directories.Config, Files.ApplicationUSJson);
-            var workspaceConfigPath = PathBuilder.Complete(
-                _workspaceContext.CurrentWorkspaceDirectory, Directories.Config, Files.ApplicationWSJson);
-            return _configurationProvider.Get<Application[]>(userspaceConfigPath, workspaceConfigPath);
+            var userspaceResourcePath = PathBuilder.Combine(
+                _userspaceContext.CurrentUserspaceDirectory, Directories.Config, Files.WBApplicationJson);
+            var workspaceResourcePath = PathBuilder.Combine(
+                _workspaceContext.CurrentWorkspaceDirectory, Directories.Config, Files.WBApplicationJson);
+            var userspaceResource = _resourceRepository.GetResource(userspaceResourcePath);
+            var workspaceResource = _resourceRepository.GetResource(userspaceResourcePath);
+            if (userspaceResource == null)
+                throw new InvalidOperationException("Unable to get application configuration");
+
+            return userspaceResource.Read<ApplicationConfig>(workspaceResource).ToArray();
         }
 
         public Application GetApplication(string applicationName)
