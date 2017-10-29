@@ -1,7 +1,6 @@
 ﻿using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Context;
 using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
@@ -35,17 +34,20 @@ namespace AstralKeks.Workbench.Repositories
         {
             if (userspace != null)
             {
-                var configDirectory = PathBuilder.Combine(userspace.Directory, Directories.Config);
+                var configDirectory = PathBuilder.Combine(userspace.Directory, Directories.Config, Directories.Workbench);
 
                 _fileSystem.DirectoryCreate(userspace.Directory);
                 _fileSystem.DirectoryCreate(configDirectory);
 
                 _resourceRepository.CreateResource(userspace.Profile, Files.UserspacePs1);
 
-                var shortcutConfigPath = PathBuilder.Combine(configDirectory, Files.WBShortcutJson);
+                var discoveryConfigPath = PathBuilder.Combine(configDirectory, Files.DiscoveryJson);
+                _resourceRepository.CreateResource(discoveryConfigPath, Files.DiscoveryUSJson);
+
+                var shortcutConfigPath = PathBuilder.Combine(configDirectory, Files.ShortcutJson);
                 _resourceRepository.CreateResource(shortcutConfigPath, Files.ShortcutUSJson);
 
-                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.WBApplicationJson);
+                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.ApplicationJson);
                 _resourceRepository.CreateResource(applicationConfigPath, Files.ApplicationUSJson);
             }
 

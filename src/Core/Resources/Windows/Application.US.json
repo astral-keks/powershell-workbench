@@ -37,15 +37,9 @@
         "ResetVariables": false,
 
         // Use operating system shell to start the application
-        "UseShellExecute": false,
+        "UseShellExecute": true,
 
         // Wait for the application to exit
-        "WaitForExit": false
-      },
-      {
-        "Name": "Workspace", // Used by Workspace Start command in launcher
-        "Arguments": [ "." ],
-        "UseShellExecute": false,
         "WaitForExit": false
       }
     ]

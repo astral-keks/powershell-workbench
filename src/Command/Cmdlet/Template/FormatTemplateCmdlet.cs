@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AstralKeks.PowerShell.Common.Parameters;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Management.Automation;
@@ -14,6 +15,13 @@ namespace AstralKeks.Workbench.Command.Template
 
         public RuntimeDefinedParameterDictionary TemplateParameters { get; set; }
 
+        protected override void ProcessRecord()
+        {
+            var templateVariables = TemplateParameters.Values.ToDictionary(p => p.Name, p => p.Value);
+            var resultPath = Components.TemplateController.FormatTemplate(TemplatePath, templateVariables);
+            WriteObject(resultPath);
+        }
+
         public object GetDynamicParameters()
         {
             if (TemplateParameters == null)
@@ -24,13 +32,6 @@ namespace AstralKeks.Workbench.Command.Template
                 TemplateParameters[variable] = new RuntimeDefinedParameter(variable, typeof(string), new Collection<Attribute>());
 
             return TemplateParameters;
-        }
-
-        protected override void ProcessRecord()
-        {
-            var templateVariables = TemplateParameters.Values.ToDictionary(p => p.Name, p => p.Value);
-            var resultPath = Components.TemplateController.FormatTemplate(TemplatePath, templateVariables);
-            WriteObject(resultPath);
         }
     }
 }

@@ -10,5 +10,6 @@ namespace AstralKeks.Workbench.Resources
         public const string Source = "src";
         public const string Temp = "Temp";
         public const string Workbench = "Workbench";
+        public const string Template = "Template";
     }
 }

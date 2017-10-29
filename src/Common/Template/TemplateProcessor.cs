@@ -1,4 +1,6 @@
+using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Infrastructure;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -34,11 +36,37 @@ namespace AstralKeks.Workbench.Common.Template
 
         public string Transform(string template, TemplateModel model = null)
         {
-            model = model ?? new TemplateModel();
-            model.AddRange(TemplateModel.Default(_fileSystem, _systemVariable));
+            if (!string.IsNullOrWhiteSpace(template))
+            {
+                model = model ?? new TemplateModel();
+                model.AddRange(TemplateModel.Default(_fileSystem, _systemVariable));
 
-            foreach (var variable in model)
-                template = template.Replace(variable.Name, variable.Value);
+                foreach (var variable in model)
+                    template = template.Replace(variable.Name, variable.Value); 
+            }
+
+            return template;
+        }
+
+        public IResource Transform(IResource template, TemplateModel model = null)
+        {
+            if (template != null)
+            {
+                template = new Resource(template.Name, template.Content);
+                if (template.CanRead && template.CanWrite)
+                {
+                    model = model ?? new TemplateModel();
+                    model.AddRange(TemplateModel.Default(_fileSystem, _systemVariable));
+
+                    foreach (var variable in model)
+                    {
+                        var value = JsonConvert.ToString(variable.Value);
+                        value = value.Substring(1, value.Length - 2);
+                        template.Content = template.Content.Replace(variable.Name, value);
+                    }
+                }
+            }
+
             return template;
         }
     }

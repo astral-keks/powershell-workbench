@@ -1,0 +1,21 @@
+{
+  //Non-recursive shortcut discovery rules
+  "Dynamic": [
+    {
+      //Directory to search shortcuts in
+      "RootDirectory": "{$Userspace}\\Template",
+      //Value for shortcut part after @ character
+      "Location": "Userspace",
+      //Pattern for paths which shortcut should be created for
+      "PathPattern": ".+"
+    }
+  ],
+  //Non-recursive shortcut discovery rules
+  "Synchronized": [
+    {
+      "RootDirectory": "{$Userspace}",
+      "Location": "Userspace",
+      "PathPattern": "{$Userspace}\\Config\\.+\\"
+    }
+  ]
+}

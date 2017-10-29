@@ -65,7 +65,7 @@ namespace AstralKeks.Workbench.Common.Infrastructure
 
         public string[] DirectoryList(string path)
         {
-            return Directory.GetFileSystemEntries(path);
+            return Directory.Exists(path) ? Directory.GetFileSystemEntries(path) : new string[0];
         }
 
         public string DirectoryGetCurrent()
@@ -80,12 +80,12 @@ namespace AstralKeks.Workbench.Common.Infrastructure
 
         public string[] GetDirectories(string path)
         {
-            return Directory.GetDirectories(path);
+            return Directory.Exists(path) ? Directory.GetDirectories(path) : new string[0];
         }
 
         public string[] GetFiles(string path)
         {
-            return Directory.GetFiles(path);
+            return Directory.Exists(path) ? Directory.GetFiles(path) : new string[0];
         }
     }
 }

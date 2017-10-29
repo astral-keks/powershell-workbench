@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\{$CoreProjectFilename}" />
+    <ProjectReference Include="..\Core\{$CoreProjectFileName}" />
   </ItemGroup>
 
   <ItemGroup>

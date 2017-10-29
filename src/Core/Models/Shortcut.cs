@@ -24,6 +24,11 @@ namespace AstralKeks.Workbench.Models
 
         public string Target { get; }
 
+        public bool IsMatch(string query)
+        {
+            return ToString().IndexOf(query ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
         public override string ToString()
         {
             return $"{Name}@{Location}";

@@ -1,7 +1,10 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace AstralKeks.Workbench.Common.Content
 {
@@ -9,7 +12,8 @@ namespace AstralKeks.Workbench.Common.Content
     {
         bool CanFormat(string resourceName);
 
-        IResource Format(string resourceName, IResourceReader resourceReader, IResourceWriter resourceWriter);
+        JToken Format(string resourceName, string resourceContent);
+        string Format(string resourceName, JToken resourceJson);
     }
 
     public class CompositeResourceFormatter : IResourceFormatter
@@ -26,9 +30,16 @@ namespace AstralKeks.Workbench.Common.Content
             return _formatters.Any(f => f.CanFormat(resourceName));
         }
 
-        public IResource Format(string resourceName, IResourceReader resourceReader, IResourceWriter resourceWriter)
+        public JToken Format(string resourceName, string resourceContent)
         {
-            return _formatters.FirstOrDefault(f => f.CanFormat(resourceName))?.Format(resourceName, resourceReader, resourceWriter);
+            var formatter = _formatters.FirstOrDefault(f => f.CanFormat(resourceName));
+            return formatter?.Format(resourceName, resourceContent);
+        }
+
+        public string Format(string resourceName, JToken resourceJson)
+        {
+            var formatter = _formatters.FirstOrDefault(f => f.CanFormat(resourceName));
+            return formatter?.Format(resourceName, resourceJson);
         }
     }
 
@@ -39,9 +50,14 @@ namespace AstralKeks.Workbench.Common.Content
             return Path.GetExtension(resourceName)?.ToLower() == ".json";
         }
 
-        public IResource Format(string resourceName, IResourceReader resourceReader, IResourceWriter resourceWriter)
+        public JToken Format(string resourceName, string resourceContent)
         {
-            return new JsonResource(resourceName, resourceReader, resourceWriter);
+            return resourceContent != null ? (JToken)JsonConvert.DeserializeObject(resourceContent) : null;
+        }
+
+        public string Format(string resourceName, JToken resourceJson)
+        {
+            return resourceJson != null ? resourceJson.ToString() : string.Empty;
         }
     }
 
@@ -52,9 +68,33 @@ namespace AstralKeks.Workbench.Common.Content
             return Path.GetExtension(resourceName)?.ToLower() == ".xml";
         }
 
-        public IResource Format(string resourceName, IResourceReader resourceReader, IResourceWriter resourceWriter)
+
+        public JToken Format(string resourceName, string resourceContent)
         {
-            return new XmlResource(resourceName, resourceReader, resourceWriter);
+            JToken json = null;
+
+            if (string.IsNullOrEmpty(resourceContent))
+            {
+                var xml = XElement.Parse(resourceContent);
+                var jsonContent = JsonConvert.SerializeXNode(xml);
+                json = JToken.Parse(jsonContent);
+            }
+
+            return json;
+        }
+
+        public string Format(string resourceName, JToken resourceJson)
+        {
+            string resourceContent = null;
+
+            if (resourceJson != null)
+            {
+                var jsonContent = resourceJson.ToString();
+                var xml = JsonConvert.DeserializeXNode(jsonContent);
+                resourceContent = xml.ToString();
+            }
+
+            return resourceContent;
         }
     }
 }

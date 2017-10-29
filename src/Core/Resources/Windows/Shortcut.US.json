@@ -1,15 +1,2 @@
-{
-  "Static": [],
-  "Dynamic": [
-    {
-      "RootDirectory": "{$Userspace}",
-      "Location": "Userspace",
-      "PathPattern": "{$Userspace}\\Config"
-    },
-    {
-      "RootDirectory": "{$Workspace}",
-      "Location": "Workspace",
-      "PathPattern": "{$Workspace}\\Config"
-    }
-  ]
-}
+//List of static shortcuts: URLs, paths etc.
+[]

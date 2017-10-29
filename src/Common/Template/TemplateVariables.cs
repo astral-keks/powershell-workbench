@@ -19,7 +19,7 @@ namespace AstralKeks.Workbench.Common.Template
         
         private static string PreparePath(string path)
         {
-            return path.TrimEnd(Path.DirectorySeparatorChar);
+            return path?.TrimEnd(Path.DirectorySeparatorChar) ?? string.Empty;
         }
 
         private static string PrepareList(IEnumerable<string> list)

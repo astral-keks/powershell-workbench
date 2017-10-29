@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Windows\Shortcut.US.json" />
+    <EmbeddedResource Include="Resources\Windows\Shortcut.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Loader.psm1" />
     <EmbeddedResource Include="Resources\Windows\Manifest.psd1" />
     <EmbeddedResource Include="Resources\Windows\.gitignore" />
@@ -18,8 +20,8 @@
     <EmbeddedResource Include="Resources\Windows\Command.csproj" />
     <EmbeddedResource Include="Resources\Windows\Core.csproj" />
     <EmbeddedResource Include="Resources\Windows\Project.sln" />
-    <EmbeddedResource Include="Resources\Windows\Shortcut.US.json" />
-    <EmbeddedResource Include="Resources\Windows\Shortcut.WS.json" />
+    <EmbeddedResource Include="Resources\Windows\Discovery.US.json" />
+    <EmbeddedResource Include="Resources\Windows\Discovery.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Userspace.ps1" />
     <EmbeddedResource Include="Resources\Windows\Workspace.ps1" />
   </ItemGroup>

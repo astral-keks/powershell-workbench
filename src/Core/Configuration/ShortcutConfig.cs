@@ -1,13 +1,12 @@
-using AstralKeks.Workbench.Models;
 using System.Collections.Generic;
 
 namespace AstralKeks.Workbench.Configuration
 {
     internal class ShortcutConfig
     {
-        public List<Shortcut> Static { get; set; } = new List<Shortcut>();
-
         public List<ShortcutPattern> Dynamic { get; set; } = new List<ShortcutPattern>();
+
+        public List<ShortcutPattern> Synchronized { get; set; } = new List<ShortcutPattern>();
     }
 
     internal class ShortcutPattern

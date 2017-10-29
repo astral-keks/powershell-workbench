@@ -1,6 +1,5 @@
 using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Context;
-using AstralKeks.Workbench.Common.Infrastructure;
 using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
@@ -14,71 +13,82 @@ namespace AstralKeks.Workbench.Repositories
     {
         private readonly WorkspaceContext _workspaceContext;
         private readonly UserspaceContext _userspaceContext;
-        private readonly FileSystem _fileSystem;
+        private readonly ResourceRepository _resourceRepository;
 
-        public ShortcutRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext, FileSystem fileSystem)
+        public ShortcutRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext, 
+            ResourceRepository resourceRepository)
         {
             _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
             _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
-        public void AddShortcuts(IEnumerable<Shortcut> workspaceShortcuts = null, IEnumerable<Shortcut> userspaceShortcuts = null)
+        public void AddWorkspaceShortcuts(IEnumerable<Shortcut> shortcuts = null)
         {
-            var shortcutWorkspaceStoragePath = PathBuilder.Complete(
-                _workspaceContext.CurrentWorkspaceDirectory, Directories.Temp, Directories.Workbench, Files.ShortcutsTxt);
-            var shortcutUserspaceStoragePath = PathBuilder.Complete(
-                _userspaceContext.CurrentUserspaceDirectory, Directories.Temp, Directories.Workbench, Files.ShortcutsTxt);
+            var shortcutWorkspaceStoragePath = PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+                Directories.Temp, Directories.Workbench, Files.ShortcutJson);
             
-            WriteShortcuts(shortcutWorkspaceStoragePath, workspaceShortcuts, true);
-            WriteShortcuts(shortcutUserspaceStoragePath, userspaceShortcuts, true);
+            WriteShortcuts(shortcutWorkspaceStoragePath, shortcuts, true);
         }
 
-        public void ClearShortcuts()
+        public void AddUserspaceShortcuts(IEnumerable<Shortcut> shortcuts = null)
         {
-            var shortcutWorkspaceStoragePath = PathBuilder.Complete(
-                _workspaceContext.CurrentWorkspaceDirectory, Directories.Temp, Directories.Workbench, Files.ShortcutsTxt);
-            var shortcutUserspaceStoragePath = PathBuilder.Complete(
-                _userspaceContext.CurrentUserspaceDirectory, Directories.Temp, Directories.Workbench, Files.ShortcutsTxt);
+            var shortcutUserspaceStoragePath = PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+                Directories.Temp, Directories.Workbench, Files.ShortcutJson);
+
+            WriteShortcuts(shortcutUserspaceStoragePath, shortcuts, true);
+        }
+
+        public void ClearWorkspaceShortcuts()
+        {
+            var shortcutWorkspaceStoragePath = PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+                Directories.Temp, Directories.Workbench, Files.ShortcutJson);
 
             WriteShortcuts(shortcutWorkspaceStoragePath, Enumerable.Empty<Shortcut>(), false);
+        }
+
+        public void ClearUserspaceShortcuts()
+        {
+            var shortcutUserspaceStoragePath = PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+                Directories.Temp, Directories.Workbench, Files.ShortcutJson);
+
             WriteShortcuts(shortcutUserspaceStoragePath, Enumerable.Empty<Shortcut>(), false);
         }
 
         public IEnumerable<Shortcut> FindShortcut(string query = null)
         {
-            var shortcutWorkspaceStoragePath = PathBuilder.Complete(
-                _workspaceContext.CurrentWorkspaceDirectory, Directories.Temp, Directories.Workbench, Files.ShortcutsTxt);
-            var shortcutUserspaceStoragePath = PathBuilder.Complete(
-                _userspaceContext.CurrentUserspaceDirectory, Directories.Temp, Directories.Workbench, Files.ShortcutsTxt);
+            var paths = new[] 
+            {
+                PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+                    Directories.Temp, Directories.Workbench, Files.ShortcutJson),
+                PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+                    Directories.Config, Directories.Workbench, Files.ShortcutJson),
+                PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+                    Directories.Temp, Directories.Workbench, Files.ShortcutJson),
+                PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+                    Directories.Config, Directories.Workbench, Files.ShortcutJson)
+            };
 
             var foundShortcuts = new HashSet<string>();
-            foreach (var shortcut in ReadShortcuts(shortcutWorkspaceStoragePath).Where(s => IsShortcutMatch(s, query)))
+            foreach (var path in paths)
             {
-                if (foundShortcuts.Add(shortcut.ToString()))
-                    yield return shortcut;
+                foreach (var shortcut in ReadShortcuts(path).Where(s => s.IsMatch(query)))
+                {
+                    if (foundShortcuts.Add(shortcut.ToString()))
+                        yield return shortcut;
+                }
             }
-            foreach (var shortcut in ReadShortcuts(shortcutUserspaceStoragePath).Where(s => IsShortcutMatch(s, query)))
-            {
-                if (foundShortcuts.Add(shortcut.ToString()))
-                    yield return shortcut;
-            }
-        }
-
-        private bool IsShortcutMatch(Shortcut shortcut, string query = null)
-        {
-            Func<string, string, bool> isMatch = (input, pattern) => input.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0;
-            return isMatch(shortcut.Name, query ?? string.Empty) || isMatch(shortcut.Location, query ?? string.Empty);
         }
 
         private IEnumerable<Shortcut> ReadShortcuts(string path)
         {
-            if (!string.IsNullOrWhiteSpace(path))
+            var shortcutsResource =_resourceRepository.GetResource(path);
+            if (shortcutsResource != null && shortcutsResource.CanRead)
             {
-                foreach (var line in _fileSystem.FileReadLines(path))
+                var shortcuts = shortcutsResource.Read<List<Shortcut>>();
+                if (shortcuts != null)
                 {
-                    var shortcut = ReadShortcut(line);
-                    if (shortcut != null)
+                    foreach (var shortcut in shortcuts)
                         yield return shortcut;
                 }
             }
@@ -86,26 +96,16 @@ namespace AstralKeks.Workbench.Repositories
 
         private void WriteShortcuts(string path, IEnumerable<Shortcut> shortcuts, bool append)
         {
-            if (!string.IsNullOrWhiteSpace(path) && shortcuts != null)
+            var shortcutsResource = _resourceRepository.CreateResource(path);
+            if (append && shortcutsResource.CanRead)
             {
-                _fileSystem.FileWriteLines(path, shortcuts.Select(WriteShortcut).ToArray(), append);
+                var existingShortcuts = shortcutsResource.Read<List<Shortcut>>();
+                if (existingShortcuts != null)
+                    shortcuts = existingShortcuts.Concat(shortcuts);
             }
-        }
 
-        private Shortcut ReadShortcut(string line)
-        {
-            Shortcut shortcut = null;
-
-            var parts = line?.Split('\t');
-            if (parts?.Length == 3 && parts?.All(p => !string.IsNullOrWhiteSpace(p)) == true)
-                shortcut = new Shortcut(parts[0], parts[1], parts[2]);
-
-            return shortcut;
-        }
-
-        private string WriteShortcut(Shortcut shortcut)
-        {
-            return shortcut != null ? $"{shortcut.Name}\t{shortcut.Location}\t{shortcut.Target}" : null;
+            shortcuts = shortcuts.ToList();
+            shortcutsResource.Write((List<Shortcut>)shortcuts);
         }
     }
 }

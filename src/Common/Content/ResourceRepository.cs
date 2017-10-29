@@ -1,39 +1,45 @@
 using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Common.Template;
 
 namespace AstralKeks.Workbench.Common.Content
 {
     public class ResourceRepository
     {
-        private readonly IResourceFormatter _resourceFormatter;
         private readonly IResourceReader _defaultResourceReader;
-        private readonly IResourceProvider _rawResourceProvider;
-        private readonly IResourceProvider _resourceProvider;
+        private readonly IResourceProvider _fileResourceProvider;
 
-        public ResourceRepository(ResourceBundle resourceBundle, FileSystem fileSystem, TemplateProcessor templateProcessor)
+        public ResourceRepository(ResourceBundle resourceBundle, FileSystem fileSystem)
         {
-            _resourceFormatter = new CompositeResourceFormatter(new JsonResourceFormatter(), new XmlResourceFormatter());
             _defaultResourceReader = new EmbeddedResourceReader(resourceBundle);
-            _rawResourceProvider = new FileResourceProvider(fileSystem);
-            _resourceProvider = new TemplateResourceProvider(_rawResourceProvider, templateProcessor);
+            _fileResourceProvider = new FileResourceProvider(fileSystem);
         }
 
         public IResource CreateResource(string resourcePath, string resourceName)
         {
-            if (_rawResourceProvider.CanWrite(resourcePath) && _defaultResourceReader.CanRead(resourceName))
+            if (_fileResourceProvider.CanWrite(resourcePath) && _defaultResourceReader.CanRead(resourceName))
             {
                 var resourceContent = _defaultResourceReader.Read(resourceName);
-                _rawResourceProvider.Write(resourcePath, resourceContent);
+                _fileResourceProvider.Write(resourcePath, resourceContent);
             }
+
+            return GetResource(resourcePath);
+        }
+
+        public IResource CreateResource(string resourcePath)
+        {
+            if (_fileResourceProvider.CanWrite(resourcePath))
+                _fileResourceProvider.Write(resourcePath, string.Empty);
 
             return GetResource(resourcePath);
         }
 
         public IResource GetResource(string resourcePath)
         {
-            return _resourceProvider.CanRead(resourcePath) 
-                ? _resourceFormatter.Format(resourcePath, _resourceProvider, _resourceProvider)
-                : null;
+            IResource resource = null;
+
+            if (_fileResourceProvider.CanRead(resourcePath))
+                resource = new Resource(resourcePath, _fileResourceProvider, _fileResourceProvider);
+
+            return resource;
         }
     }
 }

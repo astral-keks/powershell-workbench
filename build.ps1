@@ -1,4 +1,4 @@
-$version = "0.4.0"
+$version = "0.4.1"
 
 $src = "$PSScriptRoot\src"
 $doc = "$PSScriptRoot\doc"
@@ -9,11 +9,13 @@ $bin = "$artifact\bin"
 $nupkg = "$artifact\nupkg"
 $tmp = "$artifact\tmp"
 
+$module = "$bin\Workbench"
+
 # Build binaries
 if (Test-Path $artifact) { Remove-Item $artifact -Recurse }
 if (Test-Path $package) { Remove-Item $package -Recurse }
 dotnet restore $src\Command\Workbench.Command.csproj
-dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o $bin --version-suffix $version
+dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o $module --version-suffix $version
 
 # Build packages
 dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o $nupkg --version-suffix $version
@@ -36,6 +38,6 @@ dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o $nupk
 #     }
 
 # Import-Module platyPS
-# New-ExternalHelp $tmp -OutputPath $bin -Force
+# New-ExternalHelp $tmp -OutputPath $module -Force
 
 # if (Test-Path $tmp) { Remove-Item $tmp -Recurse }

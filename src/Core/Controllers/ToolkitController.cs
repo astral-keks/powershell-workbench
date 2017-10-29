@@ -58,12 +58,14 @@ namespace AstralKeks.Workbench.Controllers
                 
                 RootDirectory = directory,
                 SolutionPath = PathBuilder.Combine(srcDirectory, $"{toolkitName}.sln"),
+                CoreProjectFileName = $"{toolkitName}.{Directories.Core}.csproj",
                 CoreProjectPath = PathBuilder.Combine(coreDirectory, $"{toolkitName}.{Directories.Core}.csproj"),
+                CommandProjectFileName = $"{toolkitName}.{Directories.Command}.csproj",
                 CommandProjectPath = PathBuilder.Combine(commandDirectory, $"{toolkitName}.{Directories.Command}.csproj"),
-                LoaderSourceFilename = Files.LoaderPsm1,
-                ManifestSourceFilename = Files.ManifestPsd1,
-                GitignoreFilename = Files.Gitignore,
                 CmdletDirectory = PathBuilder.Combine(commandDirectory, Directories.Cmdlet),
+                ManifestPath = PathBuilder.Combine(commandDirectory, Files.ManifestPsd1),
+                LoaderPath = PathBuilder.Combine(commandDirectory, Files.LoaderPsm1),
+                GitignorePath = PathBuilder.Combine(directory, Files.Gitignore),
                 ChangeLogPath = PathBuilder.Combine(directory, Files.ChangeLogMd),
                 LicencePath = PathBuilder.Combine(directory, Files.LicenceMd),
                 ReadmePath = PathBuilder.Combine(directory, Files.ReadmeMd),
@@ -88,13 +90,13 @@ namespace AstralKeks.Workbench.Controllers
             var commandRes = _resourceRepository.CreateResource(project.CommandProjectPath, Files.CommandCsproj);
             commandRes.Content = _templateProcessor.Transform(commandRes.Content, model);
 
-            var manifestRes = _resourceRepository.CreateResource(project.CommandProjectPath, project.ManifestSourceFilename);
+            var manifestRes = _resourceRepository.CreateResource(project.ManifestPath, Files.ManifestPsd1);
             manifestRes.Content = _templateProcessor.Transform(manifestRes.Content, model);
 
-            var loadertRes = _resourceRepository.CreateResource(project.CommandProjectPath, project.LoaderSourceFilename);
+            var loadertRes = _resourceRepository.CreateResource(project.LoaderPath, Files.LoaderPsm1);
             loadertRes.Content = _templateProcessor.Transform(loadertRes.Content, model);
 
-            _resourceRepository.CreateResource(project.RootDirectory, project.GitignoreFilename);
+            _resourceRepository.CreateResource(project.GitignorePath, Files.Gitignore);
 
             _fileSystem.FileCreate(project.ChangeLogPath);
             _fileSystem.FileCreate(project.LicencePath);

@@ -28,17 +28,20 @@ namespace AstralKeks.Workbench.Repositories
         {
             if (workspace != null)
             {
-                var configDirectory = PathBuilder.Combine(workspace.Directory, Directories.Config);
+                var configDirectory = PathBuilder.Combine(workspace.Directory, Directories.Config, Directories.Workbench);
                 
                 _fileSystem.DirectoryCreate(workspace.Directory);
                 _fileSystem.DirectoryCreate(configDirectory);
 
                 _resourceRepository.CreateResource(workspace.Profile, Files.WorkspacePs1);
 
-                var shortcutConfigPath = PathBuilder.Combine(configDirectory, Files.WBShortcutJson);
+                var discoveryConfigPath = PathBuilder.Combine(configDirectory, Files.DiscoveryJson);
+                _resourceRepository.CreateResource(discoveryConfigPath, Files.DiscoveryWSJson);
+
+                var shortcutConfigPath = PathBuilder.Combine(configDirectory, Files.ShortcutJson);
                 _resourceRepository.CreateResource(shortcutConfigPath, Files.ShortcutWSJson);
 
-                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.WBApplicationJson);
+                var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.ApplicationJson);
                 _resourceRepository.CreateResource(applicationConfigPath, Files.ApplicationWSJson);
             }
 

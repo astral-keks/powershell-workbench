@@ -20,13 +20,14 @@ namespace AstralKeks.Workbench.Models
 
         public string RootDirectory { get; set; }
         public string SolutionPath { get; set; }
-        public string SolutionFilename { get; set; }
+        public string CoreProjectFileName { get; set; }
         public string CoreProjectPath { get; set; }
+        public string CommandProjectFileName { get; set; }
         public string CommandProjectPath { get; set; }
-        public string LoaderSourceFilename { get; set; }
-        public string ManifestSourceFilename { get; set; }
-        public string GitignoreFilename { get; set; }
         public string CmdletDirectory { get; set; }
+        public string ManifestPath { get; set; }
+        public string LoaderPath { get; set; }
+        public string GitignorePath { get; set; }
         public string ChangeLogPath { get; set; }
         public string LicencePath { get; set; }
         public string ReadmePath { get; set; }

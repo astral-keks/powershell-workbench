@@ -3,21 +3,23 @@ namespace AstralKeks.Workbench.Resources
 {
     internal class Files
     {
-        public const string WBApplicationJson = "WB-Application.json";
-        public const string WBShortcutJson = "WB-Shortcut.json";
-
         public const string ApplicationUSJson = "Application.US.json";
         public const string ApplicationWSJson = "Application.WS.json";
+        public const string ApplicationJson = "Application.json";
 
+        public const string DiscoveryUSJson = "Discovery.US.json";
+        public const string DiscoveryWSJson = "Discovery.WS.json";
+        public const string DiscoveryJson = "Discovery.json";
+
+        public const string ShortcutJson = "Shortcut.json";
         public const string ShortcutUSJson = "Shortcut.US.json";
         public const string ShortcutWSJson = "Shortcut.WS.json";
-        public const string ShortcutsTxt = "Shortcuts.txt";
 
         public const string UserspacePs1 = "Userspace.ps1";
         public const string WorkspacePs1 = "Workspace.ps1";
 
         public const string ProjectSln = "Project.sln";
-        public const string CommandCsproj = "Project.csproj";
+        public const string CommandCsproj = "Command.csproj";
         public const string CoreCsproj = "Core.csproj";
         public const string Gitignore = ".gitignore";
         public const string ChangeLogMd = "CHANGELOG.md";

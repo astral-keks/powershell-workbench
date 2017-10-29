@@ -22,22 +22,22 @@ namespace AstralKeks.Workbench.Command
 
         protected override void ProcessRecord()
         {
-            var shortcuts = Components.ShortcutRepository.FindShortcut(ShortcutQuery).Select(s => s.Target).ToList();
-            var shouldWriteOutput = Force || shortcuts.Count <= _shortcutCountThreshold;
-            if (!shouldWriteOutput)
+            var shortcuts = Components.ShortcutController.FindShortcut(ShortcutQuery).Select(s => s.Target).ToList();
+            var canContinue = Force || shortcuts.Count <= _shortcutCountThreshold;
+            if (!canContinue)
             {
                 var answers = new[] { PromptAnswer.Yes, PromptAnswer.No };
                 var result = Host.UI.PromptForAnswer($"Shortcuts found: {shortcuts.Count}", "Do you want to proceed?", answers);
-                shouldWriteOutput = result.SelectedValue == PromptAnswer.Yes;
+                canContinue = result.SelectedValue == PromptAnswer.Yes;
             }
-            if (shouldWriteOutput)
+            if (canContinue)
                 WriteObject(shortcuts, true);
         }
 
         [ParameterCompleter(nameof(ShortcutQuery))]
         public IEnumerable<string> CompleteQuery(string queryPart)
         {
-            return Components.ShortcutRepository.FindShortcut(queryPart).Select(s => s.ToString());
+            return Components.ShortcutController.FindShortcut(queryPart).Select(s => s.ToString());
         }
     }
 }

@@ -1,5 +1,5 @@
 using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Common.Template;
+using AstralKeks.Workbench.Common.Utilities;
 using System;
 
 namespace AstralKeks.Workbench.Common.Content
@@ -34,40 +34,39 @@ namespace AstralKeks.Workbench.Common.Content
 
         public void Write(string resourceName, string resourceContent)
         {
-            _fileSystem.FileWriteText(resourceName, resourceContent);
+            _fileSystem.FileCreate(resourceName, resourceContent);
         }
     }
 
-    public class TemplateResourceProvider : IResourceProvider
+    public class MemoryResourceProvider : IResourceProvider
     {
-        private readonly IResourceProvider _innerProvider;
-        private readonly TemplateProcessor _templateProcessor;
+        private string _name;
+        private string _content;
 
-        public TemplateResourceProvider(IResourceProvider innerProvider, TemplateProcessor templateProcessor)
+        public MemoryResourceProvider(string name, string content)
         {
-            _innerProvider = innerProvider ?? throw new ArgumentNullException(nameof(innerProvider));
-            _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
+            _name = name ?? throw new ArgumentNullException(nameof(name));
+            _content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
         public bool CanRead(string resourceName)
         {
-            return _innerProvider.CanRead(resourceName);
+            return !string.IsNullOrWhiteSpace(resourceName) && resourceName == _name;
         }
 
         public bool CanWrite(string resourceName)
         {
-            return false;
+            return !string.IsNullOrWhiteSpace(resourceName) && resourceName == _name;
         }
 
         public string Read(string resourceName)
         {
-            var resourceContent = _innerProvider.Read(resourceName);
-            return _templateProcessor.Transform(resourceContent);
+            return _content;
         }
 
         public void Write(string resourceName, string resourceContent)
         {
-            throw new NotSupportedException();
+            _content = resourceContent;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace AstralKeks.Workbench.Sandbox
     {
         protected override void ProcessRecord()
         {
-            WriteObject("asdasdasd");
+            WriteObject("asdasdasdss");
         }
     }
 }

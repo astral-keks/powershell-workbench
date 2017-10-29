@@ -1,3 +1,9 @@
+## 0.4.1
+### Fixed
+- Bugs related to shortcuts, templates, toolkit projects
+### Added
+- Publishing scipts
+
 ## 0.4.0
 ### Added
 - Shortcuts support

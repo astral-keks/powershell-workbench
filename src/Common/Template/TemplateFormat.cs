@@ -5,6 +5,6 @@ namespace AstralKeks.Workbench.Common.Template
     {
         public const string VariableBegining = "{$";
         public const string VariableEnding = "}";
-        public const string VariableNameFormat = VariableBegining + "{0}" + VariableEnding;
+        public const string VariableNameFormat = "{{${0}}}";
     }
 }

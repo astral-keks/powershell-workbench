@@ -33,8 +33,15 @@ namespace AstralKeks.Workbench.Common.Utilities
             path = fileSystem.MakeAbsolute(path);
 
             fileSystem.DirectoryCreate(Path.GetDirectoryName(path));
-            if (!fileSystem.FileExists(path))
-                fileSystem.FileWriteText(path, content ?? string.Empty);
+            fileSystem.FileWriteText(path, content ?? string.Empty);
+        }
+
+        public static void FileCreate(this FileSystem fileSystem, string path, string[] content)
+        {
+            path = fileSystem.MakeAbsolute(path);
+
+            fileSystem.DirectoryCreate(Path.GetDirectoryName(path));
+            fileSystem.FileWriteLines(path, content ?? new string[0]);
         }
 
         public static string FindParentDirectory(this FileSystem fileSystem, string innerDirectory, Func<string, bool> predicate)

@@ -30,11 +30,15 @@ namespace AstralKeks.Workbench.Controllers
 
         public IEnumerable<string> GetTemplateVariables(string templatePath)
         {
-            if (string.IsNullOrWhiteSpace(templatePath))
-                throw new ArgumentException("Template path is not set", nameof(templatePath));
+            var variables = Enumerable.Empty<string>();
 
-            var templateContent = _fileSystem.FileReadText(templatePath);
-            return _templateProcessor.Explore(templateContent);
+            if (!string.IsNullOrWhiteSpace(templatePath))
+            {
+                var templateContent = _fileSystem.FileReadText(templatePath);
+                variables = _templateProcessor.Explore(templateContent);
+            }
+
+            return variables;
         }
 
         public string FormatTemplate(string templatePath, Dictionary<string, object> templateVariables)
@@ -50,10 +54,10 @@ namespace AstralKeks.Workbench.Controllers
 
             var resultFolder = _workspaceContext.CurrentWorkspaceDirectory ?? _userspaceContext.CurrentUserspaceDirectory;
             var resultFileNameBase = Path.GetFileNameWithoutExtension(templatePath);
-            var resultFileNameDate = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss");
-            var resultFileName = $"{resultFileNameBase}-{resultFileNameDate}-{Path.GetExtension(templatePath)}";
-            var resultPath = PathBuilder.Combine(resultFolder, Directories.Temp, resultFileName);
-            _fileSystem.FileWriteText(resultPath, templateContent);
+            var resultFileNameDate = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-fffffff");
+            var resultFileName = $"{resultFileNameBase}-{resultFileNameDate}{Path.GetExtension(templatePath)}";
+            var resultPath = PathBuilder.Combine(resultFolder, Directories.Temp, Directories.Workbench, Directories.Template, resultFileName);
+            _fileSystem.FileCreate(resultPath, templateContent);
 
             return resultPath;
         }

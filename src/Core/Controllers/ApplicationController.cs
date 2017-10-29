@@ -72,7 +72,6 @@ namespace AstralKeks.Workbench.Controllers
 
             if (command.RereadCurrentVariables || command.RereadMachineVariables || command.RereadUserVariables)
             {
-                var variables = Enumerable.Empty<DictionaryEntry>();
                 if (command.RereadCurrentVariables)
                     AppendProcessVariables(processInfo, _systemVariable.GetVariables());
                 if (command.RereadMachineVariables)
