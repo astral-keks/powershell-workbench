@@ -8,14 +8,15 @@
       "Location": "Userspace",
       //Pattern for paths which shortcut should be created for
       "PathPattern": ".+"
-    }
-  ],
-  //Non-recursive shortcut discovery rules
-  "Synchronized": [
+    },
     {
       "RootDirectory": "{$Userspace}",
       "Location": "Userspace",
       "PathPattern": "{$Userspace}\\Config\\.+\\"
     }
+  ],
+  //Non-recursive shortcut discovery rules
+  "Synchronized": [
+    //The same structure here as in Dynamic section
   ]
 }

@@ -19,11 +19,13 @@ namespace AstralKeks.Workbench
         {
         }
 
-        public ComponentContainer(
-            IModule infrastructureModule, IModule contextModule, IModule repositoryModule, IModule controllerModule)
+        public ComponentContainer(IModule infrastructureModule, IModule contextModule, IModule repositoryModule, 
+            IModule controllerModule)
         {
             if (infrastructureModule == null)
                 throw new ArgumentNullException(nameof(infrastructureModule));
+            if (contextModule == null)
+                throw new ArgumentNullException(nameof(contextModule));
             if (repositoryModule == null)
                 throw new ArgumentNullException(nameof(repositoryModule));
             if (controllerModule == null)

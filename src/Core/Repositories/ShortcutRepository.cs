@@ -1,5 +1,6 @@
 using AstralKeks.Workbench.Common.Content;
 using AstralKeks.Workbench.Common.Context;
+using AstralKeks.Workbench.Common.Template;
 using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
@@ -13,13 +14,15 @@ namespace AstralKeks.Workbench.Repositories
     {
         private readonly WorkspaceContext _workspaceContext;
         private readonly UserspaceContext _userspaceContext;
+        private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
 
-        public ShortcutRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext, 
-            ResourceRepository resourceRepository)
+        public ShortcutRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext,
+            TemplateProcessor templateProcessor, ResourceRepository resourceRepository)
         {
             _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
             _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
@@ -83,6 +86,7 @@ namespace AstralKeks.Workbench.Repositories
         private IEnumerable<Shortcut> ReadShortcuts(string path)
         {
             var shortcutsResource =_resourceRepository.GetResource(path);
+            shortcutsResource = _templateProcessor.Transform(shortcutsResource);
             if (shortcutsResource != null && shortcutsResource.CanRead)
             {
                 var shortcuts = shortcutsResource.Read<List<Shortcut>>();

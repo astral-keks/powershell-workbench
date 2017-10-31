@@ -1,2 +1,8 @@
 //List of static shortcuts: URLs, paths etc.
-[]
+[
+  {
+    "Name": "Userspace.ps1",
+    "Location": "Userspace",
+    "Target": "{$Userspace}\\Userspace.ps1"
+  }
+]

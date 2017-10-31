@@ -4,13 +4,13 @@
       "RootDirectory": "{$Workspace}\\Template",
       "Location": "Workspace",
       "PathPattern": ".+"
-    }
-  ],
-  "Synchronized": [
+    },
     {
       "RootDirectory": "{$Workspace}",
       "Location": "Workspace",
       "PathPattern": "{$Workspace}\\Config\\.+\\"
     }
+  ],
+  "Synchronized": [
   ]
 }

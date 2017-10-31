@@ -1,6 +1,8 @@
 using AstralKeks.PowerShell.Common.Attributes;
 using AstralKeks.PowerShell.Common.Parameters;
+using AstralKeks.PowerShell.Common.UserInterface;
 using AstralKeks.Workbench.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -36,8 +38,12 @@ namespace AstralKeks.Workbench.Command
                 var userspace = Components.UserspaceController.EnterUserspace(UserspaceName, () =>
                 {
                     Userspace u = null;
-                    if (Force || ShouldContinue($"Do you want to create userspace {UserspaceName}?", $"Userspace {UserspaceName} does not exist."))
+                    if (Force || ShouldContinue(
+                        $"Do you want to create userspace {UserspaceName}?",
+                        $"Userspace {UserspaceName} does not exist in user folder."))
+                    {
                         u = Components.UserspaceRepository.CreateUserspace(UserspaceName);
+                    }
                     return u;
                 },
                 () => _prevUserspace);

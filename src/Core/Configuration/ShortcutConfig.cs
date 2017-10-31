@@ -17,6 +17,8 @@ namespace AstralKeks.Workbench.Configuration
 
         public string PathPattern { get; set; }
 
+        public bool SearchRecursively { get; set; } = true;
+
         public List<string> InnerPathPatterns { get; set; } = new List<string>();
     }
 }

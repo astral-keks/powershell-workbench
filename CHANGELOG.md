@@ -1,3 +1,11 @@
+## 0.4.2
+### Fixed
+- Macro variables are not working in Shortcut.json
+### Added
+- Userspace and Workspace transparent validation
+- Shortcut discovery parameter enabling/disabling recursive search
+- Shortcut and Template aliases
+
 ## 0.4.1
 ### Fixed
 - Bugs related to shortcuts, templates, toolkit projects

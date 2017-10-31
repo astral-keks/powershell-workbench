@@ -40,11 +40,11 @@ namespace AstralKeks.Workbench.Controllers
             var workspaceConfiguration = GetDiscoveryConfiguration(_workspaceContext.CurrentWorkspaceDirectory);
             var userspaceConfiguration = GetDiscoveryConfiguration(_userspaceContext.CurrentUserspaceDirectory);
 
-            var shorcuts = _shortcutRepository.FindShortcut(query);
-            var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic, false).Where(s => s.IsMatch(query));
-            var userspaceShortcuts = DiscoverShortcuts(userspaceConfiguration.Dynamic, false).Where(s => s.IsMatch(query));
+            var shortcuts = _shortcutRepository.FindShortcut(query);
+            var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.IsMatch(query));
+            var userspaceShortcuts = DiscoverShortcuts(userspaceConfiguration.Dynamic).Where(s => s.IsMatch(query));
 
-            return shorcuts.Concat(workspaceShortcuts).Concat(userspaceShortcuts);
+            return shortcuts.Concat(workspaceShortcuts).Concat(userspaceShortcuts);
         }
 
         public void SynchronizeShortcuts(bool inWorkspace, bool inUserspace)
@@ -52,14 +52,14 @@ namespace AstralKeks.Workbench.Controllers
             if (inWorkspace)
             {
                 var configuration = GetDiscoveryConfiguration(_workspaceContext.CurrentWorkspaceDirectory);
-                var shortcuts = DiscoverShortcuts(configuration.Synchronized, true);
+                var shortcuts = DiscoverShortcuts(configuration.Synchronized);
                 _shortcutRepository.ClearWorkspaceShortcuts();
                 _shortcutRepository.AddWorkspaceShortcuts(shortcuts);
             }
             if (inUserspace)
             {
                 var configuration = GetDiscoveryConfiguration(_userspaceContext.CurrentUserspaceDirectory);
-                var shortcuts = DiscoverShortcuts(configuration.Synchronized, true);
+                var shortcuts = DiscoverShortcuts(configuration.Synchronized);
                 _shortcutRepository.ClearUserspaceShortcuts();
                 _shortcutRepository.AddUserspaceShortcuts(shortcuts);
             }
@@ -72,32 +72,35 @@ namespace AstralKeks.Workbench.Controllers
             return resource?.Read<ShortcutConfig>() ?? new ShortcutConfig();
         }
 
-        private IEnumerable<Shortcut> DiscoverShortcuts(List<ShortcutPattern> patterns, bool recursively)
+        private IEnumerable<Shortcut> DiscoverShortcuts(List<ShortcutPattern> patterns)
         {
             foreach (var patternGroup in patterns.GroupBy(p => p.RootDirectory))
             {
                 var rootDirectory = patternGroup.Key;
                 var patternGroupList = patternGroup.ToList();
-                foreach (var shortcut in DiscoverShortcuts(rootDirectory, patternGroupList, recursively))
+                foreach (var shortcut in DiscoverShortcuts(rootDirectory, patternGroupList))
                     yield return shortcut;
             }
         }
 
-        private IEnumerable<Shortcut> DiscoverShortcuts(string directory, List<ShortcutPattern> patterns, bool recursively)
+        private IEnumerable<Shortcut> DiscoverShortcuts(string directory, List<ShortcutPattern> patterns)
         {
             if (!string.IsNullOrWhiteSpace(directory))
             {
                 foreach (var path in _fileSystem.DirectoryList(directory))
                 {
-                    var shortcut = patterns.Select(p => DiscoverShortcut(path, p)).FirstOrDefault();
-                    if (shortcut != null)
+                    foreach (var pattern in patterns)
                     {
-                        yield return shortcut;
-                    }
-                    else if (_fileSystem.DirectoryExists(path) && recursively)
-                    {
-                        foreach (var childShortcut in DiscoverShortcuts(path, patterns, true))
-                            yield return childShortcut;
+                        var shortcut = DiscoverShortcut(path, pattern);
+                        if (shortcut != null)
+                        {
+                            yield return shortcut;
+                        }
+                        if (_fileSystem.DirectoryExists(path) && pattern.SearchRecursively)
+                        {
+                            foreach (var childShortcut in DiscoverShortcuts(path, patterns))
+                                yield return childShortcut;
+                        }
                     }
                 } 
             }

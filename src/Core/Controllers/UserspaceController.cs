@@ -18,6 +18,9 @@ namespace AstralKeks.Workbench.Controllers
 
         public Userspace EnterUserspace(string userspaceName, Func<Userspace> onMissing, Func<Userspace> onFallback)
         {
+            var defaultUserspace = _userspaceRepository.GetUserspace(userspaceDirectory: _userspaceContext.DefaultUserspaceDirectory);
+            _userspaceRepository.CreateUserspace(defaultUserspace);
+
             Userspace userspace;
             if (!string.IsNullOrWhiteSpace(userspaceName))
             {
