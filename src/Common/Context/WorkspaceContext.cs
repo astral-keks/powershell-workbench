@@ -19,11 +19,5 @@ namespace AstralKeks.Workbench.Common.Context
             get { return _systemVariable.WorkspaceDirectory; }
             set { _systemVariable.WorkspaceDirectory = value; }
         }
-
-        public string RecentWorkspaceDirectory
-        {
-            get { return _systemVariable.RecentWorkspaceDirectory; }
-            set { _systemVariable.RecentWorkspaceDirectory = value; }
-        }
     }
 }

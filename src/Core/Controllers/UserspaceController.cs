@@ -1,7 +1,9 @@
 ﻿using AstralKeks.Workbench.Common.Context;
+using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Repositories;
 using System;
+using System.Linq;
 
 namespace AstralKeks.Workbench.Controllers
 {
@@ -16,43 +18,39 @@ namespace AstralKeks.Workbench.Controllers
             _userspaceRepository = userspaceRepository ?? throw new ArgumentNullException(nameof(userspaceRepository));
         }
 
-        public Userspace EnterUserspace(string userspaceName, Func<Userspace> onMissing, Func<Userspace> onFallback)
+        public bool CheckUserspace(string userspaceName, Func<bool> shouldCreate)
         {
-            var defaultUserspace = _userspaceRepository.GetUserspace(userspaceDirectory: _userspaceContext.DefaultUserspaceDirectory);
-            _userspaceRepository.CreateUserspace(defaultUserspace);
+            var userspace = GetUserspace(userspaceName);
+            if (userspace == null && shouldCreate())
+                userspace = _userspaceRepository.CreateUserspace(userspaceName);
 
-            Userspace userspace;
-            if (!string.IsNullOrWhiteSpace(userspaceName))
-            {
-                userspace = _userspaceRepository.FindUserspace(userspaceName: userspaceName);
-                if (userspace == null)
-                    userspace = onMissing();
-                if (userspace == null)
-                    userspace = onFallback();
-            }
-            else
-                userspace = _userspaceRepository.FindUserspace(userspaceDirectory: _userspaceContext.RecentUserspaceDirectory);
-            
-            return EnterUserspace(userspace);
+            return userspace != null;
         }
 
-        public Userspace EnterUserspace(Userspace userspace = null)
+        public Userspace EnterUserspace(string userspaceName)
         {
+            var userspace = GetUserspace(userspaceName);
             if (userspace != null)
-            {
                 _userspaceContext.CurrentUserspaceDirectory = userspace.Directory;
-                _userspaceContext.RecentUserspaceDirectory = userspace.Directory;
-            }
 
             return userspace;
         }
 
         public Userspace ExitUserspace()
         {
-            var userspace = _userspaceRepository.GetUserspace(null, _userspaceContext.CurrentUserspaceDirectory);
+            var userspace = GetUserspace();
+
             _userspaceContext.CurrentUserspaceDirectory = null;
 
             return userspace;
+        }
+
+        private Userspace GetUserspace(string userspaceName = null)
+        {
+            if (string.IsNullOrWhiteSpace(userspaceName))
+                userspaceName = new Userspace(_userspaceContext.DefaultUserspaceDirectory).Name;
+
+            return _userspaceRepository.GetUserspaces().FirstOrDefault(u => u.Name.Is(userspaceName));
         }
     }
 }

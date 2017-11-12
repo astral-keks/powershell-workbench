@@ -12,10 +12,7 @@ namespace AstralKeks.Workbench.Common.Infrastructure
 
         public ResourceBundle(Type assemblyLocator)
         {
-            if (assemblyLocator == null)
-                throw new ArgumentNullException(nameof(assemblyLocator));
-
-            _assemblyLocator = assemblyLocator;
+            _assemblyLocator = assemblyLocator ?? throw new ArgumentNullException(nameof(assemblyLocator));
         }
 
         public bool ExistsResource(string resourceName)

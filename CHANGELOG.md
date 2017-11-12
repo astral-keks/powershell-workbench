@@ -1,3 +1,10 @@
+## 0.5.0
+### Removed
+- Modifying session when switching userspace or entering/exiting workspace
+### Added
+- Backup support
+- Shortcut query wildcard support
+
 ## 0.4.2
 ### Fixed
 - Macro variables are not working in Shortcut.json

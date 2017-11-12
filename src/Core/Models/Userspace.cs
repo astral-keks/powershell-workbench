@@ -1,21 +1,20 @@
+using AstralKeks.Workbench.Common.Utilities;
+using AstralKeks.Workbench.Resources;
 using System;
+using System.IO;
 
 namespace AstralKeks.Workbench.Models
 {
     public class Userspace
     {
-        internal Userspace(string name, string directory, string profile)
+        internal Userspace(string directory)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Invalid userspace name", nameof(name));
             if (string.IsNullOrWhiteSpace(directory))
                 throw new ArgumentException("Invalid userspace directory", nameof(directory));
-            if (string.IsNullOrWhiteSpace(profile))
-                throw new ArgumentException("Invalid userspace profile", nameof(profile));
 
-            Name = name;
             Directory = directory;
-            Profile = profile;
+            Name = Path.GetFileName(directory);
+            Profile = PathBuilder.Complete(directory, Files.UserspacePs1);
         }
 
         public string Name { get; }

@@ -25,6 +25,11 @@ namespace AstralKeks.Workbench.Common.Infrastructure
             return File.Exists(path);
         }
 
+        public void FileCopy(string sourcePath, string destinationPath, bool overwrite = false)
+        {
+            File.Copy(sourcePath, destinationPath, overwrite);
+        }
+
         public void FileDelete(string path)
         {
             File.Delete(path);
@@ -61,6 +66,12 @@ namespace AstralKeks.Workbench.Common.Infrastructure
         public void DirectoryCreate(string path)
         {
             Directory.CreateDirectory(path);
+        }
+
+        public void DirectoryDelete(string path, bool recursive = false)
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, recursive);
         }
 
         public string[] DirectoryList(string path)

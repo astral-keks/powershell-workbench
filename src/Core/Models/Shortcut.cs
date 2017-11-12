@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace AstralKeks.Workbench.Models
 {
@@ -23,11 +24,6 @@ namespace AstralKeks.Workbench.Models
         public string Location { get; }
 
         public string Target { get; }
-
-        public bool IsMatch(string query)
-        {
-            return ToString().IndexOf(query ?? string.Empty, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
 
         public override string ToString()
         {

@@ -18,30 +18,22 @@ namespace AstralKeks.Workbench.Controllers
             _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
             _workspaceRepository = workspaceRepository ?? throw new ArgumentNullException(nameof(workspaceRepository));
         }
-        
-        public Workspace EnterWorkspace(string directory, Func<Workspace> onMissing, Func<Workspace> onFallback)
+
+        public bool CheckWorkspace(string directory, Func<bool> shouldCreate)
         {
-            Workspace workspace;
-            if (!string.IsNullOrWhiteSpace(directory))
-            {
-                workspace = _workspaceRepository.FindWorkspace(directory);
-                if (workspace == null)
-                    workspace = onMissing();
-                if (workspace == null)
-                    workspace = onFallback();
-            }
-            else
-                workspace = _workspaceRepository.FindWorkspace(_workspaceContext.RecentWorkspaceDirectory);
-            
-            return EnterWorkspace(workspace);
+            var workspace = GetWorkspace(directory);
+            if (workspace == null && shouldCreate())
+                workspace = _workspaceRepository.CreateWorkspace(directory);
+
+            return workspace != null;
         }
 
-        public Workspace EnterWorkspace(Workspace workspace)
+        public Workspace EnterWorkspace(string directory)
         {
+            var workspace = GetWorkspace(directory);
             if (workspace != null)
             {
                 _workspaceContext.CurrentWorkspaceDirectory = workspace.Directory;
-                _workspaceContext.RecentWorkspaceDirectory = workspace.Directory;
                 _fileSystem.DirectorySetCurrent(_workspaceContext.CurrentWorkspaceDirectory);
             }
 
@@ -50,10 +42,19 @@ namespace AstralKeks.Workbench.Controllers
 
         public Workspace ExitWorkspace()
         {
-            var workspace = _workspaceRepository.GetWorkspace(_workspaceContext.CurrentWorkspaceDirectory);
+            var workspace = GetWorkspace(_workspaceContext.CurrentWorkspaceDirectory);
+
             _workspaceContext.CurrentWorkspaceDirectory = null;
 
             return workspace;
+        }
+
+        private Workspace GetWorkspace(string directory)
+        {
+            if (string.IsNullOrWhiteSpace(directory))
+                directory = _fileSystem.DirectoryGetCurrent();
+
+            return _workspaceRepository.FindWorkspace(directory);
         }
     }
 }

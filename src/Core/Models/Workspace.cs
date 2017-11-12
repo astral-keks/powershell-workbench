@@ -1,18 +1,18 @@
+using AstralKeks.Workbench.Common.Utilities;
+using AstralKeks.Workbench.Resources;
 using System;
 
 namespace AstralKeks.Workbench.Models
 {
     public class Workspace
     {
-        internal Workspace(string directory, string profile)
+        internal Workspace(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
                 throw new ArgumentException("Invalid workspace directory", nameof(directory));
-            if (string.IsNullOrWhiteSpace(profile))
-                throw new ArgumentException("Invalid workspace profile", nameof(profile));
 
             Directory = directory;
-            Profile = profile;
+            Profile = PathBuilder.Combine(directory, Files.WorkspacePs1);
         }
 
         public string Directory { get; }

@@ -44,6 +44,15 @@ namespace AstralKeks.Workbench.Common.Utilities
             fileSystem.FileWriteLines(path, content ?? new string[0]);
         }
 
+        public static void FileClone(this FileSystem fileSystem, string sourcePath, string destinationPath, bool overwrite = false)
+        {
+            sourcePath = fileSystem.MakeAbsolute(sourcePath);
+            destinationPath = fileSystem.MakeAbsolute(destinationPath);
+
+            fileSystem.DirectoryCreate(Path.GetDirectoryName(destinationPath));
+            fileSystem.FileCopy(sourcePath, destinationPath, overwrite);
+        }
+
         public static string FindParentDirectory(this FileSystem fileSystem, string innerDirectory, Func<string, bool> predicate)
         {
             innerDirectory = fileSystem.MakeAbsolute(innerDirectory);

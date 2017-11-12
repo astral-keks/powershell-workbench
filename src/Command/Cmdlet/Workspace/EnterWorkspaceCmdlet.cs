@@ -1,4 +1,4 @@
-using AstralKeks.Workbench.Models;
+using System.IO;
 using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command
@@ -12,36 +12,21 @@ namespace AstralKeks.Workbench.Command
 
         [Parameter]
         public SwitchParameter Force { get; set; }
-
-        private Userspace _prevUserspace;
-        private Workspace _prevWorkspace;
-
-        protected override void BeginProcessing()
+        
+        protected override void ProcessRecord()
         {
-            SessionState.Restore(() =>
-            {
-                _prevWorkspace = Components.WorkspaceController.ExitWorkspace();
-                _prevUserspace = Components.UserspaceController.ExitUserspace();
-            });
+            if (!Components.WorkspaceController.CheckWorkspace(Directory, ShouldCreateWorkspace))
+                throw new DirectoryNotFoundException($"Workspace does not exist in {Directory}");
+            
+            SessionState.Restore(() => Components.WorkspaceController.ExitWorkspace());
+            SessionState.Update(() => Components.WorkspaceController.EnterWorkspace(Directory));
         }
 
-        protected override void EndProcessing()
+        private bool ShouldCreateWorkspace()
         {
-            SessionState.Update(() =>
-            {
-                var userspace = Components.UserspaceController.EnterUserspace(_prevUserspace);
-                SessionState.Update(userspace?.Profile);
-
-                var workspace = Components.WorkspaceController.EnterWorkspace(Directory, () =>
-                {
-                    Workspace w = null;
-                    if (Force || ShouldContinue($"Do you want to create workspace in {Directory}?", $"Workspace does not exist in {Directory}."))
-                        w = Components.WorkspaceRepository.CreateWorkspace(Directory);
-                    return w;
-                },
-                () => _prevWorkspace);
-                SessionState.Update(workspace?.Profile, workspace?.Directory);
-            });
+            return Force || ShouldContinue(
+                $"Do you want to create workspace in {Directory}?",
+                $"Workspace does not exist in {Directory}.");
         }
     }
 }

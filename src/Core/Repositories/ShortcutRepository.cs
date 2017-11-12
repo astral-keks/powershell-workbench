@@ -75,7 +75,7 @@ namespace AstralKeks.Workbench.Repositories
             var foundShortcuts = new HashSet<string>();
             foreach (var path in paths)
             {
-                foreach (var shortcut in ReadShortcuts(path).Where(s => s.IsMatch(query)))
+                foreach (var shortcut in ReadShortcuts(path).Where(s => s.ToString().Like(query)))
                 {
                     if (foundShortcuts.Add(shortcut.ToString()))
                         yield return shortcut;

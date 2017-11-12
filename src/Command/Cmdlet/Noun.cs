@@ -4,6 +4,7 @@ namespace AstralKeks.Workbench.Command
     internal static class Noun
     {
         public const string WB = "WB";
+        public const string WBItem = WB + "Item";
         public const string WBSession = WB + "Session";
         public const string WBConfiguration = WB + "Configuration";
         public const string WBApplication = WB + "Application";

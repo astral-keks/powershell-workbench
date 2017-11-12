@@ -1,0 +1,12 @@
+﻿// Userspace backups
+[
+  {
+    "Id": "",
+    "Name": "Userspace",
+    "Sources": [
+      "{$Userspace}\\Config",
+      "{$Userspace}\\Userspace.ps1"
+    ],
+    "Destination": "{$Userspace}\\..\\Backup"
+  }
+]

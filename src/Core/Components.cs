@@ -45,10 +45,12 @@ namespace AstralKeks.Workbench
         public WorkspaceController WorkspaceController => _container.Resolve<WorkspaceController>();
         public ShortcutController ShortcutController => _container.Resolve<ShortcutController>();
         public TemplateController TemplateController => _container.Resolve<TemplateController>();
+        public BackupController BackupController => _container.Resolve<BackupController>();
 
         public ApplicationRepository ApplicationRepository => _container.Resolve<ApplicationRepository>();
         public ShortcutRepository ShortcutRepository => _container.Resolve<ShortcutRepository>();
         public UserspaceRepository UserspaceRepository => _container.Resolve<UserspaceRepository>();
         public WorkspaceRepository WorkspaceRepository => _container.Resolve<WorkspaceRepository>();
+        public BackupRepository BackupRepository => _container.Resolve<BackupRepository>();
     }
 }

@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Windows\Backup.WS.json" />
+    <EmbeddedResource Include="Resources\Windows\Backup.US.json" />
     <EmbeddedResource Include="Resources\Windows\Shortcut.US.json" />
     <EmbeddedResource Include="Resources\Windows\Shortcut.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Loader.psm1" />

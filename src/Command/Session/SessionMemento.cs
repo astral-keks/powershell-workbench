@@ -1,14 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command
 {
     internal class SessionMemento
     {
-        public static Queue<SessionMemento> Saved { get; } = new Queue<SessionMemento>();
+        private static readonly object _lock = new object();
+        private static SessionMemento _saved;
 
-        public SessionMemento(string directory, string location, string modulePath, List<PSModuleInfo> modules, List<AliasInfo> aliases)
+        public static void Save(SessionMemento memento)
+        {
+            if (memento != null)
+            {
+                lock (_lock)
+                    _saved = memento; 
+            }
+        }
+
+        public static SessionMemento Load()
+        {
+            lock (_lock)
+                return _saved;
+        }
+
+        public SessionMemento(string directory, string location)
         {
             if (string.IsNullOrWhiteSpace(directory))
                 throw new ArgumentException("Invalid working directory", nameof(directory));
@@ -17,15 +31,9 @@ namespace AstralKeks.Workbench.Command
 
             Directory = directory;
             Location = location;
-            ModulePath = modulePath ?? string.Empty;
-            Modules = modules ?? throw new System.ArgumentNullException(nameof(modules));
-            Aliases = aliases ?? throw new System.ArgumentNullException(nameof(aliases));
         }
 
         public string Directory { get; }
         public string Location { get; }
-        public string ModulePath { get; }
-        public List<PSModuleInfo> Modules { get; }
-        public List<AliasInfo> Aliases { get; }
     }
 }

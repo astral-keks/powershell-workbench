@@ -11,24 +11,12 @@ namespace AstralKeks.Workbench.Common.Infrastructure
             set { SetVariable("WBWorkspaceDirectory", value); }
         }
 
-        public string RecentWorkspaceDirectory
-        {
-            get { return GetVariable("WBRecentWorkspaceDirectory", EnvironmentVariableTarget.User); }
-            set { SetVariable("WBRecentWorkspaceDirectory", value, EnvironmentVariableTarget.User); }
-        }
-
         public string UserspaceDirectory
         {
             get { return GetVariable("WBUserspaceDirectory"); }
             set { SetVariable("WBUserspaceDirectory", value); }
         }
 
-        public string RecentUserspaceDirectory
-        {
-            get { return GetVariable("WBRecentUserspaceDirectory", EnvironmentVariableTarget.User); }
-            set { SetVariable("WBRecentUserspaceDirectory", value, EnvironmentVariableTarget.User); }
-        }
-        
         public string LocalAppData
         {
             get { return GetVariable("LOCALAPPDATA"); }

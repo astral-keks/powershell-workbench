@@ -14,6 +14,7 @@ namespace AstralKeks.Workbench.Bootstrappers
             RegisterShortcutRepository(builder).As<ShortcutRepository>().SingleInstance();
             RegisterUserspaceRepository(builder).As<UserspaceRepository>().SingleInstance();
             RegisterWorkspaceRepository(builder).As<WorkspaceRepository>().SingleInstance();
+            RegisterBackupRepository(builder).As<BackupRepository>().SingleInstance();
 
             base.Load(builder);
         }
@@ -36,6 +37,11 @@ namespace AstralKeks.Workbench.Bootstrappers
         protected virtual IRegistrationBuilder<WorkspaceRepository, Activator, Style> RegisterWorkspaceRepository(ContainerBuilder builder)
         {
             return builder.RegisterType<WorkspaceRepository>();
+        }
+
+        protected virtual IRegistrationBuilder<BackupRepository, Activator, Style> RegisterBackupRepository(ContainerBuilder builder)
+        {
+            return builder.RegisterType<BackupRepository>();
         }
     }
 }

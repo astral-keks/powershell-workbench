@@ -1,9 +1,7 @@
 using AstralKeks.PowerShell.Common.Attributes;
 using AstralKeks.PowerShell.Common.Parameters;
-using AstralKeks.PowerShell.Common.UserInterface;
-using AstralKeks.Workbench.Models;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Management.Automation;
 
@@ -18,44 +16,25 @@ namespace AstralKeks.Workbench.Command
 
         [Parameter]
         public SwitchParameter Force { get; set; }
-
-        private Userspace _prevUserspace;
-        private Workspace _prevWorkspace;
-
-        protected override void BeginProcessing()
+        
+        protected override void ProcessRecord()
         {
-            SessionState.Restore(() =>
-            {
-                _prevWorkspace = Components.WorkspaceController.ExitWorkspace();
-                _prevUserspace = Components.UserspaceController.ExitUserspace();
-            });
+            if (!Components.UserspaceController.CheckUserspace(UserspaceName, ShouldCreateUserspace))
+                throw new DirectoryNotFoundException($"Userspace {UserspaceName} does not exist");
+            
+            SessionState.Restore(() => Components.UserspaceController.ExitUserspace());
+            SessionState.Update(() => Components.UserspaceController.EnterUserspace(UserspaceName));
         }
 
-        protected override void EndProcessing()
+        private bool ShouldCreateUserspace()
         {
-            SessionState.Update(() =>
-            {
-                var userspace = Components.UserspaceController.EnterUserspace(UserspaceName, () =>
-                {
-                    Userspace u = null;
-                    if (Force || ShouldContinue(
-                        $"Do you want to create userspace {UserspaceName}?",
-                        $"Userspace {UserspaceName} does not exist in user folder."))
-                    {
-                        u = Components.UserspaceRepository.CreateUserspace(UserspaceName);
-                    }
-                    return u;
-                },
-                () => _prevUserspace);
-                SessionState.Update(userspace?.Profile);
-
-                var workspace = Components.WorkspaceController.EnterWorkspace(_prevWorkspace);
-                SessionState.Update(workspace?.Profile, workspace?.Directory);
-            });
+            return Force || ShouldContinue(
+                $"Do you want to create userspace {UserspaceName}?",
+                $"Userspace {UserspaceName} does not exist in user folder.");
         }
 
         [ParameterCompleter(nameof(UserspaceName))]
-        public IEnumerable<string> CompleteUserspaceName(string userspaceNamePart)
+        private IEnumerable<string> CompleteUserspaceName(string userspaceNamePart)
         {
             return Components.UserspaceRepository.GetUserspaces().Select(u => u.Name);
         }

@@ -49,6 +49,9 @@ namespace AstralKeks.Workbench.Repositories
 
                 var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.ApplicationJson);
                 _resourceRepository.CreateResource(applicationConfigPath, Files.ApplicationUSJson);
+
+                var backupConfigPath = PathBuilder.Combine(configDirectory, Files.BackupJson);
+                _resourceRepository.CreateResource(backupConfigPath, Files.BackupUSJson);
             }
 
             return userspace;
@@ -56,19 +59,12 @@ namespace AstralKeks.Workbench.Repositories
 
         public IEnumerable<Userspace> GetUserspaces()
         {
-            return _fileSystem
-                .GetDirectories(_context.UserspaceRootDirectory)
-                .Where(d => _fileSystem.FileExists(PathBuilder.Combine(d, Files.UserspacePs1)))
-                .Select(d => GetUserspace(null, d));
+            return _fileSystem.GetDirectories(_context.UserspaceRootDirectory)
+                .Select(d => GetUserspace(null, d))
+                .Where(u => _fileSystem.FileExists(u.Profile));
         }
 
-        public Userspace FindUserspace(string userspaceName = null, string userspaceDirectory = null)
-        {
-            Func<string, string, bool> compare = (x, y) => string.Equals(x, y, StringComparison.OrdinalIgnoreCase);
-            return GetUserspaces().FirstOrDefault(u => compare(u.Name, userspaceName) || compare(u.Directory, userspaceDirectory));
-        }
-
-        public Userspace GetUserspace(string userspaceName = null, string userspaceDirectory = null)
+        private Userspace GetUserspace(string userspaceName = null, string userspaceDirectory = null)
         {
             Userspace userspace = null;
 
@@ -78,10 +74,9 @@ namespace AstralKeks.Workbench.Repositories
                     userspaceName = Path.GetFileNameWithoutExtension(userspaceDirectory);
                 if (string.IsNullOrWhiteSpace(userspaceDirectory))
                     userspaceDirectory = PathBuilder.Combine(_context.UserspaceRootDirectory, userspaceName);
-
                 userspaceDirectory = _fileSystem.GetFullPath(userspaceDirectory);
-                var userspaceProfile = PathBuilder.Combine(userspaceDirectory, Files.UserspacePs1);
-                userspace = new Userspace(userspaceName, userspaceDirectory, userspaceProfile);
+
+                userspace = new Userspace(userspaceDirectory);
             }
 
             return userspace;

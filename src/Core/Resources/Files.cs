@@ -7,6 +7,10 @@ namespace AstralKeks.Workbench.Resources
         public const string ApplicationWSJson = "Application.WS.json";
         public const string ApplicationJson = "Application.json";
 
+        public const string BackupUSJson = "Backup.US.json";
+        public const string BackupWSJson = "Backup.WS.json";
+        public const string BackupJson = "Backup.json";
+
         public const string DiscoveryUSJson = "Discovery.US.json";
         public const string DiscoveryWSJson = "Discovery.WS.json";
         public const string DiscoveryJson = "Discovery.json";

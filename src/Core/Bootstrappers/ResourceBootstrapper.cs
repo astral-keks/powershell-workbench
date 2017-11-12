@@ -1,6 +1,5 @@
-﻿using AstralKeks.Workbench.Common.Content;
-using AstralKeks.Workbench.Common.Context;
-using AstralKeks.Workbench.Common.Infrastructure;
+﻿using AstralKeks.Workbench.Common.Context;
+using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Repositories;
 using Autofac;
 using System;
@@ -38,13 +37,13 @@ namespace AstralKeks.Workbench.Bootstrappers
         
         protected virtual void BootstrapUserspace(string userspaceDirectory)
         {
-            var userspace = _userspaceRepository.GetUserspace(userspaceDirectory: userspaceDirectory);
+            var userspace = new Userspace(userspaceDirectory);
             _userspaceRepository.CreateUserspace(userspace);
         }
 
         protected virtual void BootstrapWorkspace(string workspaceDirectory)
         {
-            var workspace = _workspaceRepository.GetWorkspace(workspaceDirectory);
+            var workspace = new Workspace(workspaceDirectory);
             _workspaceRepository.CreateWorkspace(workspace);
         }
     }

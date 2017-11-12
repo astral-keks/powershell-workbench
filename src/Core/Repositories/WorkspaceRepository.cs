@@ -18,9 +18,9 @@ namespace AstralKeks.Workbench.Repositories
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
-        public Workspace CreateWorkspace(string directory = null)
+        public Workspace CreateWorkspace(string directory)
         {
-            var workspace = GetWorkspace(directory) ?? GetWorkspace(_fileSystem.DirectoryGetCurrent());
+            var workspace = GetWorkspace(directory);
             return CreateWorkspace(workspace);
         }
 
@@ -28,9 +28,11 @@ namespace AstralKeks.Workbench.Repositories
         {
             if (workspace != null)
             {
-                var configDirectory = PathBuilder.Combine(workspace.Directory, Directories.Config, Directories.Workbench);
+                var workspaceDirectory = _fileSystem.MakeAbsolute(workspace.Directory);
+
+                var configDirectory = PathBuilder.Combine(workspaceDirectory, Directories.Config, Directories.Workbench);
                 
-                _fileSystem.DirectoryCreate(workspace.Directory);
+                _fileSystem.DirectoryCreate(workspaceDirectory);
                 _fileSystem.DirectoryCreate(configDirectory);
 
                 _resourceRepository.CreateResource(workspace.Profile, Files.WorkspacePs1);
@@ -43,6 +45,9 @@ namespace AstralKeks.Workbench.Repositories
 
                 var applicationConfigPath = PathBuilder.Combine(configDirectory, Files.ApplicationJson);
                 _resourceRepository.CreateResource(applicationConfigPath, Files.ApplicationWSJson);
+
+                var backupConfigPath = PathBuilder.Combine(configDirectory, Files.BackupJson);
+                _resourceRepository.CreateResource(backupConfigPath, Files.BackupWSJson);
             }
 
             return workspace;
@@ -50,25 +55,29 @@ namespace AstralKeks.Workbench.Repositories
 
         public Workspace FindWorkspace(string innerDirectory)
         {
-            innerDirectory = _fileSystem.MakeAbsolute(innerDirectory);
-            var workspaceDirectory = _fileSystem.FindParentDirectory(innerDirectory, d =>
+            string workspaceDirectory = null;
+
+            if (!string.IsNullOrWhiteSpace(innerDirectory))
             {
-                var profile = PathBuilder.Combine(d, Files.WorkspacePs1);
-                return _fileSystem.FileExists(profile);
-            });
+                innerDirectory = _fileSystem.MakeAbsolute(innerDirectory);
+                workspaceDirectory = _fileSystem.FindParentDirectory(innerDirectory, d =>
+                {
+                    var workspace = GetWorkspace(d);
+                    return _fileSystem.FileExists(workspace.Profile);
+                });
+            }
 
             return GetWorkspace(workspaceDirectory);
         }
 
-        public Workspace GetWorkspace(string workspaceDirectory)
+        private Workspace GetWorkspace(string workspaceDirectory)
         {
             Workspace workspace = null;
 
             if (!string.IsNullOrWhiteSpace(workspaceDirectory))
             {
-                workspaceDirectory = _fileSystem.GetFullPath(workspaceDirectory);
-                var workspaceProfile = PathBuilder.Combine(workspaceDirectory, Files.WorkspacePs1);
-                workspace = new Workspace(workspaceDirectory, workspaceProfile);
+                workspaceDirectory = _fileSystem.MakeAbsolute(workspaceDirectory);
+                workspace = new Workspace(workspaceDirectory);
             }
 
             return workspace;

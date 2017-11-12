@@ -26,12 +26,6 @@ namespace AstralKeks.Workbench.Common.Context
             get { return PathBuilder.Combine(UserspaceRootDirectory, _default); }
         }
 
-        public string RecentUserspaceDirectory
-        {
-            get { return _systemVariable.RecentUserspaceDirectory ?? DefaultUserspaceDirectory; }
-            set { _systemVariable.RecentUserspaceDirectory = value; }
-        }
-
         public string CurrentUserspaceDirectory
         {
             get { return _systemVariable.UserspaceDirectory ?? DefaultUserspaceDirectory; }

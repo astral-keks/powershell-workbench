@@ -41,8 +41,8 @@ namespace AstralKeks.Workbench.Controllers
             var userspaceConfiguration = GetDiscoveryConfiguration(_userspaceContext.CurrentUserspaceDirectory);
 
             var shortcuts = _shortcutRepository.FindShortcut(query);
-            var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.IsMatch(query));
-            var userspaceShortcuts = DiscoverShortcuts(userspaceConfiguration.Dynamic).Where(s => s.IsMatch(query));
+            var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.ToString().Like(query));
+            var userspaceShortcuts = DiscoverShortcuts(userspaceConfiguration.Dynamic).Where(s => s.ToString().Like(query));
 
             return shortcuts.Concat(workspaceShortcuts).Concat(userspaceShortcuts);
         }
