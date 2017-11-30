@@ -1,4 +1,4 @@
-$version = "0.5.1"
+$version = "0.5.2"
 
 $src = "$PSScriptRoot\src"
 $doc = "$PSScriptRoot\doc"
@@ -11,11 +11,16 @@ $tmp = "$artifact\tmp"
 
 $module = "$bin\Workbench"
 
+$manifest = "$module\Workbench.psd1"
+
 # Build binaries
 if (Test-Path $artifact) { Remove-Item $artifact -Recurse }
 if (Test-Path $package) { Remove-Item $package -Recurse }
 dotnet restore $src\Command\Workbench.Command.csproj
 dotnet build $src\Command\Workbench.Command.csproj --configuration Release -o $module --version-suffix $version
+
+# Fix manifest version
+(Get-Content $manifest).replace("ModuleVersion = '0.0.0'", "ModuleVersion = '$version'") | Set-Content $manifest
 
 # Build packages
 dotnet pack $src\Common\Workbench.Common.csproj --configuration Release -o $nupkg --version-suffix $version

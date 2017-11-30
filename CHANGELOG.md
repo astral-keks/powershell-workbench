@@ -1,3 +1,11 @@
+## 0.5.2
+### Fixed
+- SharedContext dependency was not registered in module
+### Changed 
+- Initial backup id in Userspace
+### Added
+- Manifest version automatic update during build
+
 ## 0.5.1
 ### Added
 - SharedContext in Workbench.Common to be used by toolkits

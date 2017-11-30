@@ -2,8 +2,6 @@
 using AstralKeks.Workbench.Controllers;
 using AstralKeks.Workbench.Repositories;
 using Autofac;
-using Autofac.Core;
-using System;
 
 namespace AstralKeks.Workbench
 {
@@ -11,31 +9,14 @@ namespace AstralKeks.Workbench
     {
         private readonly IContainer _container;
 
-        public ComponentContainer() : this(
-            new InfrastructureBootstrapper(),
-            new ContextBootstrapper(),
-            new RepositoryBootstrapper(),
-            new ControllerBootstrapper())
+        public ComponentContainer()
         {
-        }
-
-        public ComponentContainer(IModule infrastructureModule, IModule contextModule, IModule repositoryModule, 
-            IModule controllerModule)
-        {
-            if (infrastructureModule == null)
-                throw new ArgumentNullException(nameof(infrastructureModule));
-            if (contextModule == null)
-                throw new ArgumentNullException(nameof(contextModule));
-            if (repositoryModule == null)
-                throw new ArgumentNullException(nameof(repositoryModule));
-            if (controllerModule == null)
-                throw new ArgumentNullException(nameof(controllerModule));
-
             var builder = new ContainerBuilder();
-            builder.RegisterModule(infrastructureModule);
-            builder.RegisterModule(contextModule);
-            builder.RegisterModule(repositoryModule);
-            builder.RegisterModule(controllerModule);
+            builder.RegisterModule(new InfrastructureBootstrapper());
+            builder.RegisterModule(new ContextBootstrapper());
+            builder.RegisterModule(new RepositoryBootstrapper());
+            builder.RegisterModule(new ControllerBootstrapper());
+            builder.RegisterType<ResourceBootstrapper>().As<IStartable>().SingleInstance();
             _container = builder.Build();
         }
 

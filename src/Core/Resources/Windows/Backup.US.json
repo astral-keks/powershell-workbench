@@ -1,7 +1,7 @@
 ﻿// Userspace backups
 [
   {
-    "Id": "",
+    "Id": "Userspace",
     "Name": "Userspace",
     "Sources": [
       "{$Userspace}\\Config",
