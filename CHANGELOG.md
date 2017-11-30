@@ -1,3 +1,7 @@
+## 0.5.1
+### Added
+- SharedContext in Workbench.Common to be used by toolkits
+
 ## 0.5.0
 ### Removed
 - Modifying session when switching userspace or entering/exiting workspace

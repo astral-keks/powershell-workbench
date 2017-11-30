@@ -15,7 +15,7 @@ namespace AstralKeks.Workbench.Common.Context
         {
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
         }
-
+        
         public string UserspaceRootDirectory
         {
             get { return PathBuilder.Combine(_systemVariable.UserDirectory, _workbench); }
@@ -28,7 +28,7 @@ namespace AstralKeks.Workbench.Common.Context
 
         public string CurrentUserspaceDirectory
         {
-            get { return _systemVariable.UserspaceDirectory ?? DefaultUserspaceDirectory; }
+            get { return _systemVariable.UserspaceDirectory; }
             set { _systemVariable.UserspaceDirectory = value; }
         }
     }

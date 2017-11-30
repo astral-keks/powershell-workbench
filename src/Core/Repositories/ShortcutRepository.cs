@@ -12,23 +12,20 @@ namespace AstralKeks.Workbench.Repositories
 {
     public class ShortcutRepository
     {
-        private readonly WorkspaceContext _workspaceContext;
-        private readonly UserspaceContext _userspaceContext;
+        private readonly SharedContext _sharedContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
 
-        public ShortcutRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext,
-            TemplateProcessor templateProcessor, ResourceRepository resourceRepository)
+        public ShortcutRepository(SharedContext sharedContext, TemplateProcessor templateProcessor, ResourceRepository resourceRepository)
         {
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
         public void AddWorkspaceShortcuts(IEnumerable<Shortcut> shortcuts = null)
         {
-            var shortcutWorkspaceStoragePath = PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+            var shortcutWorkspaceStoragePath = PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory,
                 Directories.Temp, Directories.Workbench, Files.ShortcutJson);
             
             WriteShortcuts(shortcutWorkspaceStoragePath, shortcuts, true);
@@ -36,7 +33,7 @@ namespace AstralKeks.Workbench.Repositories
 
         public void AddUserspaceShortcuts(IEnumerable<Shortcut> shortcuts = null)
         {
-            var shortcutUserspaceStoragePath = PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+            var shortcutUserspaceStoragePath = PathBuilder.Complete(_sharedContext.CurrentUserspaceDirectory,
                 Directories.Temp, Directories.Workbench, Files.ShortcutJson);
 
             WriteShortcuts(shortcutUserspaceStoragePath, shortcuts, true);
@@ -44,7 +41,7 @@ namespace AstralKeks.Workbench.Repositories
 
         public void ClearWorkspaceShortcuts()
         {
-            var shortcutWorkspaceStoragePath = PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+            var shortcutWorkspaceStoragePath = PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory,
                 Directories.Temp, Directories.Workbench, Files.ShortcutJson);
 
             WriteShortcuts(shortcutWorkspaceStoragePath, Enumerable.Empty<Shortcut>(), false);
@@ -52,7 +49,7 @@ namespace AstralKeks.Workbench.Repositories
 
         public void ClearUserspaceShortcuts()
         {
-            var shortcutUserspaceStoragePath = PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+            var shortcutUserspaceStoragePath = PathBuilder.Complete(_sharedContext.CurrentUserspaceDirectory,
                 Directories.Temp, Directories.Workbench, Files.ShortcutJson);
 
             WriteShortcuts(shortcutUserspaceStoragePath, Enumerable.Empty<Shortcut>(), false);
@@ -62,13 +59,13 @@ namespace AstralKeks.Workbench.Repositories
         {
             var paths = new[] 
             {
-                PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+                PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory,
                     Directories.Temp, Directories.Workbench, Files.ShortcutJson),
-                PathBuilder.Complete(_workspaceContext.CurrentWorkspaceDirectory,
+                PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory,
                     Directories.Config, Directories.Workbench, Files.ShortcutJson),
-                PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+                PathBuilder.Complete(_sharedContext.CurrentUserspaceDirectory,
                     Directories.Temp, Directories.Workbench, Files.ShortcutJson),
-                PathBuilder.Complete(_userspaceContext.CurrentUserspaceDirectory,
+                PathBuilder.Complete(_sharedContext.CurrentUserspaceDirectory,
                     Directories.Config, Directories.Workbench, Files.ShortcutJson)
             };
 

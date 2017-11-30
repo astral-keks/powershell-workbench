@@ -17,17 +17,15 @@ namespace AstralKeks.Workbench.Repositories
 {
     public class BackupRepository
     {
-        private readonly UserspaceContext _userspaceContext;
-        private readonly WorkspaceContext _workspaceContext;
+        private readonly SharedContext _sharedContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
         private readonly FileSystem _fileSystem;
 
-        public BackupRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext,
-            TemplateProcessor templateProcessor, ResourceRepository resourceRepository, FileSystem fileSystem)
+        public BackupRepository(SharedContext sharedContext, TemplateProcessor templateProcessor, 
+            ResourceRepository resourceRepository, FileSystem fileSystem)
         {
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -36,9 +34,9 @@ namespace AstralKeks.Workbench.Repositories
         public IEnumerable<Backup> GetBackups()
         {
             var workspaceResourcePath = PathBuilder.Complete(
-                _workspaceContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
+                _sharedContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
             var userspaceResourcePath = PathBuilder.Combine(
-                _userspaceContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
+                _sharedContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
             var workspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(workspaceResourcePath));
             var userspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(userspaceResourcePath));
 

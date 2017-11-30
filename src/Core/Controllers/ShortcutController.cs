@@ -18,18 +18,16 @@ namespace AstralKeks.Workbench.Controllers
     public class ShortcutController
     {
         private readonly FileSystem _fileSystem;
-        private readonly WorkspaceContext _workspaceContext;
-        private readonly UserspaceContext _userspaceContext;
+        private readonly SharedContext _sharedContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
         private readonly ShortcutRepository _shortcutRepository;
 
-        public ShortcutController(FileSystem fileSystem, WorkspaceContext workspaceContext, UserspaceContext userspaceContext,
-            TemplateProcessor templateProcessor, ResourceRepository resourceRepository, ShortcutRepository shortcutRepository)
+        public ShortcutController(FileSystem fileSystem, SharedContext sharedContext, TemplateProcessor templateProcessor, 
+            ResourceRepository resourceRepository, ShortcutRepository shortcutRepository)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
             _shortcutRepository = shortcutRepository ?? throw new ArgumentNullException(nameof(shortcutRepository));
@@ -37,8 +35,8 @@ namespace AstralKeks.Workbench.Controllers
 
         public IEnumerable<Shortcut> FindShortcut(string query = null)
         {
-            var workspaceConfiguration = GetDiscoveryConfiguration(_workspaceContext.CurrentWorkspaceDirectory);
-            var userspaceConfiguration = GetDiscoveryConfiguration(_userspaceContext.CurrentUserspaceDirectory);
+            var workspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentWorkspaceDirectory);
+            var userspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentUserspaceDirectory);
 
             var shortcuts = _shortcutRepository.FindShortcut(query);
             var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.ToString().Like(query));
@@ -51,14 +49,14 @@ namespace AstralKeks.Workbench.Controllers
         {
             if (inWorkspace)
             {
-                var configuration = GetDiscoveryConfiguration(_workspaceContext.CurrentWorkspaceDirectory);
+                var configuration = GetDiscoveryConfiguration(_sharedContext.CurrentWorkspaceDirectory);
                 var shortcuts = DiscoverShortcuts(configuration.Synchronized);
                 _shortcutRepository.ClearWorkspaceShortcuts();
                 _shortcutRepository.AddWorkspaceShortcuts(shortcuts);
             }
             if (inUserspace)
             {
-                var configuration = GetDiscoveryConfiguration(_userspaceContext.CurrentUserspaceDirectory);
+                var configuration = GetDiscoveryConfiguration(_sharedContext.CurrentUserspaceDirectory);
                 var shortcuts = DiscoverShortcuts(configuration.Synchronized);
                 _shortcutRepository.ClearUserspaceShortcuts();
                 _shortcutRepository.AddUserspaceShortcuts(shortcuts);

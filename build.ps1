@@ -1,4 +1,4 @@
-$version = "0.5.0"
+$version = "0.5.1"
 
 $src = "$PSScriptRoot\src"
 $doc = "$PSScriptRoot\doc"

@@ -12,16 +12,14 @@ namespace AstralKeks.Workbench.Repositories
 {
     public class ApplicationRepository
     {
-        private readonly UserspaceContext _userspaceContext;
-        private readonly WorkspaceContext _workspaceContext;
+        private readonly SharedContext _sharedContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
 
-        public ApplicationRepository(WorkspaceContext workspaceContext, UserspaceContext userspaceContext,
-            TemplateProcessor templateProcessor, ResourceRepository resourceRepository)
+        public ApplicationRepository(SharedContext sharedContext, TemplateProcessor templateProcessor, 
+            ResourceRepository resourceRepository)
         {
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
@@ -29,9 +27,9 @@ namespace AstralKeks.Workbench.Repositories
         public Application[] GetApplications()
         {
             var workspaceResourcePath = PathBuilder.Complete(
-                _workspaceContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
+                _sharedContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
             var userspaceResourcePath = PathBuilder.Combine(
-                _userspaceContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
+                _sharedContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
             var workspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(workspaceResourcePath));
             var userspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(userspaceResourcePath));
 

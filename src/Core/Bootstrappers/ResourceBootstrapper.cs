@@ -37,14 +37,20 @@ namespace AstralKeks.Workbench.Bootstrappers
         
         protected virtual void BootstrapUserspace(string userspaceDirectory)
         {
-            var userspace = new Userspace(userspaceDirectory);
-            _userspaceRepository.CreateUserspace(userspace);
+            if (!string.IsNullOrWhiteSpace(userspaceDirectory))
+            {
+                var userspace = new Userspace(userspaceDirectory);
+                _userspaceRepository.CreateUserspace(userspace);
+            }
         }
 
         protected virtual void BootstrapWorkspace(string workspaceDirectory)
         {
-            var workspace = new Workspace(workspaceDirectory);
-            _workspaceRepository.CreateWorkspace(workspace);
+            if (!string.IsNullOrWhiteSpace(workspaceDirectory))
+            {
+                var workspace = new Workspace(workspaceDirectory);
+                _workspaceRepository.CreateWorkspace(workspace); 
+            }
         }
     }
 }
