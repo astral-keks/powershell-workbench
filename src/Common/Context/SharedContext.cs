@@ -27,6 +27,6 @@ namespace AstralKeks.Workbench.Common.Context
 
         public string CurrentUserspaceDirectory => IsBound
             ? _userspaceContext.CurrentUserspaceDirectory
-            : _systemVariable.UserDirectory;
+            : _userspaceContext.AlternateUserspaceDirectory;
     }
 }

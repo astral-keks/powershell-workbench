@@ -8,6 +8,7 @@ namespace AstralKeks.Workbench.Common.Context
     {
         private const string _default = "Default";
         private const string _workbench = ".Workbench";
+        private const string _powerShellTools = ".PowerShellTools";
 
         private readonly SystemVariable _systemVariable;
 
@@ -15,7 +16,12 @@ namespace AstralKeks.Workbench.Common.Context
         {
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
         }
-        
+
+        public string AlternateUserspaceDirectory
+        {
+            get { return PathBuilder.Combine(_systemVariable.UserDirectory, _powerShellTools); }
+        }
+
         public string UserspaceRootDirectory
         {
             get { return PathBuilder.Combine(_systemVariable.UserDirectory, _workbench); }
