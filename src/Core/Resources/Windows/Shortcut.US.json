@@ -4,5 +4,20 @@
     "Name": "Userspace.ps1",
     "Location": "Userspace",
     "Target": "{$Userspace}\\Userspace.ps1"
+  },
+  {
+    "Name": "Workspaces.ps1",
+    "Location": "Userspace",
+    "Target": "{$Userspace}\\Workspaces.ps1"
+  },
+  {
+    "Name": "AllUserspaces.ps1",
+    "Location": "Globalspace",
+    "Target": "{$Userspace}\\..\\AllUserspaces.ps1"
+  },
+  {
+    "Name": "AllWorkspaces.ps1",
+    "Location": "Globalspace",
+    "Target": "{$Userspace}\\..\\AllWorkspaces.ps1"
   }
 ]
