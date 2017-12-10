@@ -15,11 +15,15 @@ namespace AstralKeks.Workbench.Command
 
         [Parameter(Mandatory = true)]
         [ValidateNotNullOrEmpty]
-        public string ToolkitProjectDirectory { get; set; }
+        public string ToolkitProjectPath { get; set; }
 
         protected override void ProcessRecord()
         {
-            Components.ToolkitСontroller.InitializeToolkitProject(ToolkitProjectDirectory, ToolkitName, ToolkitAuthor);
+            var resolvedPaths = SessionState.Path.GetResolvedProviderPathFromPSPath(ToolkitProjectPath, out ProviderInfo provider);
+            foreach (var resolvedPath in resolvedPaths)
+            {
+                Components.ToolkitСontroller.InitializeToolkitProject(resolvedPath, ToolkitName, ToolkitAuthor);
+            }
         }
     }
 }

@@ -1,6 +1,11 @@
+## 0.5.4
+### Added
+- New profile types
+- Paths resolution in cmdlets
+
 ## 0.5.3
 ### Changed
-- Ubound Userspace directory in SharedContext
+- Alternative Userspace directory in SharedContext
 
 ## 0.5.2
 ### Fixed

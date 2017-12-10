@@ -14,19 +14,9 @@ namespace AstralKeks.Workbench.Command
             var userspace = userspaceProvider?.Invoke();
             if (userspace != null)
             {
-                cmdletSession.Import(userspace.Profile);
-                cmdletSession.Execute($"Update-WBUserspaceSession");
-            }
-        }
-
-        public static void Restore(this SessionState cmdletSession, Func<Userspace> userspaceProvider)
-        {
-            var userspace = userspaceProvider?.Invoke();
-            if (userspace != null)
-            {
-                cmdletSession.Import(userspace.Profile);
-                cmdletSession.Execute($"Restore-WBUserspaceSession");
-            }
+                foreach (var profile in userspace.Profiles)
+                    cmdletSession.Import(profile);
+            };
         }
 
         public static void Update(this SessionState cmdletSession, Func<Workspace> workspaceProvider)
@@ -37,27 +27,12 @@ namespace AstralKeks.Workbench.Command
             var workspace = workspaceProvider?.Invoke();
             if (workspace != null)
             {
-                cmdletSession.Import(workspace.Profile);
-
                 cmdletSession.Relocate(workspace.Directory, workspace.Directory);
-                cmdletSession.Execute($"Update-WBWorkspaceSession");
+                foreach (var profile in workspace.Profiles)
+                    cmdletSession.Import(profile);
             }
         }
 
-        public static void Restore(this SessionState cmdletSession, Func<Workspace> workspaceProvider)
-        {
-            var memento = SessionMemento.Load();
-
-            var workspace = workspaceProvider?.Invoke();
-            if (workspace != null)
-            {
-                cmdletSession.Import(workspace.Profile);
-
-                cmdletSession.Execute($"Restore-WBWorkspaceSession");
-                cmdletSession.Relocate(memento?.Directory, memento?.Location);
-            }
-        }
-        
         private static void Relocate(this SessionState cmdletSession, string directory, string location)
         {
             if (!string.IsNullOrWhiteSpace(directory))

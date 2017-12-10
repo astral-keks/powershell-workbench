@@ -5,15 +5,19 @@ namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.New, Noun.WBWorkspace)]
     [OutputType(typeof(Workspace))]
-    public class NewWorkspaceCmdlet : WorkbenchCmdlet
+    public class NewWorkspaceCmdlet : WorkbenchPSCmdlet
     {
         [Parameter(Position = 0)]
         public string Directory { get; }
 
         protected override void ProcessRecord()
         {
-            var workspace = Components.WorkspaceRepository.CreateWorkspace(Directory);
-            WriteObject(workspace);
+            var directories = SessionState.Path.GetResolvedProviderPathFromPSPath(Directory, out ProviderInfo provider);
+            foreach (var directory in directories)
+            {
+                var workspace = Components.WorkspaceRepository.CreateWorkspace(directory);
+                WriteObject(workspace);
+            }
         }
     }
 }

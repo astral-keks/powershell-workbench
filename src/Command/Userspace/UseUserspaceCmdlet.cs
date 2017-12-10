@@ -7,8 +7,8 @@ using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command
 {
-    [Cmdlet(VerbsCommon.Switch, Noun.WBUserspace)]
-    public class SwitchUserspaceCmdlet : WorkbenchPSCmdlet
+    [Cmdlet(VerbsOther.Use, Noun.WBUserspace)]
+    public class UseUserspaceCmdlet : WorkbenchPSCmdlet
     {
         [Parameter(Position = 0)]
         [ValidateNotNullOrEmpty, ArgumentCompleter(typeof(ParameterCompleter))]
@@ -21,9 +21,8 @@ namespace AstralKeks.Workbench.Command
         {
             if (!Components.UserspaceController.CheckUserspace(UserspaceName, ShouldCreateUserspace))
                 throw new DirectoryNotFoundException($"Userspace {UserspaceName} does not exist");
-            
-            SessionState.Restore(() => Components.UserspaceController.ExitUserspace());
-            SessionState.Update(() => Components.UserspaceController.EnterUserspace(UserspaceName));
+
+            SessionState.Update(() => Components.UserspaceController.UseUserspace(UserspaceName));
         }
 
         private bool ShouldCreateUserspace()

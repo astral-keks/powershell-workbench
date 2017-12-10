@@ -4,23 +4,27 @@ using AstralKeks.Workbench.Common.Utilities;
 using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Resources;
 using System;
+using System.IO;
 
 namespace AstralKeks.Workbench.Repositories
 {
     public class WorkspaceRepository
     {
         private readonly FileSystem _fileSystem;
+        private readonly ProfileRepository _profileRepository;
         private readonly ResourceRepository _resourceRepository;
 
-        public WorkspaceRepository(FileSystem fileSystem, ResourceRepository resourceRepository)
+        public WorkspaceRepository(FileSystem fileSystem, ProfileRepository profileRepository, 
+            ResourceRepository resourceRepository)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
 
         public Workspace CreateWorkspace(string directory)
         {
-            var workspace = GetWorkspace(directory);
+            var workspace = DefineWorkspace(directory);
             return CreateWorkspace(workspace);
         }
 
@@ -35,7 +39,8 @@ namespace AstralKeks.Workbench.Repositories
                 _fileSystem.DirectoryCreate(workspaceDirectory);
                 _fileSystem.DirectoryCreate(configDirectory);
 
-                _resourceRepository.CreateResource(workspace.Profile, Files.WorkspacePs1);
+                var workspaceProfilePath = _profileRepository.CurrentWorkspace(workspaceDirectory);
+                _resourceRepository.CreateResource(workspaceProfilePath, Files.WorkspacePs1);
 
                 var discoveryConfigPath = PathBuilder.Combine(configDirectory, Files.DiscoveryJson);
                 _resourceRepository.CreateResource(discoveryConfigPath, Files.DiscoveryWSJson);
@@ -62,22 +67,32 @@ namespace AstralKeks.Workbench.Repositories
                 innerDirectory = _fileSystem.MakeAbsolute(innerDirectory);
                 workspaceDirectory = _fileSystem.FindParentDirectory(innerDirectory, d =>
                 {
-                    var workspace = GetWorkspace(d);
-                    return _fileSystem.FileExists(workspace.Profile);
+                    var workspace = DefineWorkspace(d);
+                    return _fileSystem.FileExists(workspace.Marker);
                 });
             }
 
-            return GetWorkspace(workspaceDirectory);
+            return DefineWorkspace(workspaceDirectory);
         }
 
-        private Workspace GetWorkspace(string workspaceDirectory)
+        public Workspace DefineWorkspace(string workspaceDirectory)
         {
             Workspace workspace = null;
 
             if (!string.IsNullOrWhiteSpace(workspaceDirectory))
             {
                 workspaceDirectory = _fileSystem.MakeAbsolute(workspaceDirectory);
-                workspace = new Workspace(workspaceDirectory);
+
+                var profiles = new[]
+                {
+                    _profileRepository.AllWorkspaces(),
+                    _profileRepository.Workspaces(),
+                    _profileRepository.CurrentWorkspace(workspaceDirectory)
+                };
+
+                var marker = PathBuilder.Complete(workspaceDirectory, Files.WorkspacePs1);
+
+                workspace = new Workspace(workspaceDirectory, marker, profiles);
             }
 
             return workspace;

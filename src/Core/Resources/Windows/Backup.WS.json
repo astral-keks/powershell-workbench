@@ -1,3 +1,12 @@
 ﻿// Workspace backups
 [
+  {
+    "Id": "Workspace\\Workbench",
+    "Name": "Workspace",
+    "Sources": [
+      "{$Workspace}\\Config",
+      "{$Workspace}\\Workspace.ps1"
+    ],
+    "Destination": "{$Userspace}\\..\\Backup"
+  }
 ]

@@ -9,7 +9,7 @@ namespace AstralKeks.Workbench.Command
         public SwitchParameter InWorkspace { get; set; }
 
         [Parameter]
-        public SwitchParameter InUserspace { get; set; } = true;
+        public SwitchParameter InUserspace { get; set; }
         
         protected override void ProcessRecord()
         {

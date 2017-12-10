@@ -27,7 +27,7 @@ namespace AstralKeks.Workbench.Controllers
             return userspace != null;
         }
 
-        public Userspace EnterUserspace(string userspaceName)
+        public Userspace UseUserspace(string userspaceName)
         {
             var userspace = GetUserspace(userspaceName);
             if (userspace != null)
@@ -36,19 +36,10 @@ namespace AstralKeks.Workbench.Controllers
             return userspace;
         }
 
-        public Userspace ExitUserspace()
-        {
-            var userspace = GetUserspace();
-
-            _userspaceContext.CurrentUserspaceDirectory = null;
-
-            return userspace;
-        }
-
         private Userspace GetUserspace(string userspaceName = null)
         {
             if (string.IsNullOrWhiteSpace(userspaceName))
-                userspaceName = new Userspace(_userspaceContext.DefaultUserspaceDirectory).Name;
+                userspaceName = _userspaceRepository.DefineUserspace(null, _userspaceContext.DefaultUserspaceDirectory).Name;
 
             return _userspaceRepository.GetUserspaces().FirstOrDefault(u => u.Name.Is(userspaceName));
         }

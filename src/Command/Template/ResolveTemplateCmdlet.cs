@@ -9,6 +9,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command.Template
 {
     [Cmdlet(VerbsDiagnostic.Resolve, Noun.WBTemplate)]
+    [OutputType(typeof(string))]
     public class ResolveTemplateCmdlet : WorkbenchCmdlet, IDynamicParameters
     {
         [Parameter(Position = 0, Mandatory = true)]

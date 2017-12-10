@@ -19,7 +19,10 @@ namespace AstralKeks.Workbench.Resources
         public const string ShortcutUSJson = "Shortcut.US.json";
         public const string ShortcutWSJson = "Shortcut.WS.json";
 
+        public const string AllUserspacesPs1 = "AllUserspaces.ps1";
         public const string UserspacePs1 = "Userspace.ps1";
+        public const string AllWorkspacesPs1 = "AllWorkspaces.ps1";
+        public const string WorkspacesPs1 = "Workspaces.ps1";
         public const string WorkspacePs1 = "Workspace.ps1";
 
         public const string ProjectSln = "Project.sln";

@@ -19,16 +19,16 @@ namespace AstralKeks.Workbench.Controllers
             _workspaceRepository = workspaceRepository ?? throw new ArgumentNullException(nameof(workspaceRepository));
         }
 
-        public bool CheckWorkspace(string directory, Func<bool> shouldCreate)
+        public bool CheckWorkspace(string directory, Func<string, bool> shouldCreate)
         {
             var workspace = GetWorkspace(directory);
-            if (workspace == null && shouldCreate())
+            if (workspace == null && shouldCreate(directory))
                 workspace = _workspaceRepository.CreateWorkspace(directory);
 
             return workspace != null;
         }
 
-        public Workspace EnterWorkspace(string directory)
+        public Workspace UseWorkspace(string directory)
         {
             var workspace = GetWorkspace(directory);
             if (workspace != null)
@@ -36,15 +36,6 @@ namespace AstralKeks.Workbench.Controllers
                 _workspaceContext.CurrentWorkspaceDirectory = workspace.Directory;
                 _fileSystem.DirectorySetCurrent(_workspaceContext.CurrentWorkspaceDirectory);
             }
-
-            return workspace;
-        }
-
-        public Workspace ExitWorkspace()
-        {
-            var workspace = GetWorkspace(_workspaceContext.CurrentWorkspaceDirectory);
-
-            _workspaceContext.CurrentWorkspaceDirectory = null;
 
             return workspace;
         }

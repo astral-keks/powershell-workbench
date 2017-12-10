@@ -1,8 +1,1 @@
-﻿function global:Update-WBWorkspaceSession
-{
-    Get-WBApplication | foreach { Set-Alias $_.Name Start-WBApplication -Scope Global }
-}
-
-function global:Restore-WBWorkspaceSession
-{
-}
+﻿# This script is executed every time current workspace is used

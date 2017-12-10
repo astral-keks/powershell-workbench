@@ -5,7 +5,10 @@
     "Name": "Userspace",
     "Sources": [
       "{$Userspace}\\Config",
-      "{$Userspace}\\Userspace.ps1"
+      "{$Userspace}\\Userspace.ps1",
+      "{$Userspace}\\Workspaces.ps1",
+      "{$Userspace}\\..\\AllWorkspaces.ps1",
+      "{$Userspace}\\..\\AllUserspaces.ps1"
     ],
     "Destination": "{$Userspace}\\..\\Backup"
   }

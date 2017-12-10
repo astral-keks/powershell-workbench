@@ -13,20 +13,23 @@ namespace AstralKeks.Workbench.Repositories
 {
     public class UserspaceRepository
     {
-        private readonly UserspaceContext _context;
+        private readonly GlobalContext _globalContext;
         private readonly FileSystem _fileSystem;
+        private readonly ProfileRepository _profileRepository;
         private readonly ResourceRepository _resourceRepository;
         
-        public UserspaceRepository(UserspaceContext context, FileSystem fileSystem, ResourceRepository resourceRepository)
+        public UserspaceRepository(GlobalContext globalContext, FileSystem fileSystem, 
+            ProfileRepository profileRepository, ResourceRepository resourceRepository)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _globalContext = globalContext ?? throw new ArgumentNullException(nameof(globalContext));
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
         
         public Userspace CreateUserspace(string userspaceName)
         {
-            var userspace = GetUserspace(userspaceName, null);
+            var userspace = DefineUserspace(userspaceName, null);
             return CreateUserspace(userspace);
         }
         
@@ -34,12 +37,23 @@ namespace AstralKeks.Workbench.Repositories
         {
             if (userspace != null)
             {
-                var configDirectory = PathBuilder.Combine(userspace.Directory, Directories.Config, Directories.Workbench);
-
                 _fileSystem.DirectoryCreate(userspace.Directory);
-                _fileSystem.DirectoryCreate(configDirectory);
 
-                _resourceRepository.CreateResource(userspace.Profile, Files.UserspacePs1);
+                var userspaceProfilePath = _profileRepository.CurrentUserspace(userspace.Directory);
+                _resourceRepository.CreateResource(userspaceProfilePath, Files.UserspacePs1);
+
+                var allUserspacesProfilePath = _profileRepository.AllUserspaces();
+                _resourceRepository.CreateResource(allUserspacesProfilePath, Files.AllUserspacesPs1);
+
+                var allWorkspacesProfile = _profileRepository.AllWorkspaces();
+                _resourceRepository.CreateResource(allWorkspacesProfile, Files.AllWorkspacesPs1);
+
+                var workspacesProfilePath = _profileRepository.Workspaces(userspace.Directory);
+                _resourceRepository.CreateResource(workspacesProfilePath, Files.WorkspacesPs1);
+
+
+                var configDirectory = PathBuilder.Combine(userspace.Directory, Directories.Config, Directories.Workbench);
+                _fileSystem.DirectoryCreate(configDirectory);
 
                 var discoveryConfigPath = PathBuilder.Combine(configDirectory, Files.DiscoveryJson);
                 _resourceRepository.CreateResource(discoveryConfigPath, Files.DiscoveryUSJson);
@@ -59,12 +73,17 @@ namespace AstralKeks.Workbench.Repositories
 
         public IEnumerable<Userspace> GetUserspaces()
         {
-            return _fileSystem.GetDirectories(_context.UserspaceRootDirectory)
-                .Select(d => GetUserspace(null, d))
-                .Where(u => _fileSystem.FileExists(u.Profile));
+            return _fileSystem.GetDirectories(_globalContext.UserDirectory)
+                .Select(d => DefineUserspace(null, d))
+                .Where(u => _fileSystem.FileExists(u.Marker));
         }
 
-        private Userspace GetUserspace(string userspaceName = null, string userspaceDirectory = null)
+        public Userspace DefineUserspace(string userspaceDirectory)
+        {
+            return DefineUserspace(null, userspaceDirectory);
+        }
+
+        public Userspace DefineUserspace(string userspaceName, string userspaceDirectory)
         {
             Userspace userspace = null;
 
@@ -73,10 +92,18 @@ namespace AstralKeks.Workbench.Repositories
                 if (string.IsNullOrWhiteSpace(userspaceName))
                     userspaceName = Path.GetFileNameWithoutExtension(userspaceDirectory);
                 if (string.IsNullOrWhiteSpace(userspaceDirectory))
-                    userspaceDirectory = PathBuilder.Combine(_context.UserspaceRootDirectory, userspaceName);
+                    userspaceDirectory = PathBuilder.Combine(_globalContext.UserDirectory, userspaceName);
                 userspaceDirectory = _fileSystem.GetFullPath(userspaceDirectory);
 
-                userspace = new Userspace(userspaceDirectory);
+                var profiles = new[]
+                {
+                    PathBuilder.Complete(_globalContext.UserDirectory, Files.AllUserspacesPs1),
+                    PathBuilder.Complete(userspaceDirectory, Files.UserspacePs1)
+                };
+
+                var marker = PathBuilder.Complete(userspaceDirectory, Files.UserspacePs1);
+
+                userspace = new Userspace(userspaceDirectory, marker, profiles);
             }
 
             return userspace;

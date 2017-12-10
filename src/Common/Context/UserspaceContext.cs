@@ -7,29 +7,19 @@ namespace AstralKeks.Workbench.Common.Context
     public class UserspaceContext
     {
         private const string _default = "Default";
-        private const string _workbench = ".Workbench";
-        private const string _powerShellTools = ".PowerShellTools";
 
+        private readonly GlobalContext _globalContext;
         private readonly SystemVariable _systemVariable;
 
-        public UserspaceContext(SystemVariable systemVariable)
+        public UserspaceContext(GlobalContext globalContext, SystemVariable systemVariable)
         {
+            _globalContext = globalContext ?? throw new ArgumentNullException(nameof(globalContext));
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
-        }
-
-        public string AlternateUserspaceDirectory
-        {
-            get { return PathBuilder.Combine(_systemVariable.UserDirectory, _powerShellTools); }
-        }
-
-        public string UserspaceRootDirectory
-        {
-            get { return PathBuilder.Combine(_systemVariable.UserDirectory, _workbench); }
         }
 
         public string DefaultUserspaceDirectory
         {
-            get { return PathBuilder.Combine(UserspaceRootDirectory, _default); }
+            get { return PathBuilder.Combine(_globalContext.UserDirectory, _default); }
         }
 
         public string CurrentUserspaceDirectory

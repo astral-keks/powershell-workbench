@@ -1,5 +1,4 @@
 ﻿using AstralKeks.Workbench.Common.Context;
-using AstralKeks.Workbench.Models;
 using AstralKeks.Workbench.Repositories;
 using Autofac;
 using System;
@@ -39,7 +38,7 @@ namespace AstralKeks.Workbench.Bootstrappers
         {
             if (!string.IsNullOrWhiteSpace(userspaceDirectory))
             {
-                var userspace = new Userspace(userspaceDirectory);
+                var userspace = _userspaceRepository.DefineUserspace(userspaceDirectory);
                 _userspaceRepository.CreateUserspace(userspace);
             }
         }
@@ -48,7 +47,7 @@ namespace AstralKeks.Workbench.Bootstrappers
         {
             if (!string.IsNullOrWhiteSpace(workspaceDirectory))
             {
-                var workspace = new Workspace(workspaceDirectory);
+                var workspace = _workspaceRepository.DefineWorkspace(workspaceDirectory);
                 _workspaceRepository.CreateWorkspace(workspace); 
             }
         }
