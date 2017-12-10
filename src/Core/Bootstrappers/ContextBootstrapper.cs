@@ -18,7 +18,6 @@ namespace AstralKeks.Workbench.Bootstrappers
             RegisterSharedContext(builder).As<SharedContext>().SingleInstance();
             RegisterTemplateProcessor(builder).As<TemplateProcessor>().SingleInstance();
             RegisterResourceRepository(builder).As<ResourceRepository>().SingleInstance();
-            RegisterResourceBootstrapper(builder).As<IStartable>().SingleInstance();
         }
 
         protected virtual IRegistrationBuilder<UserspaceContext, Activator, Style> RegisterUserspaceContext(ContainerBuilder builder)
@@ -49,11 +48,6 @@ namespace AstralKeks.Workbench.Bootstrappers
         protected virtual IRegistrationBuilder<ResourceRepository, Activator, Style> RegisterResourceRepository(ContainerBuilder builder)
         {
             return builder.RegisterType<ResourceRepository>();
-        }
-
-        protected virtual IRegistrationBuilder<ResourceBootstrapper, Activator, Style> RegisterResourceBootstrapper(ContainerBuilder builder)
-        {
-            return builder.RegisterType<ResourceBootstrapper>();
         }
     }
 }
