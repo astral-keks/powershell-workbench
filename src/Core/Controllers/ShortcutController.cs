@@ -45,6 +45,18 @@ namespace AstralKeks.Workbench.Controllers
             return shortcuts.Concat(workspaceShortcuts).Concat(userspaceShortcuts);
         }
 
+        public IEnumerable<Shortcut> ResolveShortcut(string query = null)
+        {
+            var workspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentWorkspaceDirectory);
+            var userspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentUserspaceDirectory);
+
+            var shortcuts = _shortcutRepository.ResolveShortcut(query);
+            var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.ToString().Matches(query));
+            var userspaceShortcuts = DiscoverShortcuts(userspaceConfiguration.Dynamic).Where(s => s.ToString().Matches(query));
+
+            return shortcuts.Concat(workspaceShortcuts).Concat(userspaceShortcuts);
+        }
+
         public void SynchronizeShortcuts(bool inWorkspace, bool inUserspace)
         {
             if (inWorkspace)

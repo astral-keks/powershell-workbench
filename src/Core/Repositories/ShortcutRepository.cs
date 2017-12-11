@@ -80,6 +80,31 @@ namespace AstralKeks.Workbench.Repositories
             }
         }
 
+        public IEnumerable<Shortcut> ResolveShortcut(string query)
+        {
+            var paths = new[]
+            {
+                PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory,
+                    Directories.Temp, Directories.Workbench, Files.ShortcutJson),
+                PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory,
+                    Directories.Config, Directories.Workbench, Files.ShortcutJson),
+                PathBuilder.Complete(_sharedContext.CurrentUserspaceDirectory,
+                    Directories.Temp, Directories.Workbench, Files.ShortcutJson),
+                PathBuilder.Complete(_sharedContext.CurrentUserspaceDirectory,
+                    Directories.Config, Directories.Workbench, Files.ShortcutJson)
+            };
+
+            var foundShortcuts = new HashSet<string>();
+            foreach (var path in paths)
+            {
+                foreach (var shortcut in ReadShortcuts(path).Where(s => s.ToString().Matches(query)))
+                {
+                    if (foundShortcuts.Add(shortcut.ToString()))
+                        yield return shortcut;
+                }
+            }
+        }
+
         private IEnumerable<Shortcut> ReadShortcuts(string path)
         {
             var shortcutsResource =_resourceRepository.GetResource(path);

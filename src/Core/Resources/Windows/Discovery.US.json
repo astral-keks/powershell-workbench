@@ -10,7 +10,7 @@
       "PathPattern": ".+"
     },
     {
-      "RootDirectory": "{$Userspace}",
+      "RootDirectory": "{$Userspace}\\Config",
       "Location": "Userspace",
       "PathPattern": "{$Userspace}\\Config\\.+\\"
     }

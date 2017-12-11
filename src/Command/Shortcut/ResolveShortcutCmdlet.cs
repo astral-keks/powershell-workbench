@@ -11,7 +11,7 @@ namespace AstralKeks.Workbench.Command
     [OutputType(typeof(string))]
     public class ResolveShortcutCmdlet : WorkbenchPSCmdlet
     {
-        private const int _shortcutCountThreshold = 10;
+        private const int _shortcutCountThreshold = 2;
 
         [Parameter(Position = 0, Mandatory = true)]
         [ValidateNotNullOrEmpty, ArgumentCompleter(typeof(ParameterCompleter))]
@@ -22,7 +22,7 @@ namespace AstralKeks.Workbench.Command
 
         protected override void ProcessRecord()
         {
-            var shortcuts = Components.ShortcutController.FindShortcut(ShortcutQuery).Select(s => s.Target).ToList();
+            var shortcuts = Components.ShortcutController.ResolveShortcut(ShortcutQuery).Select(s => s.Target).ToList();
             var canContinue = Force || shortcuts.Count <= _shortcutCountThreshold;
             if (!canContinue)
             {

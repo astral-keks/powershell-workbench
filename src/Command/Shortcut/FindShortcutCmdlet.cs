@@ -19,14 +19,14 @@ namespace AstralKeks.Workbench.Command
 
         protected override void ProcessRecord()
         {
-            var shortcuts = Components.ShortcutRepository.FindShortcut(ShortcutQuery);
+            var shortcuts = Components.ShortcutController.FindShortcut(ShortcutQuery);
             WriteObject(shortcuts, true);
         }
 
         [ParameterCompleter(nameof(ShortcutQuery))]
         public IEnumerable<string> CompleteQuery(string queryPart)
         {
-            return Components.ShortcutRepository.FindShortcut(queryPart).Select(s => s.ToString());
+            return Components.ShortcutController.FindShortcut(queryPart).Select(s => s.ToString());
         }
     }
 }

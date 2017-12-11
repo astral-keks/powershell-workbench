@@ -1,3 +1,9 @@
+## 0.5.5
+### Changed
+- NuGet dependencies update
+### Fixed
+- Incorrect shortcut resolution
+
 ## 0.5.4
 ### Added
 - New profile types

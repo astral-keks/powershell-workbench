@@ -6,7 +6,7 @@
       "PathPattern": ".+"
     },
     {
-      "RootDirectory": "{$Workspace}",
+      "RootDirectory": "{$Workspace}\\Config",
       "Location": "Workspace",
       "PathPattern": "{$Workspace}\\Config\\.+\\"
     }

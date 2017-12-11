@@ -20,7 +20,7 @@ namespace AstralKeks.Workbench.Command.Template
 
         protected override void ProcessRecord()
         {
-            var shortcuts = Components.ShortcutController.FindShortcut(TemplateShortcutQuery).ToList();
+            var shortcuts = Components.ShortcutController.ResolveShortcut(TemplateShortcutQuery).ToList();
             if (shortcuts.Count > 1)
                 throw new ArgumentException($"More than 1 shortcut found for query {TemplateShortcutQuery}");
 
@@ -35,7 +35,7 @@ namespace AstralKeks.Workbench.Command.Template
             if (TemplateParameters == null)
                 TemplateParameters = new RuntimeDefinedParameterDictionary();
 
-            var shortcuts = Components.ShortcutController.FindShortcut(TemplateShortcutQuery).ToList();
+            var shortcuts = Components.ShortcutController.ResolveShortcut(TemplateShortcutQuery).ToList();
             if (shortcuts.Count == 1)
             {
                 var templatePath = shortcuts.Single().Target;
