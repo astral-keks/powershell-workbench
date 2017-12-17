@@ -1,3 +1,7 @@
+## 0.5.6
+### Added
+- Strong name for AstralKeks.Workbench.Common
+
 ## 0.5.5
 ### Changed
 - NuGet dependencies update
