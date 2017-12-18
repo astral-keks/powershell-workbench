@@ -10,18 +10,18 @@ namespace AstralKeks.Workbench.Repositories
     public class TemplateRepository
     {
         private readonly FileSystem _fileSystem;
-        private readonly SharedContext _sharedContext;
+        private readonly SessionContext _sessionContext;
 
-        public TemplateRepository(FileSystem fileSystem, SharedContext sharedContext)
+        public TemplateRepository(FileSystem fileSystem, SessionContext sessionContext)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         }
 
         public IEnumerable<string> GetTemplates()
         {
-            var workspaceTemplateDirectory = PathBuilder.Complete(_sharedContext.CurrentWorkspaceDirectory, Directories.Template);
-            var userspaceTemplateDirectory = PathBuilder.Combine(_sharedContext.CurrentUserspaceDirectory, Directories.Template);
+            var workspaceTemplateDirectory = PathBuilder.Complete(_sessionContext.CurrentWorkspaceDirectory, Directories.Template);
+            var userspaceTemplateDirectory = PathBuilder.Combine(_sessionContext.CurrentUserspaceDirectory, Directories.Template);
 
             if (string.IsNullOrWhiteSpace(workspaceTemplateDirectory))
             {

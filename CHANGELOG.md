@@ -1,3 +1,13 @@
+## 0.5.8
+### Added
+- All environment variables can be used in templates and configurations
+### Fixed
+- #9 Change $User config variable target
+
+## 0.5.7
+### Removed
+- Implicit call to Use-WBUserspace Default during module import
+
 ## 0.5.6
 ### Added
 - Strong name for AstralKeks.Workbench.Common

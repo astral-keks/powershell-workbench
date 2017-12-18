@@ -1,17 +1,12 @@
 ﻿using AstralKeks.Workbench.Common.Infrastructure;
 using AstralKeks.Workbench.Common.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AstralKeks.Workbench.Common.Context
 {
     public class GlobalContext
     {
         private const string _workbench = ".Workbench";
-        private const string _powerShellTools = ".PowerShellTools";
 
         private readonly SystemVariable _systemVariable;
 
@@ -20,15 +15,16 @@ namespace AstralKeks.Workbench.Common.Context
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
         }
 
-        public string AltUserDirectory
+        public string ApplicationDirectoryRoot
         {
-            get { return PathBuilder.Combine(_systemVariable.UserDirectory, _powerShellTools); }
+            get => !string.IsNullOrWhiteSpace(_systemVariable.LocalAppData)
+                ? _systemVariable.LocalAppData
+                : _systemVariable.Home;
         }
 
-        public string UserDirectory
+        public string ApplicationDirectory
         {
-            get { return PathBuilder.Combine(_systemVariable.UserDirectory, _workbench); }
+            get => PathBuilder.Combine(ApplicationDirectoryRoot, _workbench); 
         }
-
     }
 }

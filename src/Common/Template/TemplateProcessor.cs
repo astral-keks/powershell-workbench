@@ -1,4 +1,5 @@
 using AstralKeks.Workbench.Common.Content;
+using AstralKeks.Workbench.Common.Context;
 using AstralKeks.Workbench.Common.Infrastructure;
 using Newtonsoft.Json;
 using System;
@@ -9,12 +10,14 @@ namespace AstralKeks.Workbench.Common.Template
 {
     public class TemplateProcessor
     {
-        private readonly FileSystem _fileSystem;
+        private readonly GlobalContext _globalContext;
+        private readonly SessionContext _sessionContext;
         private readonly SystemVariable _systemVariable;
 
-        public TemplateProcessor(FileSystem fileSystem, SystemVariable systemVariable)
+        public TemplateProcessor(GlobalContext globalContext, SessionContext sessionContext, SystemVariable systemVariable)
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _globalContext = globalContext ?? throw new ArgumentNullException(nameof(globalContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
         }
 
@@ -39,7 +42,8 @@ namespace AstralKeks.Workbench.Common.Template
             if (!string.IsNullOrWhiteSpace(template))
             {
                 model = model ?? new TemplateModel();
-                model.AddRange(TemplateModel.Default(_fileSystem, _systemVariable));
+                model.AddRange(TemplateModel.Default(_globalContext, _sessionContext));
+                model.AddRange(TemplateModel.Dictionary(_systemVariable.GetVariables()));
 
                 foreach (var variable in model)
                     template = template.Replace(variable.Name, variable.Value); 
@@ -56,7 +60,8 @@ namespace AstralKeks.Workbench.Common.Template
                 if (template.CanRead && template.CanWrite)
                 {
                     model = model ?? new TemplateModel();
-                    model.AddRange(TemplateModel.Default(_fileSystem, _systemVariable));
+                    model.AddRange(TemplateModel.Default(_globalContext, _sessionContext));
+                    model.AddRange(TemplateModel.Dictionary(_systemVariable.GetVariables()));
 
                     foreach (var variable in model)
                     {

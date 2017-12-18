@@ -8,41 +8,39 @@ namespace AstralKeks.Workbench.Repositories
     public class ProfileRepository
     {
         private readonly GlobalContext _globalContext;
-        private readonly UserspaceContext _userspaceContext;
-        private readonly WorkspaceContext _workspaceContext;
+        private readonly SessionContext _sessionContext;
 
-        public ProfileRepository(GlobalContext globalContext, UserspaceContext userspaceContext, WorkspaceContext workspaceContext)
+        public ProfileRepository(GlobalContext globalContext, SessionContext sessionContext)
         {
             _globalContext = globalContext ?? throw new ArgumentNullException(nameof(globalContext));
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         }
 
         public string AllUserspaces()
         {
-            return PathBuilder.Complete(_globalContext.UserDirectory, Files.AllUserspacesPs1);
+            return PathBuilder.Complete(_globalContext.ApplicationDirectory, Files.AllUserspacesPs1);
         }
 
         public string AllWorkspaces()
         {
-            return PathBuilder.Complete(_globalContext.UserDirectory, Files.AllWorkspacesPs1);
+            return PathBuilder.Complete(_globalContext.ApplicationDirectory, Files.AllWorkspacesPs1);
         }
 
         public string Workspaces(string userspaceDirectory = null)
         {
-            userspaceDirectory = userspaceDirectory ?? _userspaceContext.CurrentUserspaceDirectory;
+            userspaceDirectory = userspaceDirectory ?? _sessionContext.CurrentUserspaceDirectory;
             return PathBuilder.Complete(userspaceDirectory, Files.WorkspacesPs1);
         }
 
         public string CurrentUserspace(string userspaceDirectory = null)
         {
-            userspaceDirectory = userspaceDirectory ?? _userspaceContext.CurrentUserspaceDirectory;
+            userspaceDirectory = userspaceDirectory ?? _sessionContext.CurrentUserspaceDirectory;
             return PathBuilder.Complete(userspaceDirectory, Files.UserspacePs1);
         }
 
         public string CurrentWorkspace(string workspaceDirectory = null)
         {
-            workspaceDirectory = workspaceDirectory ?? _workspaceContext.CurrentWorkspaceDirectory;
+            workspaceDirectory = workspaceDirectory ?? _sessionContext.CurrentWorkspaceDirectory;
             return PathBuilder.Complete(workspaceDirectory, Files.WorkspacePs1);
         }
     }

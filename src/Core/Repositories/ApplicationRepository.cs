@@ -12,14 +12,14 @@ namespace AstralKeks.Workbench.Repositories
 {
     public class ApplicationRepository
     {
-        private readonly SharedContext _sharedContext;
+        private readonly SessionContext _sessionContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
 
-        public ApplicationRepository(SharedContext sharedContext, TemplateProcessor templateProcessor, 
+        public ApplicationRepository(SessionContext sessionContext, TemplateProcessor templateProcessor, 
             ResourceRepository resourceRepository)
         {
-            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
         }
@@ -27,9 +27,9 @@ namespace AstralKeks.Workbench.Repositories
         public Application[] GetApplications()
         {
             var workspaceResourcePath = PathBuilder.Complete(
-                _sharedContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
+                _sessionContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
             var userspaceResourcePath = PathBuilder.Combine(
-                _sharedContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
+                _sessionContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.ApplicationJson);
             var workspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(workspaceResourcePath));
             var userspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(userspaceResourcePath));
 

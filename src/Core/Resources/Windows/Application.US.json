@@ -15,11 +15,6 @@
 
         // Arguments to pass to executable when starting the application
         "Arguments": [],
-        // Template variables
-        // {$Bin}      - path to workbench installation directory
-        // {$User}     - `%LOCALAPPDATA%`
-        // {$Args}     - arguments passed when starting application
-        // {$Pipeline} - single value from pipeline passed when starting application
 
         //Environment variables to delete before starting the application
         "DeleteVariables": [],

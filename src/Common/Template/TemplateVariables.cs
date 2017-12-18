@@ -5,9 +5,7 @@ namespace AstralKeks.Workbench.Common.Template
 {
     public partial struct TemplateVariable
     {
-        public static TemplateVariable Bin(string binPath) => new TemplateVariable("Bin", PreparePath(binPath));
-
-        public static TemplateVariable User(string userPath) => new TemplateVariable("User", PreparePath(userPath));
+        public static TemplateVariable Workbench(string workbenchPath) => new TemplateVariable("Workbench", PreparePath(workbenchPath));
 
         public static TemplateVariable Userspace(string userspacePath) => new TemplateVariable("Userspace", PreparePath(userspacePath));
 

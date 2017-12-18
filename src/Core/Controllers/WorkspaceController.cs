@@ -8,14 +8,14 @@ namespace AstralKeks.Workbench.Controllers
 {
     public class WorkspaceController
     {
-        private readonly WorkspaceContext _workspaceContext;
+        private readonly SessionContext _sessionContext;
         private readonly WorkspaceRepository _workspaceRepository;
         private readonly FileSystem _fileSystem;
 
-        public WorkspaceController(WorkspaceContext workspaceContext, WorkspaceRepository workspaceRepository, FileSystem fileSystem)
+        public WorkspaceController(SessionContext sessionContext, WorkspaceRepository workspaceRepository, FileSystem fileSystem)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _workspaceRepository = workspaceRepository ?? throw new ArgumentNullException(nameof(workspaceRepository));
         }
 
@@ -33,8 +33,8 @@ namespace AstralKeks.Workbench.Controllers
             var workspace = GetWorkspace(directory);
             if (workspace != null)
             {
-                _workspaceContext.CurrentWorkspaceDirectory = workspace.Directory;
-                _fileSystem.DirectorySetCurrent(_workspaceContext.CurrentWorkspaceDirectory);
+                _sessionContext.CurrentWorkspaceDirectory = workspace.Directory;
+                _fileSystem.DirectorySetCurrent(_sessionContext.CurrentWorkspaceDirectory);
             }
 
             return workspace;

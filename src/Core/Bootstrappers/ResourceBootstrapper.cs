@@ -7,25 +7,23 @@ namespace AstralKeks.Workbench.Bootstrappers
 {
     public class ResourceBootstrapper : IStartable
     {
-        private readonly UserspaceContext _userspaceContext;
-        private readonly WorkspaceContext _workspaceContext;
+        private readonly SessionContext _sessionContext;
         private readonly UserspaceRepository _userspaceRepository;
         private readonly WorkspaceRepository _workspaceRepository;
 
-        public ResourceBootstrapper(UserspaceContext userspaceContext, WorkspaceContext workspaceContext,
+        public ResourceBootstrapper(SessionContext sessionContext,
             UserspaceRepository userspaceRepository, WorkspaceRepository workspaceRepository)
         {
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
-            _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _userspaceRepository = userspaceRepository ?? throw new ArgumentNullException(nameof(userspaceRepository));
             _workspaceRepository = workspaceRepository ?? throw new ArgumentNullException(nameof(workspaceRepository));
         }
 
         public void Start()
         {
-            var defaultUserspaceDirectory = _userspaceContext.DefaultUserspaceDirectory;
-            var currentUserspaceDirectory = _userspaceContext.CurrentUserspaceDirectory;
-            var currentWorkspaceDirectory = _workspaceContext.CurrentWorkspaceDirectory;
+            var defaultUserspaceDirectory = _sessionContext.DefaultUserspaceDirectory;
+            var currentUserspaceDirectory = _sessionContext.CurrentUserspaceDirectory;
+            var currentWorkspaceDirectory = _sessionContext.CurrentWorkspaceDirectory;
 
             BootstrapUserspace(defaultUserspaceDirectory);
             if (!string.Equals(currentUserspaceDirectory, defaultUserspaceDirectory, StringComparison.OrdinalIgnoreCase))

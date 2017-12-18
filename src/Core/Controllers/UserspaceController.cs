@@ -9,12 +9,12 @@ namespace AstralKeks.Workbench.Controllers
 {
     public class UserspaceController
     {
-        private readonly UserspaceContext _userspaceContext;
+        private readonly SessionContext _sessionContext;
         private readonly UserspaceRepository _userspaceRepository;
 
-        public UserspaceController(UserspaceContext userspaceContext, UserspaceRepository userspaceRepository)
+        public UserspaceController(SessionContext sessionContext, UserspaceRepository userspaceRepository)
         {
-            _userspaceContext = userspaceContext ?? throw new ArgumentNullException(nameof(userspaceContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _userspaceRepository = userspaceRepository ?? throw new ArgumentNullException(nameof(userspaceRepository));
         }
 
@@ -31,7 +31,7 @@ namespace AstralKeks.Workbench.Controllers
         {
             var userspace = GetUserspace(userspaceName);
             if (userspace != null)
-                _userspaceContext.CurrentUserspaceDirectory = userspace.Directory;
+                _sessionContext.CurrentUserspaceDirectory = userspace.Directory;
 
             return userspace;
         }
@@ -39,7 +39,7 @@ namespace AstralKeks.Workbench.Controllers
         private Userspace GetUserspace(string userspaceName = null)
         {
             if (string.IsNullOrWhiteSpace(userspaceName))
-                userspaceName = _userspaceRepository.DefineUserspace(null, _userspaceContext.DefaultUserspaceDirectory).Name;
+                userspaceName = _userspaceRepository.DefineUserspace(null, _sessionContext.DefaultUserspaceDirectory).Name;
 
             return _userspaceRepository.GetUserspaces().FirstOrDefault(u => u.Name.Is(userspaceName));
         }

@@ -17,15 +17,15 @@ namespace AstralKeks.Workbench.Repositories
 {
     public class BackupRepository
     {
-        private readonly SharedContext _sharedContext;
+        private readonly SessionContext _sessionContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
         private readonly FileSystem _fileSystem;
 
-        public BackupRepository(SharedContext sharedContext, TemplateProcessor templateProcessor, 
+        public BackupRepository(SessionContext sessionContext, TemplateProcessor templateProcessor, 
             ResourceRepository resourceRepository, FileSystem fileSystem)
         {
-            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
@@ -34,9 +34,9 @@ namespace AstralKeks.Workbench.Repositories
         public IEnumerable<Backup> GetBackups()
         {
             var workspaceResourcePath = PathBuilder.Complete(
-                _sharedContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
+                _sessionContext.CurrentWorkspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
             var userspaceResourcePath = PathBuilder.Combine(
-                _sharedContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
+                _sessionContext.CurrentUserspaceDirectory, Directories.Config, Directories.Workbench, Files.BackupJson);
             var workspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(workspaceResourcePath));
             var userspaceResource = _templateProcessor.Transform(_resourceRepository.GetResource(userspaceResourcePath));
 

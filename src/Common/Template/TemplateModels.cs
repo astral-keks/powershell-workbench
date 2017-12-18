@@ -1,19 +1,18 @@
-using AstralKeks.Workbench.Common.Infrastructure;
-using AstralKeks.Workbench.Common.Utilities;
+using AstralKeks.Workbench.Common.Context;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace AstralKeks.Workbench.Common.Template
 {
     public partial class TemplateModel
     {
-        public static TemplateModel Default(FileSystem fileSystem, SystemVariable systemVariable)
+        public static TemplateModel Default(GlobalContext globalContext, SessionContext sessionContext)
         {
             return new TemplateModel
             {
-                TemplateVariable.Bin(fileSystem.BinDirectory()),
-                TemplateVariable.User(systemVariable.UserDirectory),
-                TemplateVariable.Userspace(systemVariable.UserspaceDirectory),
-                TemplateVariable.Workspace(systemVariable.WorkspaceDirectory)
+                TemplateVariable.Workbench(globalContext.ApplicationDirectory),
+                TemplateVariable.Userspace(sessionContext.CurrentUserspaceDirectory),
+                TemplateVariable.Workspace(sessionContext.CurrentWorkspaceDirectory)
             };
         }
 
@@ -34,12 +33,12 @@ namespace AstralKeks.Workbench.Common.Template
             return model;
         }
 
-        public static TemplateModel Dictionary(Dictionary<string, object> source)
+        public static TemplateModel Dictionary(IDictionary source)
         {
             var model = new TemplateModel();
 
-            foreach (var variableSource in source)
-                model.Add(variableSource.Key, variableSource.Value?.ToString() ?? string.Empty);
+            foreach (DictionaryEntry variableSource in source)
+                model.Add(variableSource.Key.ToString(), variableSource.Value?.ToString() ?? string.Empty);
 
             return model;
         }

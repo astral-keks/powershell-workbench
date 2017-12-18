@@ -13,13 +13,13 @@ namespace AstralKeks.Workbench.Controllers
     public class TemplateController
     {
         private readonly FileSystem _fileSystem;
-        private readonly SharedContext _sharedContext;
+        private readonly SessionContext _sessionContext;
         private readonly TemplateProcessor _templateProcessor;
 
-        public TemplateController(SharedContext sharedContext, FileSystem fileSystem, TemplateProcessor templateProcessor)
+        public TemplateController(SessionContext sessionContext, FileSystem fileSystem, TemplateProcessor templateProcessor)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
         }
 
@@ -47,7 +47,7 @@ namespace AstralKeks.Workbench.Controllers
             var templateContent = _fileSystem.FileReadText(templatePath);
             templateContent = _templateProcessor.Transform(templateContent, templateModel);
 
-            var resultFolder = _sharedContext.CurrentWorkspaceDirectory ?? _sharedContext.CurrentUserspaceDirectory;
+            var resultFolder = _sessionContext.CurrentWorkspaceDirectory ?? _sessionContext.CurrentUserspaceDirectory;
             var resultFileNameBase = Path.GetFileNameWithoutExtension(templatePath);
             var resultFileNameDate = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-fffffff");
             var resultFileName = $"{resultFileNameBase}-{resultFileNameDate}{Path.GetExtension(templatePath)}";

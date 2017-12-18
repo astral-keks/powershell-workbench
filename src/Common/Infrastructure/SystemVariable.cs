@@ -27,26 +27,14 @@ namespace AstralKeks.Workbench.Common.Infrastructure
             get { return GetVariable("HOME"); }
         }
 
-        public string UserDirectory
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(LocalAppData))
-                    return LocalAppData;
-                if (!string.IsNullOrWhiteSpace(Home))
-                    return Home;
-                throw new NotSupportedException();
-            }
-        }
-
-        public IDictionary GetVariables(EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
+        public virtual IDictionary GetVariables(EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             return target == EnvironmentVariableTarget.Process
                 ? Environment.GetEnvironmentVariables()
                 : Environment.GetEnvironmentVariables(target);
         }
 
-        public string GetVariable(string name, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
+        public virtual string GetVariable(string name, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             return target == EnvironmentVariableTarget.Process
                 ? Environment.GetEnvironmentVariable(name)

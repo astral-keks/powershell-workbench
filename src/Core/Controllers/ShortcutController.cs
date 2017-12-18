@@ -18,16 +18,16 @@ namespace AstralKeks.Workbench.Controllers
     public class ShortcutController
     {
         private readonly FileSystem _fileSystem;
-        private readonly SharedContext _sharedContext;
+        private readonly SessionContext _sessionContext;
         private readonly TemplateProcessor _templateProcessor;
         private readonly ResourceRepository _resourceRepository;
         private readonly ShortcutRepository _shortcutRepository;
 
-        public ShortcutController(FileSystem fileSystem, SharedContext sharedContext, TemplateProcessor templateProcessor, 
+        public ShortcutController(FileSystem fileSystem, SessionContext sessionContext, TemplateProcessor templateProcessor, 
             ResourceRepository resourceRepository, ShortcutRepository shortcutRepository)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _sharedContext = sharedContext ?? throw new ArgumentNullException(nameof(sharedContext));
+            _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _resourceRepository = resourceRepository ?? throw new ArgumentNullException(nameof(resourceRepository));
             _shortcutRepository = shortcutRepository ?? throw new ArgumentNullException(nameof(shortcutRepository));
@@ -35,8 +35,8 @@ namespace AstralKeks.Workbench.Controllers
 
         public IEnumerable<Shortcut> FindShortcut(string query = null)
         {
-            var workspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentWorkspaceDirectory);
-            var userspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentUserspaceDirectory);
+            var workspaceConfiguration = GetDiscoveryConfiguration(_sessionContext.CurrentWorkspaceDirectory);
+            var userspaceConfiguration = GetDiscoveryConfiguration(_sessionContext.CurrentUserspaceDirectory);
 
             var shortcuts = _shortcutRepository.FindShortcut(query);
             var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.ToString().Like(query));
@@ -47,8 +47,8 @@ namespace AstralKeks.Workbench.Controllers
 
         public IEnumerable<Shortcut> ResolveShortcut(string query = null)
         {
-            var workspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentWorkspaceDirectory);
-            var userspaceConfiguration = GetDiscoveryConfiguration(_sharedContext.CurrentUserspaceDirectory);
+            var workspaceConfiguration = GetDiscoveryConfiguration(_sessionContext.CurrentWorkspaceDirectory);
+            var userspaceConfiguration = GetDiscoveryConfiguration(_sessionContext.CurrentUserspaceDirectory);
 
             var shortcuts = _shortcutRepository.ResolveShortcut(query);
             var workspaceShortcuts = DiscoverShortcuts(workspaceConfiguration.Dynamic).Where(s => s.ToString().Matches(query));
@@ -61,14 +61,14 @@ namespace AstralKeks.Workbench.Controllers
         {
             if (inWorkspace)
             {
-                var configuration = GetDiscoveryConfiguration(_sharedContext.CurrentWorkspaceDirectory);
+                var configuration = GetDiscoveryConfiguration(_sessionContext.CurrentWorkspaceDirectory);
                 var shortcuts = DiscoverShortcuts(configuration.Synchronized);
                 _shortcutRepository.ClearWorkspaceShortcuts();
                 _shortcutRepository.AddWorkspaceShortcuts(shortcuts);
             }
             if (inUserspace)
             {
-                var configuration = GetDiscoveryConfiguration(_sharedContext.CurrentUserspaceDirectory);
+                var configuration = GetDiscoveryConfiguration(_sessionContext.CurrentUserspaceDirectory);
                 var shortcuts = DiscoverShortcuts(configuration.Synchronized);
                 _shortcutRepository.ClearUserspaceShortcuts();
                 _shortcutRepository.AddUserspaceShortcuts(shortcuts);

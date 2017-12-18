@@ -12,22 +12,10 @@ namespace AstralKeks.Workbench.Bootstrappers
     {
         protected override void Load(ContainerBuilder builder)
         {
-            RegisterUserspaceContext(builder).As<UserspaceContext>().SingleInstance();
-            RegisterWorkspaceContext(builder).As<WorkspaceContext>().SingleInstance();
             RegisterGlobalContext(builder).As<GlobalContext>().SingleInstance();
-            RegisterSharedContext(builder).As<SharedContext>().SingleInstance();
+            RegisterSessionContext(builder).As<SessionContext>().SingleInstance();
             RegisterTemplateProcessor(builder).As<TemplateProcessor>().SingleInstance();
             RegisterResourceRepository(builder).As<ResourceRepository>().SingleInstance();
-        }
-
-        protected virtual IRegistrationBuilder<UserspaceContext, Activator, Style> RegisterUserspaceContext(ContainerBuilder builder)
-        {
-            return builder.RegisterType<UserspaceContext>();
-        }
-
-        protected virtual IRegistrationBuilder<WorkspaceContext, Activator, Style> RegisterWorkspaceContext(ContainerBuilder builder)
-        {
-            return builder.RegisterType<WorkspaceContext>();
         }
 
         protected virtual IRegistrationBuilder<GlobalContext, Activator, Style> RegisterGlobalContext(ContainerBuilder builder)
@@ -35,9 +23,9 @@ namespace AstralKeks.Workbench.Bootstrappers
             return builder.RegisterType<GlobalContext>();
         }
 
-        protected virtual IRegistrationBuilder<SharedContext, Activator, Style> RegisterSharedContext(ContainerBuilder builder)
+        protected virtual IRegistrationBuilder<SessionContext, Activator, Style> RegisterSessionContext(ContainerBuilder builder)
         {
-            return builder.RegisterType<SharedContext>();
+            return builder.RegisterType<SessionContext>();
         }
 
         protected virtual IRegistrationBuilder<TemplateProcessor, Activator, Style> RegisterTemplateProcessor(ContainerBuilder builder)
