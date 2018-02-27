@@ -28,15 +28,17 @@ namespace AstralKeks.Workbench.Command.BackingUp
 
         private bool ShouldBackup(Backup backup, string backupId)
         {
+            var backupIdPart = !string.IsNullOrEmpty(backupId) ? $" with ID '{backupId}'" : null;
             return Force || ShouldContinue(
-                $"Do you want to make backup before restoration of backup '{backup.Name}' with id '{backupId}'?",
+                $"Do you want to make backup before restoration of backup '{backup.Name}'{backupIdPart}?",
                 $"Confirmation required.");
         }
 
         private bool CanOverwrite(Backup backup, string backupId)
         {
+            var backupIdPart = !string.IsNullOrEmpty(backupId) ? $" with ID '{backupId}'" : null;
             return Force || ShouldContinue(
-                $"Backup '{backup.Name}' with ID '{backupId}' already exists. Do you want to overwrite it?",
+                $"Backup '{backup.Name}'{backupIdPart} already exists. Do you want to overwrite it?",
                 $"Confirmation required.");
         }
 

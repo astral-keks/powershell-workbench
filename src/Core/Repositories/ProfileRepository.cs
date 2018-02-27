@@ -18,12 +18,12 @@ namespace AstralKeks.Workbench.Repositories
 
         public string AllUserspaces()
         {
-            return PathBuilder.Complete(_globalContext.ApplicationDirectory, Files.AllUserspacesPs1);
+            return PathBuilder.Complete(_globalContext.UserspacesDirectory, Files.AllUserspacesPs1);
         }
 
         public string AllWorkspaces()
         {
-            return PathBuilder.Complete(_globalContext.ApplicationDirectory, Files.AllWorkspacesPs1);
+            return PathBuilder.Complete(_globalContext.UserspacesDirectory, Files.AllWorkspacesPs1);
         }
 
         public string Workspaces(string userspaceDirectory = null)

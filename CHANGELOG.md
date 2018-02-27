@@ -1,3 +1,8 @@
+## 0.6.0
+### Changed
+- Retargeting to .NET Standard 2.0
+- Userspaces are now located in Userspaces subdirectory in .Workbench directory
+
 ## 0.5.8
 ### Added
 - All environment variables can be used in templates and configurations

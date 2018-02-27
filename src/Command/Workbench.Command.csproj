@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Command</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Command</RootNamespace>
     <Version>$(VersionSuffix)</Version>
     <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
     <FileVersion>$(VersionSuffix)</FileVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ContentWithTargetPath Include="Loader.psm1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -24,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Workbench.Core.csproj" />
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0-preview-01" />
+    <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AstralKeks.PowerShell.Common" Version="0.2.2" />
-    <PackageReference Include="System.Management.Automation.dll" Version="10.0.10586" />
+    <ProjectReference Include="..\Core\Workbench.Core.csproj" />
   </ItemGroup>
 
 </Project>

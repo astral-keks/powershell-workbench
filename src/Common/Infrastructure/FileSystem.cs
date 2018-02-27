@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -10,37 +9,42 @@ namespace AstralKeks.Workbench.Common.Infrastructure
         public const char WindowsSeparator = '\\';
         public const char UnixSeparator = '/';
 
-        public char Separator
+        public virtual char Separator
         {
             get { return Path.DirectorySeparatorChar; }
         }
 
-        public string GetFullPath(string path)
+        public virtual string GetFullPath(string path)
         {
             return Path.GetFullPath(path);
         }
 
-        public bool FileExists(string path)
+        public virtual bool FileExists(string path)
         {
             return File.Exists(path);
         }
 
-        public void FileCopy(string sourcePath, string destinationPath, bool overwrite = false)
+        public virtual void FileCopy(string sourcePath, string destinationPath, bool overwrite = false)
         {
             File.Copy(sourcePath, destinationPath, overwrite);
         }
 
-        public void FileDelete(string path)
+        public virtual void FileDelete(string path)
         {
             File.Delete(path);
         }
 
-        public void FileWriteText(string path, string text)
+        public virtual void FileWriteBytes(string path, byte[] bytes)
+        {
+            File.WriteAllBytes(path, bytes);
+        }
+
+        public virtual void FileWriteText(string path, string text)
         {
             File.WriteAllText(path, text);
         }
 
-        public void FileWriteLines(string path, string[] lines, bool append = false)
+        public virtual void FileWriteLines(string path, string[] lines, bool append = false)
         {
             if (append)
                 File.AppendAllLines(path, lines);
@@ -48,53 +52,58 @@ namespace AstralKeks.Workbench.Common.Infrastructure
                 File.WriteAllLines(path, lines);
         }
 
-        public string FileReadText(string path)
+        public virtual byte[] FileReadBytes(string path)
+        {
+            return File.ReadAllBytes(path);
+        }
+
+        public virtual string FileReadText(string path)
         {
             return File.Exists(path) ? File.ReadAllText(path) : null;
         }
 
-        public IEnumerable<string> FileReadLines(string path)
+        public virtual IEnumerable<string> FileReadLines(string path)
         {
             return File.Exists(path) ? File.ReadLines(path) : Enumerable.Empty<string>();
         }
 
-        public bool DirectoryExists(string path)
+        public virtual bool DirectoryExists(string path)
         {
             return Directory.Exists(path);
         }
 
-        public void DirectoryCreate(string path)
+        public virtual void DirectoryCreate(string path)
         {
             Directory.CreateDirectory(path);
         }
 
-        public void DirectoryDelete(string path, bool recursive = false)
+        public virtual void DirectoryDelete(string path, bool recursive = false)
         {
             if (Directory.Exists(path))
                 Directory.Delete(path, recursive);
         }
 
-        public string[] DirectoryList(string path)
+        public virtual string[] DirectoryList(string path)
         {
             return Directory.Exists(path) ? Directory.GetFileSystemEntries(path) : new string[0];
         }
 
-        public string DirectoryGetCurrent()
+        public virtual string DirectoryGetCurrent()
         {
             return Directory.GetCurrentDirectory();
         }
 
-        public void DirectorySetCurrent(string directory)
+        public virtual void DirectorySetCurrent(string directory)
         {
             Directory.SetCurrentDirectory(directory);
         }
 
-        public string[] GetDirectories(string path)
+        public virtual string[] GetDirectories(string path)
         {
             return Directory.Exists(path) ? Directory.GetDirectories(path) : new string[0];
         }
 
-        public string[] GetFiles(string path)
+        public virtual string[] GetFiles(string path)
         {
             return Directory.Exists(path) ? Directory.GetFiles(path) : new string[0];
         }

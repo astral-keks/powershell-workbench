@@ -143,6 +143,5 @@ namespace AstralKeks.Workbench.Repositories
                 return string.Concat(hashBytes.Select(b => b.ToString("x2")));
             }
         }
-
     }
 }

@@ -8,7 +8,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.New, Noun.WBUserspace)]
-    [OutputType(typeof(Userspace))]
+    [OutputType(new[] { typeof(Userspace) })]
     public class NewUserspaceCmdlet : WorkbenchCmdlet
     {
         [Parameter(Position = 0, Mandatory = true)]

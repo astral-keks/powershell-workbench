@@ -8,7 +8,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Find, Noun.WBShortcut)]
-    [OutputType(typeof(Shortcut))]
+    [OutputType(new[] { typeof(Shortcut) })]
     public class FindShortcutCmdlet : WorkbenchPSCmdlet
     {
         private const int _shortcutCountThreshold = 10;

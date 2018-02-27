@@ -6,7 +6,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command.Template
 {
     [Cmdlet(VerbsCommon.Format, Noun.WBTemplate)]
-    [OutputType(typeof(string))]
+    [OutputType(new[] { typeof(string) })]
     public class FormatTemplateCmdlet : WorkbenchPSCmdlet, IDynamicParameters
     {
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]

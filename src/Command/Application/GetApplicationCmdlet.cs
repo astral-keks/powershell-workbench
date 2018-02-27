@@ -8,7 +8,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Get, Noun.WBApplication)]
-    [OutputType(typeof(Application))]
+    [OutputType(new[] { typeof(Application) })]
     public class GetApplicationCmdlet : WorkbenchCmdlet
     {
         [Parameter(Position = 0)]

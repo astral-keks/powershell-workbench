@@ -73,7 +73,7 @@ namespace AstralKeks.Workbench.Repositories
 
         public IEnumerable<Userspace> GetUserspaces()
         {
-            return _fileSystem.GetDirectories(_globalContext.ApplicationDirectory)
+            return _fileSystem.GetDirectories(_globalContext.UserspacesDirectory)
                 .Select(d => DefineUserspace(null, d))
                 .Where(u => _fileSystem.FileExists(u.Marker));
         }
@@ -92,12 +92,12 @@ namespace AstralKeks.Workbench.Repositories
                 if (string.IsNullOrWhiteSpace(userspaceName))
                     userspaceName = Path.GetFileNameWithoutExtension(userspaceDirectory);
                 if (string.IsNullOrWhiteSpace(userspaceDirectory))
-                    userspaceDirectory = PathBuilder.Combine(_globalContext.ApplicationDirectory, userspaceName);
+                    userspaceDirectory = PathBuilder.Combine(_globalContext.UserspacesDirectory, userspaceName);
                 userspaceDirectory = _fileSystem.GetFullPath(userspaceDirectory);
 
                 var profiles = new[]
                 {
-                    PathBuilder.Complete(_globalContext.ApplicationDirectory, Files.AllUserspacesPs1),
+                    PathBuilder.Complete(_globalContext.UserspacesDirectory, Files.AllUserspacesPs1),
                     PathBuilder.Complete(userspaceDirectory, Files.UserspacePs1)
                 };
 

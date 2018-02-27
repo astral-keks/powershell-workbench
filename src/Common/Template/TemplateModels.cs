@@ -10,7 +10,7 @@ namespace AstralKeks.Workbench.Common.Template
         {
             return new TemplateModel
             {
-                TemplateVariable.Workbench(globalContext.ApplicationDirectory),
+                TemplateVariable.Workbench(globalContext.WorkbenchDirectory),
                 TemplateVariable.Userspace(sessionContext.CurrentUserspaceDirectory),
                 TemplateVariable.Workspace(sessionContext.CurrentWorkspaceDirectory)
             };

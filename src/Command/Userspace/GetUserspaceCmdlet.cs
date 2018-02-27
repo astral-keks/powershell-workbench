@@ -9,7 +9,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Get, Noun.WBUserspace)]
-    [OutputType(typeof(Userspace))]
+    [OutputType(new[] { typeof(Userspace) })]
     public class GetUserspaceCmdlet : WorkbenchCmdlet
     {
         [Parameter(Position = 0)]

@@ -7,6 +7,7 @@ namespace AstralKeks.Workbench.Common.Context
     public class GlobalContext
     {
         private const string _workbench = ".Workbench";
+        private const string _userspaces = "Userspaces";
 
         private readonly SystemVariable _systemVariable;
 
@@ -15,16 +16,21 @@ namespace AstralKeks.Workbench.Common.Context
             _systemVariable = systemVariable ?? throw new ArgumentNullException(nameof(systemVariable));
         }
 
-        public string ApplicationDirectoryRoot
+        public string UserDirectory
         {
             get => !string.IsNullOrWhiteSpace(_systemVariable.LocalAppData)
                 ? _systemVariable.LocalAppData
                 : _systemVariable.Home;
         }
 
-        public string ApplicationDirectory
+        public string WorkbenchDirectory
         {
-            get => PathBuilder.Combine(ApplicationDirectoryRoot, _workbench); 
+            get => PathBuilder.Combine(UserDirectory, _workbench); 
+        }
+
+        public string UserspacesDirectory
+        {
+            get => PathBuilder.Combine(WorkbenchDirectory, _userspaces);
         }
     }
 }

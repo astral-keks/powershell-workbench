@@ -19,7 +19,7 @@ namespace AstralKeks.Workbench.Common.Context
 
         public string DefaultUserspaceDirectory
         {
-            get => PathBuilder.Combine(_globalContext.ApplicationDirectory, _default);
+            get => PathBuilder.Combine(_globalContext.UserspacesDirectory, _default);
         }
 
         public string CurrentUserspaceDirectory

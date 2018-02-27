@@ -1,14 +1,21 @@
 ﻿// Userspace backups
 [
   {
+    "Name": "Workbench",
+    "Id": "Workbench",
+    "Sources": [
+      "{$Workbench}\\Userspaces\\AllWorkspaces.ps1",
+      "{$Workbench}\\Userspaces\\AllUserspaces.ps1"
+    ],
+    "Destination": "d:\\OneDrive\\Settings\\Workbench-Home"
+  },
+  {
     "Id": "Userspace",
     "Name": "Userspace",
     "Sources": [
       "{$Userspace}\\Config",
       "{$Userspace}\\Userspace.ps1",
-      "{$Userspace}\\Workspaces.ps1",
-      "{$Userspace}\\..\\AllWorkspaces.ps1",
-      "{$Userspace}\\..\\AllUserspaces.ps1"
+      "{$Userspace}\\Workspaces.ps1"
     ],
     "Destination": "{$Userspace}\\..\\Backup"
   }

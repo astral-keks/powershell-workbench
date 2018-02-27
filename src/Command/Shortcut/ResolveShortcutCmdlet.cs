@@ -8,7 +8,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsDiagnostic.Resolve, Noun.WBShortcut)]
-    [OutputType(typeof(string))]
+    [OutputType(new[] { typeof(string) })]
     public class ResolveShortcutCmdlet : WorkbenchPSCmdlet
     {
         private const int _shortcutCountThreshold = 2;

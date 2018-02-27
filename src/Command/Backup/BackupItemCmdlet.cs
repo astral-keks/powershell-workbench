@@ -28,8 +28,9 @@ namespace AstralKeks.Workbench.Command.BackingUp
 
         private bool CanOverwrite(Backup backup, string backupId)
         {
+            var backupIdPart = !string.IsNullOrEmpty(backupId) ? $" with ID '{backupId}'" : null;
             return Force || ShouldContinue(
-                $"Backup '{backup.Name}' with ID '{backupId}' already exists. Do you want to overwrite it?",
+                $"Backup '{backup.Name}'{backupIdPart} already exists. Do you want to overwrite it?",
                 $"Confirmation required.");
         }
         

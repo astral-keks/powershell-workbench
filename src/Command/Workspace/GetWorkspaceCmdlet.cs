@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace AstralKeks.Workbench.Command
 {
     [Cmdlet(VerbsCommon.Get, Noun.WBWorkspace)]
-    [OutputType(typeof(Workspace))]
+    [OutputType(new[] { typeof(Workspace) })]
     public class GetWorkspaceCmdlet : WorkbenchPSCmdlet
     {
         [Parameter(Position = 0)]
