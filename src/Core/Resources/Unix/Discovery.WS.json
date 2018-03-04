@@ -1,0 +1,16 @@
+{
+  "Dynamic": [
+    {
+      "RootDirectory": "{$Workspace}/Template",
+      "Location": "Workspace",
+      "PathPattern": ".+"
+    },
+    {
+      "RootDirectory": "{$Workspace}/Config",
+      "Location": "Workspace",
+      "PathPattern": "{$Workspace}/Config/.+/"
+    }
+  ],
+  "Synchronized": [
+  ]
+}

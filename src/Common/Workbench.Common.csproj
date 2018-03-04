@@ -6,7 +6,7 @@
     <RootNamespace>AstralKeks.Workbench.Common</RootNamespace>
     <Version>$(VersionSuffix)</Version>
     <Description>Common components for creation Workbench toolkits</Description>
-    <Copyright>Copyright (c) 2017 Astral Keks</Copyright>
+    <Copyright>Copyright (c) 2018 Astral Keks</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/astral-keks/powershell-workbench</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
@@ -32,7 +32,6 @@
     <None Include="Json\JsonMap.cs" />
     <None Include="Json\JsonObject.cs" />
     <None Include="Json\JsonRef.cs" />
-    <None Include="Json\JsonConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>

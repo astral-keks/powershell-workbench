@@ -1,3 +1,10 @@
+## 0.6.1
+### Fixed
+- Unable to load multiple versions of .Net assembly module dependencies
+### Added
+- Resource templates for UNIX
+- Support for common directory to store resources shared between platforms
+
 ## 0.6.0
 ### Changed
 - Retargeting to .NET Standard 2.0

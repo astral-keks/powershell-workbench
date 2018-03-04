@@ -27,7 +27,7 @@ Author = 'Astral Keks'
 # CompanyName = 'Unknown'
 
 # Copyright statement for this module
-Copyright = '(c) 2017 Astral Keks. All rights reserved.'
+Copyright = '(c) 2018 Astral Keks. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Workbench for PowerShell (Alpha)'

@@ -1,10 +1,10 @@
 {
   "profiles": {
     "Workbench.Command": {
-      "commandLineArgs": "-NoExit -Command &{Import-Module .\\bin\\$(Configuration)\\$(TargetFramework)\\Workbench.psd1}",
+      "commandLineArgs": "-NoExit -Command &{Import-Module -Name .\\bin\\$(Configuration)\\$(TargetFramework)\\Workbench.psd1}",
       "commandName": "Executable",
-      "executablePath": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe"
-      //"executablePath": "c:\\Program Files\\PowerShell\\6.0.1\\pwsh.exe"
+      //"executablePath": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe"
+      "executablePath": "c:\\Program Files\\PowerShell\\6.0.1\\pwsh.exe"
     }
   }
 }

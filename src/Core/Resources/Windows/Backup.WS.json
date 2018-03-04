@@ -7,6 +7,6 @@
       "{$Workspace}\\Config",
       "{$Workspace}\\Workspace.ps1"
     ],
-    "Destination": "{$Userspace}\\..\\Backup"
+    "Destination": "{$Workbench}\\Backup"
   }
 ]

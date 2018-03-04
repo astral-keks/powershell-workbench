@@ -7,7 +7,7 @@ using System.Management.Automation;
 
 namespace AstralKeks.Workbench.Command
 {
-    internal static class SessionOriginator
+    internal static class Session
     {
         public static void Update(this SessionState cmdletSession, Func<Userspace> userspaceProvider)
         {
@@ -21,9 +21,6 @@ namespace AstralKeks.Workbench.Command
 
         public static void Update(this SessionState cmdletSession, Func<Workspace> workspaceProvider)
         {
-            var memento = new SessionMemento(Directory.GetCurrentDirectory(), cmdletSession.GetLocation());
-            SessionMemento.Save(memento);
-
             var workspace = workspaceProvider?.Invoke();
             if (workspace != null)
             {

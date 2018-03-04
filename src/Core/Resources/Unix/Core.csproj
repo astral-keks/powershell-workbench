@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>{$TargetFramework}</TargetFramework>
+    <AssemblyName>{$CoreAssemblyName}</AssemblyName>
+    <RootNamespace>{$CoreAssemblyName}</RootNamespace>
+    <Version>$(VersionSuffix)</Version>
+    <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
+    <FileVersion>$(VersionSuffix)</FileVersion>
+  </PropertyGroup>
+
+</Project>

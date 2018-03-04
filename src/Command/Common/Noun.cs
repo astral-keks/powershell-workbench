@@ -13,6 +13,6 @@ namespace AstralKeks.Workbench.Command
         public const string WBShortcut = WB + "Shortcut";
         public const string WBTemplate = WB + "Template";
         public const string WBToolkit = WB + "Toolkit";
-        public const string WBToolkitProject = WBToolkit + "Project"; 
+        public const string WBToolkitProject = WBToolkit + "Project";
     }
 }

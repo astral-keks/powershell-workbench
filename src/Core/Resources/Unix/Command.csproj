@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>{$TargetFramework}</TargetFramework>
+    <AssemblyName>{$CommandAssemblyName}</AssemblyName>
+    <RootNamespace>{$CommandAssemblyName}</RootNamespace>
+    <Version>$(VersionSuffix)</Version>
+    <AssemblyVersion>$(VersionSuffix)</AssemblyVersion>
+    <FileVersion>$(VersionSuffix)</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Core/{$CoreProjectFileName}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContentWithTargetPath Include="Loader.psm1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>{$ModuleName}.psm1</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Manifest.psd1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>{$ModuleName}.psd1</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+
+</Project>

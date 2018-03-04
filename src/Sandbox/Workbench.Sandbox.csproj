@@ -1,10 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-  </PropertyGroup>
-
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>AstralKeks.Workbench.Sandbox</AssemblyName>
     <RootNamespace>AstralKeks.Workbench.Sandbox</RootNamespace>
     <Version>$(VersionSuffix)</Version>

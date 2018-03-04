@@ -10,13 +10,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Unix\Application.US.json" />
+    <EmbeddedResource Include="Resources\Unix\Application.WS.json" />
+    <EmbeddedResource Include="Resources\Unix\Backup.US.json" />
+    <EmbeddedResource Include="Resources\Unix\Backup.WS.json" />
+    <EmbeddedResource Include="Resources\Unix\Command.csproj" />
+    <EmbeddedResource Include="Resources\Unix\Core.csproj" />
+    <EmbeddedResource Include="Resources\Unix\Discovery.US.json" />
+    <EmbeddedResource Include="Resources\Unix\Discovery.WS.json" />
+    <EmbeddedResource Include="Resources\Unix\Project.sln" />
+    <EmbeddedResource Include="Resources\Unix\Shortcut.US.json" />
+    <EmbeddedResource Include="Resources\Unix\Shortcut.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Backup.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Backup.US.json" />
     <EmbeddedResource Include="Resources\Windows\Shortcut.US.json" />
     <EmbeddedResource Include="Resources\Windows\Shortcut.WS.json" />
-    <EmbeddedResource Include="Resources\Windows\Loader.psm1" />
-    <EmbeddedResource Include="Resources\Windows\Manifest.psd1" />
-    <EmbeddedResource Include="Resources\Windows\.gitignore" />
+    <EmbeddedResource Include="Resources\Common\Loader.psm1" />
+    <EmbeddedResource Include="Resources\Common\Manifest.psd1" />
+    <EmbeddedResource Include="Resources\Common\.gitignore" />
     <EmbeddedResource Include="Resources\Windows\Application.US.json" />
     <EmbeddedResource Include="Resources\Windows\Application.WS.json" />
     <EmbeddedResource Include="Resources\Windows\Command.csproj" />
@@ -24,11 +35,11 @@
     <EmbeddedResource Include="Resources\Windows\Project.sln" />
     <EmbeddedResource Include="Resources\Windows\Discovery.US.json" />
     <EmbeddedResource Include="Resources\Windows\Discovery.WS.json" />
-    <EmbeddedResource Include="Resources\Windows\AllUserspaces.ps1" />
-    <EmbeddedResource Include="Resources\Windows\AllWorkspaces.ps1" />
-    <EmbeddedResource Include="Resources\Windows\Workspaces.ps1" />
-    <EmbeddedResource Include="Resources\Windows\Userspace.ps1" />
-    <EmbeddedResource Include="Resources\Windows\Workspace.ps1" />
+    <EmbeddedResource Include="Resources\Common\AllUserspaces.ps1" />
+    <EmbeddedResource Include="Resources\Common\AllWorkspaces.ps1" />
+    <EmbeddedResource Include="Resources\Common\Workspaces.ps1" />
+    <EmbeddedResource Include="Resources\Common\Userspace.ps1" />
+    <EmbeddedResource Include="Resources\Common\Workspace.ps1" />
   </ItemGroup>
 
   <ItemGroup>

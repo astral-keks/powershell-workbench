@@ -17,14 +17,14 @@ namespace AstralKeks.Workbench.Common.Infrastructure
 
         public bool ExistsResource(string resourceName)
         {
-            return GetResourceName(resourceName) != null;
+            return FindResourceName(resourceName) != null;
         }
 
         public string GetResource(string resourceName)
         {
             string content = null;
 
-            resourceName = GetResourceName(resourceName);
+            resourceName = FindResourceName(resourceName);
             var assembly = _assemblyLocator.GetTypeInfo().Assembly;
             if (!string.IsNullOrWhiteSpace(resourceName))
             {
@@ -43,27 +43,26 @@ namespace AstralKeks.Workbench.Common.Infrastructure
             }
             return content;
         }
-
-
-        private string GetResourceName(string resourceName)
+        
+        private string FindResourceName(string resourceName)
         {
             var platform = GetPlatform();
-            var assembly = _assemblyLocator.GetTypeInfo().Assembly;
-            var resourceQuery = $"{_assemblyLocator.Namespace}.Resources.{platform}.{resourceName}";
+            var platformResourceQuery = $"{_assemblyLocator.Namespace}.Resources.{platform}.{resourceName}";
+            var commonResourceQuery = $"{_assemblyLocator.Namespace}.Resources.Common.{resourceName}";
+            return GetResourceName(platformResourceQuery) ?? GetResourceName(commonResourceQuery);
+        }
 
+        private string GetResourceName(string resourceQuery)
+        {
+            var assembly = _assemblyLocator.GetTypeInfo().Assembly;
             var resourceNames = assembly.GetManifestResourceNames();
-            resourceName = resourceNames
-                .Where(r => r.Contains(platform))
-                .FirstOrDefault(r => r == resourceQuery);
+            var resourceName = resourceNames.FirstOrDefault(r => r == resourceQuery);
             if (resourceName == null)
-            {
-                resourceName = resourceNames
-                    .Where(r => r.Contains(platform))
-                    .FirstOrDefault(r => Regex.IsMatch(resourceQuery, r));
-            }
+                resourceName = resourceNames.FirstOrDefault(r => Regex.IsMatch(resourceQuery, r));
 
             return resourceName;
         }
+
 
         private string GetPlatform()
         {

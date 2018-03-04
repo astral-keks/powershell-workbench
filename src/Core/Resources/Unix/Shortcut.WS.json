@@ -1,0 +1,8 @@
+//List of static shortcuts: URLs, paths etc.
+[
+  {
+    "Name": "Workspace.ps1",
+    "Location": "Workspace",
+    "Target": "{$Workspace}/Workspace.ps1"
+  }
+]

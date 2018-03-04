@@ -20,7 +20,7 @@ namespace AstralKeks.Workbench.Command
         protected override void ProcessRecord()
         {
             if (!Components.UserspaceController.CheckUserspace(UserspaceName, ShouldCreateUserspace))
-                throw new DirectoryNotFoundException($"Userspace {UserspaceName} does not exist");
+                throw new DirectoryNotFoundException($"Userspace {UserspaceName} was not found");
 
             SessionState.Update(() => Components.UserspaceController.UseUserspace(UserspaceName));
         }
