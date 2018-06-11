@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>AstralKeks.Workbench.Test</AssemblyName>
+    <RootNamespace>AstralKeks.Workbench</RootNamespace>
+    <!--<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
+    <!--<IsPackable>false</IsPackable>-->
+    <OutputType>Exe</OutputType>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Core\Resources\Directories.cs" Link="Resources\Directories.cs" />
+    <Compile Include="..\Core\Resources\Files.cs" Link="Resources\Files.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.3.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.3.0" />
+    <PackageReference Include="Bogus" Version="22.0.9" />
+    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="2.1.0.178" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.console" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Workbench.Common.csproj" />
+    <ProjectReference Include="..\Core\Workbench.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+</Project>
